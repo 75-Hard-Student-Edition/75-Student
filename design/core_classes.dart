@@ -78,8 +78,11 @@ class Task {
 
 class DailySchedule {
   List<Task> tasks = [];
+  DateTime bedtime;
   int maxPoints = 0;
   int currentPoints = 0;
+
+  DailySchedule({required this.bedtime});
 
   void importRecurringTasks(DateTime date) {
     // Import tasks from database?
@@ -104,9 +107,17 @@ class DailySchedule {
 }
 
 class ScheduleHandler {
-  DailySchedule today = DailySchedule();
-  DailySchedule tomorrow = DailySchedule();
+  //! Need a way to determine bedtime - user settings or algorithmic?
+  DateTime? bedtime = null;
+  late DailySchedule today;
+  late DailySchedule tomorrow;
+  //! Need to be able to write backlog to the database as well, in case of logout
   Backlog backlog = Backlog();
+
+  ScheduleHandler() {
+    today = DailySchedule(bedtime: bedtime!);
+    tomorrow = DailySchedule(bedtime: bedtime!);
+  }
 
   void importTasks() {
     today.importRecurringTasks(DateTime.now());
@@ -120,6 +131,11 @@ class ScheduleHandler {
     } else {
       backlog.addTask(task);
     }
+  }
+
+  void nextDay() {
+    today = tomorrow;
+    tomorrow = DailySchedule(bedtime: bedtime!);
   }
 }
 
@@ -179,4 +195,8 @@ class UserAccountHandler {
     // Push username, password, streak = 0, and categories order to database
     login(username, password);
   }
+}
+
+class Alarm {
+  DateTime alarmTime;
 }
