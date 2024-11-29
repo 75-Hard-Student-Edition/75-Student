@@ -78,6 +78,8 @@ class Task {
 
 class DailySchedule {
   List<Task> tasks = [];
+  int maxPoints = 0;
+  int currentPoints = 0;
 
   void importRecurringTasks(DateTime date) {
     // Import tasks from database?
@@ -87,11 +89,18 @@ class DailySchedule {
     // Import tasks from calander?
   }
 
-  void addTask(Task task) => tasks.add(task);
+  void addTask(Task task) {
+    // Need more logic about what time to put tasks in
+    tasks.add(task);
+    maxPoints += task.category.cost;
+  }
 
   void removeTask(Task task) => tasks.remove(task);
 
-  void completeTask(Task task) => task.complete();
+  void completeTask(Task task) {
+    task.complete();
+    currentPoints += task.category.cost;
+  }
 }
 
 class ScheduleHandler {
@@ -104,9 +113,13 @@ class ScheduleHandler {
     today.importCalanderTasks(DateTime.now());
   }
 
-  void postPoneTask(Task task) {
+  void postPoneTask(Task task, bool toTomorrow) {
     today.removeTask(task);
-    backlog.addTask(task);
+    if (toTomorrow) {
+      tomorrow.addTask(task);
+    } else {
+      backlog.addTask(task);
+    }
   }
 }
 
