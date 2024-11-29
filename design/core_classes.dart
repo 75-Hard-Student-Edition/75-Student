@@ -1,3 +1,6 @@
+const Duration DURATION_TO_AGE_TASK = Duration(days: 1);
+const double DEFAULT_LOCATION_RADIUS = 100.0;
+
 enum CategoryType { academic, social, health, employment, chore, hobby }
 
 class Category {
@@ -6,8 +9,6 @@ class Category {
 
   Category({required this.type, required this.cost});
 }
-
-const double DEFAULT_RADIUS = 100.0;
 
 class Location {
   String name;
@@ -19,7 +20,7 @@ class Location {
       {required this.name,
       required this.latitude,
       required this.longitude,
-      this.radius = DEFAULT_RADIUS});
+      this.radius = DEFAULT_LOCATION_RADIUS});
 }
 
 enum Priority {
@@ -30,8 +31,6 @@ enum Priority {
   final int value;
   const Priority(this.value);
 }
-
-const Duration DURATION_TO_AGE = Duration(days: 1);
 
 class Task {
   final String name;
@@ -69,7 +68,7 @@ class Task {
   }
 
   void age() {
-    if (DateTime.now().difference(lastAged) >= DURATION_TO_AGE) {
+    if (DateTime.now().difference(lastAged) >= DURATION_TO_AGE_TASK) {
       lastAged = DateTime.now();
       priority = Priority.values[priority.value + 1];
       // Callback to schedule handler to reorganize tasks
