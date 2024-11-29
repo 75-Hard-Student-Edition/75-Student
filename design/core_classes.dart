@@ -141,3 +141,42 @@ class Backlog {
 
   Task popTask() => tasks.removeAt(0);
 }
+
+enum Difficulty { easy, medium, hard }
+
+class UserAccount {
+  late final String username;
+  late int streak;
+  late Difficulty difficulty;
+
+  UserAccount() {
+    fetchUserDetails();
+  }
+
+  void fetchUserDetails() {
+    // Fetch details from database
+    username = "temp";
+    streak = -1;
+    difficulty = Difficulty.easy;
+  }
+
+  void incrementStreak() => ++streak;
+}
+
+/// Acts as an interface between the app, database, and userAccount
+class UserAccountHandler {
+  UserAccount? account;
+
+  void login(String username, String password) {
+    // Fetch username and password from database
+    String fetchedUsername = "temp";
+    //* Note: important not to store fetchedPassword in a variable
+    String fetchedPassword = "temp";
+    if (username == fetchedUsername && password == fetchedPassword) account = UserAccount();
+  }
+
+  void signUp(String username, String password) {
+    // Push username, password, streak = 0, and categories order to database
+    login(username, password);
+  }
+}
