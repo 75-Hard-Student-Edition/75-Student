@@ -1,16 +1,15 @@
-# untitled
+# 75 Hard Habit Tracker
 
-A new Flutter project.
+A simple habit tracking app designed to help users complete the 75 Hard challenge. Track daily progress and stay committed to your fitness and personal growth goals.
 
-## Getting Started
+## Features
+- Track daily habits such as water intake, exercise, and reading.
+- Visual progress indicators to help users stay on track.
+- Reminders for daily tasks.
+- User-friendly interface for easy tracking.
 
-This project is a starting point for a Flutter application.
+## Usage
+Log your daily habits and track your progress. 
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Contributing
+Feel free to fork the repo, submit issues, and create pull requests. All contributions are welcome!
