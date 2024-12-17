@@ -12,4 +12,4 @@ A simple habit tracking app designed to help users complete the 75 Hard challeng
 Log your daily habits and track your progress.
 
 ## Contributing
-Feel free to fork the repo, submit issues, and create pull requests. All contributions are welcome!
+Feel free to fork the repo, submit issues, and create pull requests. All contributions are welcome!!
