@@ -1,7 +1,7 @@
-
-import 'package:location/location.dart';
+import 'package:student_75/models/location_model.dart';
 
 enum TaskPriority { low, medium, high }
+
 enum TaskCategory { academic, social, health, employment, chore, hobby }
 
 class TaskModel {
