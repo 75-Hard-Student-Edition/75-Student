@@ -1,10 +1,10 @@
-class TaskCategory {/* Stub implementation of TaskCategory */}
 
-class Location {/* Stub implementation of Location */}
+import 'package:location/location.dart';
 
 enum TaskPriority { low, medium, high }
+enum TaskCategory { academic, social, health, employment, chore, hobby }
 
-class Task {
+class TaskModel {
   final int id;
   final String name;
   final String description;
@@ -23,7 +23,7 @@ class Task {
 
   final Duration notifyBefore;
 
-  Task({
+  TaskModel({
     required this.id,
     required this.name,
     this.description = '',
@@ -58,7 +58,7 @@ class Task {
     }
   }
 
-  Task copyWith({
+  TaskModel copyWith({
     String? name,
     String? description,
     bool? isMovable,
@@ -72,7 +72,7 @@ class Task {
     Duration? period,
     Duration? notifyBefore,
   }) {
-    return Task(
+    return TaskModel(
       id: id,
       name: name ?? this.name,
       description: description ?? this.description,
