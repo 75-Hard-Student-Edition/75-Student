@@ -57,4 +57,34 @@ class Task {
       throw ArgumentError('Notify before must be greater than or equal to 0');
     }
   }
+
+  Task copyWith({
+    String? name,
+    String? description,
+    bool? isMovable,
+    bool? isComplete,
+    TaskCategory? category,
+    TaskPriority? priority,
+    Location? location,
+    DateTime? startTime,
+    DateTime? endTime,
+    DateTime? nextScheduled,
+    Duration? period,
+    Duration? notifyBefore,
+  }) {
+    return Task(
+      id: id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      isMovable: isMovable ?? this.isMovable,
+      category: category ?? this.category,
+      priority: priority ?? this.priority,
+      location: location ?? this.location,
+      startTime: startTime ?? this.startTime,
+      duration:
+          (endTime ?? this.endTime).difference(startTime ?? this.startTime),
+      period: period ?? this.period,
+      notifyBefore: notifyBefore ?? this.notifyBefore,
+    );
+  }
 }
