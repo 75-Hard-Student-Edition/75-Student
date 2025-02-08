@@ -2,6 +2,10 @@ class Task {/* Stub implementation of Task */}
 
 class UserAccount {/* Stub implementation of UserAccount */}
 
+/*
+Contains bi-directional methods due to simplicity of the service, acting simply
+as an intermediary layer between the database and business logic.
+*/
 abstract class IDatabaseService {
   // ScheduleManager -> Database methods
   Future<void> addTaskRecord(Task task);
@@ -14,7 +18,6 @@ abstract class IDatabaseService {
 
   // AccountManager -> Database methods
   Future<void> addAccountRecord(UserAccount account);
-  Future<void> updateAccountRecord(UserAccount account);
   Future<void> removeAccountRecord(UserAccount account);
 
   // Database -> AccountManager methods
