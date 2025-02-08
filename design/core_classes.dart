@@ -196,7 +196,3 @@ class UserAccountHandler {
     login(username, password);
   }
 }
-
-class Alarm {
-  DateTime alarmTime;
-}
