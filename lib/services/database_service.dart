@@ -1,6 +1,5 @@
-class Task {/* Stub implementation of Task */}
-
-class UserAccount {/* Stub implementation of UserAccount */}
+import 'package:student_75/models/task_model.dart';
+import 'package:student_75/models/user_account_model.dart';
 
 /*
 Contains bi-directional methods due to simplicity of the service, acting simply
@@ -8,18 +7,18 @@ as an intermediary layer between the database and business logic.
 */
 abstract class IDatabaseService {
   // ScheduleManager -> Database methods
-  Future<void> addTaskRecord(Task task);
-  Future<void> updateTaskRecord(Task task);
-  Future<void> removeTaskRecord(Task task);
+  Future<void> addTaskRecord(TaskModel task);
+  Future<void> updateTaskRecord(TaskModel task);
+  Future<void> removeTaskRecord(TaskModel task);
 
   // Database -> ScheduleManager methods
-  Future<Task?> queryTask(int taskId);
-  Future<List<Task>> fetchTodaysScheduledTasks();
+  Future<TaskModel?> queryTask(int taskId);
+  Future<List<TaskModel>> fetchTodaysScheduledTasks();
 
   // AccountManager -> Database methods
-  Future<void> addAccountRecord(UserAccount account);
-  Future<void> removeAccountRecord(UserAccount account);
+  Future<void> addAccountRecord(UserAccountModel account);
+  Future<void> removeAccountRecord(UserAccountModel account);
 
   // Database -> AccountManager methods
-  Future<UserAccount?> queryAccount(String username);
+  Future<UserAccountModel?> queryAccount(String username);
 }
