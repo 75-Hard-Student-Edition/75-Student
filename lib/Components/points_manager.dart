@@ -1,3 +1,5 @@
+class Task {/* Stub implementation of Task */}
+
 class PointsManager {
   int maxPoints;
   int currentPoints;
@@ -10,29 +12,20 @@ class PointsManager {
     required this.pointsToPass,
   });
 
-  // Method to calculate the total points 
-  void calculateTotalPoints(List<Task> allTasks) {
-
-  }
+  // Method to calculate the total points
+  void calculateTotalPoints(List<Task> allTasks) {}
 
   // Method to mark a task as completed and add points
-  void completeTask(Task task) {
-
-  }
+  void completeTask(Task task) {}
 
   // Method to determine if the user has passed
   bool determinePass() {
-
     return false;
   }
 
   // Method to simulate a successful day
-  void passDay() {
+  void passDay() {}
 
-  }
-
-  // Method to simulate a failed day 
-  void failDay() {
-
-  }
+  // Method to simulate a failed day
+  void failDay() {}
 }

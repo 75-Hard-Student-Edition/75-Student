@@ -1,28 +1,27 @@
-class NotificationManager {
+import 'package:student_75/models/task_notification.dart';
+
+class Task {/* Stub implementation of Task */}
+
+abstract class ApiInterface {
+  // Stub implementation of API interface
+  void setNotification(notification);
+  void removeNotification(int taskId);
+}
+
+class NotificationManager implements ApiInterface {
   // Instance variable to hold a list of TaskNotification objects
   List<TaskNotification> notifications;
-
 
   NotificationManager({required this.notifications});
 
   // Method to add a notification for a task (empty for now)
-  void addNotification(Task task) {
-
-  }
+  void addNotification(Task task) {}
 
   // API method to set a notification via an external interface (empty for now)
-    void ApiInterface.SetNotification(notification){
+  @override
+  void setNotification(notification) {}
 
-    }
-
-  // Method to remove a notification based on task ID
-  void removeNotification(int taskId) {
-
-  }
-
-  // API method to remove a notification via an external interface
-    void ApiInterface.removeNotification(int taskId) {
-
-    }
-
+  // API Method to remove a notification based on task ID via an external interface
+  @override
+  void removeNotification(int taskId) {}
 }
