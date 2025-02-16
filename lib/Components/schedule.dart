@@ -20,4 +20,11 @@ class Schedule {
     // need clarification on this.
   }
 
+  int getTaskIndex(int taskId) {
+    for (int i = 0; i < tasks.length; i++) {
+      TaskModel task = tasks[i];
+      if (task.id == taskId) return i;
+    }
+    throw Exception("Task $taskId not found in Schedule");
+  }
 }
