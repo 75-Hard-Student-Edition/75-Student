@@ -10,7 +10,7 @@ abstract class IScheduleManager {
   Future<List<TaskModel>> getBacklogSuggestions();
 
   // GUI -> ScheduleManager methods
-  Future<void> addTask(TaskModel task);
+  void addTask(TaskModel task);
   Future<void> deleteTask(int taskId);
   Future<void> editTask(TaskModel task);
   Future<void> postPoneTask(int taskId);
@@ -27,7 +27,7 @@ class ScheduleManager implements IScheduleManager {
   late NotificationManager notificationManager;
 
   ScheduleManager() {
-    //! All this data needs to be fetched by database service
+    //! All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog();
     pointsManager = PointsManager(
@@ -43,7 +43,16 @@ class ScheduleManager implements IScheduleManager {
   Future<List<TaskModel>> getBacklogSuggestions() {}
 
   // GUI -> ScheduleManager methods
-  Future<void> addTask(TaskModel task) {}
+  @override
+  void addTask(TaskModel task) {
+    // Add task to schedule
+    todaysSchedule.add(task);
+    // Add notification for task
+    notificationManager.addNotification(task);
+    //todo Update points
+    // pointsManager.updatePoints(task);
+  }
+
   Future<void> deleteTask(int taskId) {}
   Future<void> editTask(TaskModel task) {}
   Future<void> postPoneTask(int taskId) {}
