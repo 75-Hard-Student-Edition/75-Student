@@ -15,12 +15,25 @@ abstract class IScheduleManager {
   void editTask(TaskModel task);
   void postPoneTask(int taskId);
   void completeTask(int taskId);
-  Future<List<TaskModel>> scheduleBacklogSuggestion(int taskId);
+  void scheduleBacklogSuggestion(int taskId);
 }
 
 class Backlog {
   /* Stub implementation of Backlog */
   void add(TaskModel task) {}
+  TaskModel getTask(int taskId) {
+    return TaskModel(
+        id: taskId,
+        name: 'Stub Task',
+        isMovable: true,
+        category: TaskCategory.academic,
+        priority: TaskPriority.low,
+        startTime: DateTime.now(),
+        duration: const Duration(hours: 1),
+        period: const Duration(days: 1));
+  }
+
+  void remove(int taskId) {}
 }
 
 class ScheduleManager implements IScheduleManager {
@@ -89,5 +102,13 @@ class ScheduleManager implements IScheduleManager {
     todaysSchedule.tasks[taskIndex] = task.copyWith(isComplete: true);
   }
 
-  Future<List<TaskModel>> scheduleBacklogSuggestion(int taskId) {}
+  @override
+  void scheduleBacklogSuggestion(int taskId) {
+    // Fetch task from backlog
+    final TaskModel task = backlog.getTask(taskId);
+    // Add task to schedule
+    addTask(task);
+    // Remove task from backlog
+    backlog.remove(taskId);
+  }
 }
