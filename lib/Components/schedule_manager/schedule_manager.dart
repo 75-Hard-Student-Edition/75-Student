@@ -11,10 +11,10 @@ abstract class IScheduleManager {
 
   // GUI -> ScheduleManager methods
   void addTask(TaskModel task);
-  Future<void> deleteTask(int taskId);
-  Future<void> editTask(TaskModel task);
-  Future<void> postPoneTask(int taskId);
-  Future<void> completeTask(int taskId);
+  void deleteTask(int taskId);
+  void editTask(TaskModel task);
+  void postPoneTask(int taskId);
+  void completeTask(int taskId);
   Future<List<TaskModel>> scheduleBacklogSuggestion(int taskId);
 }
 
@@ -53,10 +53,19 @@ class ScheduleManager implements IScheduleManager {
     // pointsManager.updatePoints(task);
   }
 
-  Future<void> deleteTask(int taskId) {}
-  Future<void> editTask(TaskModel task) {}
-  Future<void> postPoneTask(int taskId) {}
-  Future<void> completeTask(int taskId) {}
+  @override
+  void deleteTask(int taskId) {
+    // Remove task from schedule
+    todaysSchedule.remove(taskId);
+    // Remove notification for task
+    notificationManager.removeNotification(taskId);
+    //todo Update points
+    // pointsManager.updatePoints(task);
+  }
+
+  void editTask(TaskModel task) {}
+  void postPoneTask(int taskId) {}
+  void completeTask(int taskId) {}
   Future<List<TaskModel>> scheduleBacklogSuggestion(int taskId) {}
 }
 
