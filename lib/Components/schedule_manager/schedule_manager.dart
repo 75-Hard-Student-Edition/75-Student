@@ -6,8 +6,8 @@ import 'package:student_75/components/notification_manager.dart';
 // Interface for ScheduleManager to interact with the GUI
 abstract class IScheduleManager {
   // ScheduleManager -> GUI methods
-  Future<List<TaskModel>> getSchedule(DateTime date);
-  Future<List<TaskModel>> getBacklogSuggestions();
+  List<TaskModel> getSchedule();
+  List<TaskModel> getBacklogSuggestions();
 
   // GUI -> ScheduleManager methods
   void addTask(TaskModel task);
@@ -21,19 +21,27 @@ abstract class IScheduleManager {
 class Backlog {
   /* Stub implementation of Backlog */
   void add(TaskModel task) {}
-  TaskModel getTask(int taskId) {
-    return TaskModel(
-        id: taskId,
-        name: 'Stub Task',
-        isMovable: true,
-        category: TaskCategory.academic,
-        priority: TaskPriority.low,
-        startTime: DateTime.now(),
-        duration: const Duration(hours: 1),
-        period: const Duration(days: 1));
-  }
-
+  TaskModel getTask(int taskId) => TaskModel(
+      id: taskId,
+      name: 'Stub Task',
+      isMovable: true,
+      category: TaskCategory.academic,
+      priority: TaskPriority.low,
+      startTime: DateTime.now(),
+      duration: const Duration(hours: 1),
+      period: const Duration(days: 1));
   void remove(int taskId) {}
+  List<TaskModel> peak(int depth) => [
+        TaskModel(
+            id: 0,
+            name: 'Stub Task',
+            isMovable: true,
+            category: TaskCategory.academic,
+            priority: TaskPriority.low,
+            startTime: DateTime.now(),
+            duration: const Duration(hours: 1),
+            period: const Duration(days: 1))
+      ];
 }
 
 class ScheduleManager implements IScheduleManager {
@@ -54,11 +62,14 @@ class ScheduleManager implements IScheduleManager {
     notificationManager = NotificationManager(notifications: []);
   }
 
-  // ScheduleManager -> GUI methods
-  Future<List<TaskModel>> getSchedule(DateTime date) {}
-  Future<List<TaskModel>> getBacklogSuggestions() {}
+  //* ScheduleManager -> GUI methods
+  @override
+  List<TaskModel> getSchedule() => todaysSchedule.tasks;
+  @override
+  //todo Decide on some way of deciding peak depth
+  List<TaskModel> getBacklogSuggestions() => backlog.peak(5);
 
-  // GUI -> ScheduleManager methods
+  //* GUI -> ScheduleManager methods
   @override
   void addTask(TaskModel task) {
     // Add task to schedule
