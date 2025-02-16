@@ -29,4 +29,9 @@ class Schedule {
     }
     throw Exception("Task $taskId not found in Schedule");
   }
+
+  TaskModel getTaskModel(int taskId) {
+    int index = getTaskIndex(taskId);
+    return tasks[index];
+  }
 }

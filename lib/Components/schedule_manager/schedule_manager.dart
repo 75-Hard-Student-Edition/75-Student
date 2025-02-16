@@ -18,7 +18,10 @@ abstract class IScheduleManager {
   Future<List<TaskModel>> scheduleBacklogSuggestion(int taskId);
 }
 
-class Backlog {/* Stub implementation of Backlog */}
+class Backlog {
+  /* Stub implementation of Backlog */
+  void add(TaskModel task) {}
+}
 
 class ScheduleManager implements IScheduleManager {
   late Schedule todaysSchedule;
@@ -70,19 +73,15 @@ class ScheduleManager implements IScheduleManager {
     addTask(task);
   }
 
-  void postPoneTask(int taskId) {}
+  @override
+  void postPoneTask(int taskId) {
+    // Add task to backlog
+    TaskModel task = todaysSchedule.getTaskModel(taskId);
+    backlog.add(task);
+    // Remove task from schedule
+    deleteTask(taskId);
+  }
+
   void completeTask(int taskId) {}
   Future<List<TaskModel>> scheduleBacklogSuggestion(int taskId) {}
 }
-
-
-  // void completeTask(int taskId) {
-  //   int taskIndex = getTaskIndex(taskId);
-  //   TaskModel task = tasks[taskIndex];
-  //   tasks[taskIndex] = task.copyWith(isComplete: true);
-  // }
-
-  // void updateTask(TaskModel task) {
-  //   int taskIndex = getTaskIndex(task.id);
-  //   tasks[taskIndex] = task;
-  // }
