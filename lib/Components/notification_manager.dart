@@ -1,6 +1,5 @@
 import 'package:student_75/models/task_notification.dart';
-
-class Task {/* Stub implementation of Task */}
+import 'package:student_75/models/task_model.dart';
 
 abstract class ApiInterface {
   // Stub implementation of API interface
@@ -15,7 +14,7 @@ class NotificationManager implements ApiInterface {
   NotificationManager({required this.notifications});
 
   // Method to add a notification for a task (empty for now)
-  void addNotification(Task task) {}
+  void addNotification(TaskModel task) {}
 
   // API method to set a notification via an external interface (empty for now)
   @override

@@ -1,6 +1,14 @@
+import 'package:student_75/app_settings.dart';
+
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  // Ensure that the Flutter binding is initialized before calling any plugins
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load the app settings
+  await AppSettings.loadSettings();
+
   runApp(const MyApp());
 }
 
