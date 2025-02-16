@@ -76,12 +76,18 @@ class ScheduleManager implements IScheduleManager {
   @override
   void postPoneTask(int taskId) {
     // Add task to backlog
-    TaskModel task = todaysSchedule.getTaskModel(taskId);
+    final TaskModel task = todaysSchedule.getTaskModel(taskId);
     backlog.add(task);
     // Remove task from schedule
     deleteTask(taskId);
   }
 
-  void completeTask(int taskId) {}
+  @override
+  void completeTask(int taskId) {
+    final int taskIndex = todaysSchedule.getTaskIndex(taskId);
+    final TaskModel task = todaysSchedule.tasks[taskIndex];
+    todaysSchedule.tasks[taskIndex] = task.copyWith(isComplete: true);
+  }
+
   Future<List<TaskModel>> scheduleBacklogSuggestion(int taskId) {}
 }
