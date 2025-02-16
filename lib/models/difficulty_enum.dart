@@ -1,7 +1,4 @@
-//todo Probably move these to a settings file too
-const double EASY_VALUE = 0.5;
-const double MEDIUM_VALUE = 1.0;
-const double HARD_VALUE = 1.5;
+import 'package:student_75/app_settings.dart';
 
 enum Difficulty { easy, medium, hard }
 
@@ -9,11 +6,11 @@ extension DifficultyExtension on Difficulty {
   double get value {
     switch (this) {
       case Difficulty.easy:
-        return EASY_VALUE;
+        return AppSettings.difficultyEasyValue;
       case Difficulty.medium:
-        return MEDIUM_VALUE;
+        return AppSettings.difficultyMediumValue;
       case Difficulty.hard:
-        return HARD_VALUE;
+        return AppSettings.difficultyHardValue;
     }
   }
 }

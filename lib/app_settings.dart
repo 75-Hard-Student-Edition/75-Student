@@ -13,11 +13,11 @@ class AppSettings {
     }
   }
 
-  static double? get difficultyEasyValue =>
-      settings['difficultyValues']['easy'];
-  static double? get difficultyMediumValue =>
-      settings['difficultyValues']['medium'];
-  static double? get difficultyHardValue =>
-      settings['difficultyValues']['hard'];
-  static double? get locationRadius => settings['locationRadius'];
+  static double get difficultyEasyValue =>
+      settings['difficultyValues']['easy'] ?? 0.5;
+  static double get difficultyMediumValue =>
+      settings['difficultyValues']['medium'] ?? 0.75;
+  static double get difficultyHardValue =>
+      settings['difficultyValues']['hard'] ?? 1.0;
+  static double get locationRadius => settings['locationRadius'] ?? 100.0;
 }
