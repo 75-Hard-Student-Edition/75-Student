@@ -63,7 +63,13 @@ class ScheduleManager implements IScheduleManager {
     // pointsManager.updatePoints(task);
   }
 
-  void editTask(TaskModel task) {}
+  @override
+  void editTask(TaskModel task) {
+    // Works by deleting and re-adding the task, assuming that the task ID is not changed
+    deleteTask(task.id);
+    addTask(task);
+  }
+
   void postPoneTask(int taskId) {}
   void completeTask(int taskId) {}
   Future<List<TaskModel>> scheduleBacklogSuggestion(int taskId) {}
