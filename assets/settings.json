@@ -1,1 +1,7 @@
-{}
+{
+    "easyDifficultyValue": 0.5,
+    "meduimDifficultyValue": 0.75,
+    "hardDifficultyValue": 1,
+    
+    "locationRadius": 100
+}
