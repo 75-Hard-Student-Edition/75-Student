@@ -1,0 +1,26 @@
+WIDAD
+    - SchedulePage and MainPage are the same thing 
+
+AYO
+    - Add your pages to figma
+    - Keep settings page simple
+
+DYLAN
+    - Add your pages to figma
+
+TIRES
+    - Work on the actual project
+
+TOM
+    - Go over tires' implementation 
+
+PRINCE
+    - Add PointsManager add/remove task method?
+
+CHARLIE 
+    - Both immovable needs to return error to frontend and schedule higher priority
+        - Same priority needs to be decided by user
+    - Movable
+        - Lower priority gets user notification - move or postpone?
+        - Equal priority gets user notification - which task?, move or postpone?
+        
