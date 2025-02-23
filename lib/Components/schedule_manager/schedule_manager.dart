@@ -165,7 +165,12 @@ class ScheduleManager implements IScheduleManager {
     /* 
     Cases:
       1. No overlap - move to next task
-      The rest of the cases are all overlaps
+
+      The rest of the cases are all overlaps.
+      Note that in overlap cases, the user will be notified whenever the schedule
+      is changed (e.g., pass is not clean) reguardless of whether user input is 
+      required or not.
+      
       2. Neither tasks movable
         a. Different priority - delete lower priority
         b. Same priority - USER selects which task to delete
