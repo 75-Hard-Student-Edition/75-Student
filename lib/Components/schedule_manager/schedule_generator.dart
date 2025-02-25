@@ -30,6 +30,7 @@ class ScheduleGenerator {
         break;
       }
     }
+    return schedule;
   }
 
   /// Method to handle cases where two tasks overlap
@@ -65,6 +66,7 @@ class ScheduleGenerator {
         // Same priority
         // USER selects which task to delete
         // taskToDelete = await someComponent.userSelectTaskToDelete(currentTask, nextTask);
+        TaskModel taskToDelete = currentTask; // todo implement this
         _scheduleManager.deleteTask(taskToDelete.id);
         // sanitisedSchedule.remove(taskToDelete);
       } else {
@@ -94,6 +96,8 @@ class ScheduleGenerator {
       // Edit lower priority task
       // moveOrPostponeTask(schedule, lowerPriority);
     }
+
+    return sanitisedSchedule;
   }
 
   static bool checkMovePossible(List<TaskModel> schedule, TaskModel task) {
@@ -103,7 +107,7 @@ class ScheduleGenerator {
     return true;
   }
 
-  void moveOrPostponeTask(List<TaskModel> schedule, TaskModel task) {
+  Future<void> moveOrPostponeTask(List<TaskModel> schedule, TaskModel task) async {
     //todo Implement this method
     // USER selects to move or postpone task
     if (checkMovePossible(schedule, task)) {
