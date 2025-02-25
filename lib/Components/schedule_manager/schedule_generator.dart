@@ -21,15 +21,96 @@ class ScheduleGenerator {
 
         // Overlap detected
         passIsClean = false;
-        List<TaskModel> newTasks = handleOverlap(currentTask, nextTask);
-        schedule.removeAt(i);
-        schedule.removeAt(i);
-        schedule.insertAll(i, newTasks);
+        schedule = handleOverlap(schedule, currentTask, nextTask);
         break;
       }
     }
   }
 
+  /// Method to handle cases where two tasks overlap
+  /// Returns a schedule with the overlapping tasks resolved
+  ///
+  /// Overlap cases:
+  ///   2. Neither tasks movable
+  ///     a. Different priority - delete lower priority
+  ///     b. Same priority - USER selects which task to delete
+  ///   3. One task movable
+  ///     a. Move is possible - USER selects to move or postpone task
+  ///     b. Move is impossible - postpone task
+  ///   4. Both tasks movable
+  ///     a. Same priority - USER selects which task to edit
+  ///       i. Move is possible - USER selects to move or postpone task
+  ///       ii. Move is impossible - postpone task
+  ///     b. Different priority - edit lower priority task
+  ///       i. Move is possible - USER selects to move or postpone task
+  ///       ii. Move is impossible - postpone task
   static List<TaskModel> handleOverlap(
-      TaskModel currentTask, TaskModel nextTask) {}
+      List<TaskModel> schedule, TaskModel currentTask, TaskModel nextTask) {
+    List<TaskModel> sanitisedSchedule = schedule;
+    List<TaskModel> movableTasks = [currentTask, nextTask].where((task) => task.isMovable).toList();
+    TaskModel? lowerPriority = currentTask.priority.index > nextTask.priority.index
+        ? nextTask
+        : currentTask.priority.index < nextTask.priority.index
+            ? currentTask
+            : null; // Null if equal priority
+
+    if (movableTasks.isEmpty) {
+      //todo Implement this case
+      if (lowerPriority == null) {
+        // Same priority
+        // USER selects which task to delete
+        // taskToDelete = await someComponent.userSelectTaskToDelete(currentTask, nextTask);
+        // scheduleManager.deleteTask(taskToDelete.id);
+        // sanitisedSchedule.remove(taskToDelete);
+      } else {
+        // Different priority
+        // Delete lower priority task
+        // scheduleManager.deleteTask(lowerPriority.id);
+        // sanitisedSchedule.remove(lowerPriority);
+      }
+      return sanitisedSchedule;
+    }
+
+    if (movableTasks.length == 1) {
+      TaskModel movableTask = movableTasks.first;
+      moveOrPostponeTask(schedule, movableTask);
+      return sanitisedSchedule;
+    }
+
+    // Both tasks movable
+    //todo Implement this case
+    if (lowerPriority == null) {
+      // Same priority
+      // USER selects which task to edit
+      // TaskModel taskToEdit = await someComponent.userSelectTaskToEdit(currentTask, nextTask);
+      // moveOrPostponeTask(schedule, taskToEdit);
+    } else {
+      // Different priority
+      // Edit lower priority task
+      // moveOrPostponeTask(schedule, lowerPriority);
+    }
+  }
+
+  static bool checkMovePossible(List<TaskModel> schedule, TaskModel task) {
+    //todo Implement this method
+    // Check if task can be moved to a different time
+    // return true if possible, false otherwise
+    return true;
+  }
+
+  static void moveOrPostponeTask(List<TaskModel> schedule, TaskModel task) {
+    //todo Implement this method
+    // USER selects to move or postpone task
+    if (checkMovePossible(schedule, task)) {
+      // Move is possible
+      // if (await someComponent.userSelectMoveOrPostpone(task)) {
+      //   scheduleManager.moveTask(task);
+      // } else {
+      //   scheduleManager.postponeTask(task);
+      // }
+    } else {
+      // Move is impossible
+      // scheduleManager.postponeTask(task);
+    }
+  }
 }
