@@ -279,4 +279,18 @@ class ScheduleManager implements IScheduleManager {
     //todo Implement this - make no change if not possible
     return true;
   }
+
+  void handleOverlap(TaskModel task, TaskModel nextTask) async {
+    bool passIsClean = false;
+    List<TaskModel> movableTasks =
+        [task, nextTask].where((task) => task.isMovable).toList();
+    // Task with lower priority, null if priorities are the same
+    TaskModel? lowerPriority = task.priority.index > nextTask.priority.index
+        ? nextTask
+        : task.priority.index < nextTask.priority.index
+            ? task
+            : null;
+
+    if (movableTasks.isEmpty) {}
+  }
 }
