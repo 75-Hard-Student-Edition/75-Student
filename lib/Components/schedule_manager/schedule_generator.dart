@@ -68,12 +68,12 @@ class ScheduleGenerator {
         // taskToDelete = await someComponent.userSelectTaskToDelete(currentTask, nextTask);
         TaskModel taskToDelete = currentTask; // todo implement this
         _scheduleManager.deleteTask(taskToDelete.id);
-        // sanitisedSchedule.remove(taskToDelete);
+        sanitisedSchedule.remove(taskToDelete);
       } else {
         // Different priority
         // Delete lower priority task
-        // scheduleManager.deleteTask(lowerPriority.id);
-        // sanitisedSchedule.remove(lowerPriority);
+        _scheduleManager.deleteTask(lowerPriority.id);
+        sanitisedSchedule.remove(lowerPriority);
       }
       return sanitisedSchedule;
     }
@@ -90,21 +90,40 @@ class ScheduleGenerator {
       // Same priority
       // USER selects which task to edit
       // TaskModel taskToEdit = await someComponent.userSelectTaskToEdit(currentTask, nextTask);
-      // moveOrPostponeTask(schedule, taskToEdit);
+      TaskModel taskToEdit = currentTask; // todo implement this
+      moveOrPostponeTask(schedule, taskToEdit);
     } else {
       // Different priority
       // Edit lower priority task
-      // moveOrPostponeTask(schedule, lowerPriority);
+      moveOrPostponeTask(schedule, lowerPriority);
     }
 
     return sanitisedSchedule;
   }
 
   static bool checkMovePossible(List<TaskModel> schedule, TaskModel task) {
-    //todo Implement this method
     // Check if task can be moved to a different time
     // return true if possible, false otherwise
-    return true;
+    Duration taskDuration = task.endTime.difference(task.startTime);
+
+    for (int i = 0; i < schedule.length - 1; i++) {
+      TaskModel currentTask = schedule[i];
+      TaskModel nextTask = schedule[i + 1];
+
+      if (currentTask.id == task.id || nextTask.id == task.id) continue;
+
+      Duration gap = nextTask.startTime.difference(currentTask.endTime);
+      if (gap >= taskDuration) return true;
+    }
+
+    // Handle edge cases of moving task to start or end of day
+    Duration timeFromWakeup =
+        task.startTime.difference(/* some way to fetch wakeup time */ DateTime.now());
+    if (timeFromWakeup >= taskDuration) return true;
+
+    Duration timeToBedtime =
+        schedule.last.endTime.difference(/* some way to fetch bedtime */ DateTime.now());
+    return timeToBedtime >= taskDuration;
   }
 
   Future<void> moveOrPostponeTask(List<TaskModel> schedule, TaskModel task) async {
