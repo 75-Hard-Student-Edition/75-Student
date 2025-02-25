@@ -1,7 +1,12 @@
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/components/schedule_manager/schedule_manager.dart';
 
 class ScheduleGenerator {
-  static List<TaskModel> generateSanitisedSchedule() {
+  IScheduleManager _scheduleManager;
+
+  ScheduleGenerator(this._scheduleManager);
+
+  List<TaskModel> generateSanitisedSchedule() {
     List<TaskModel> schedule = []; // databaseService.getSchedule(); or smtn
     if (schedule.isEmpty || schedule.length == 1) return schedule;
 
@@ -44,7 +49,7 @@ class ScheduleGenerator {
   ///     b. Different priority - edit lower priority task
   ///       i. Move is possible - USER selects to move or postpone task
   ///       ii. Move is impossible - postpone task
-  static List<TaskModel> handleOverlap(
+  List<TaskModel> handleOverlap(
       List<TaskModel> schedule, TaskModel currentTask, TaskModel nextTask) {
     List<TaskModel> sanitisedSchedule = schedule;
     List<TaskModel> movableTasks = [currentTask, nextTask].where((task) => task.isMovable).toList();
@@ -60,7 +65,7 @@ class ScheduleGenerator {
         // Same priority
         // USER selects which task to delete
         // taskToDelete = await someComponent.userSelectTaskToDelete(currentTask, nextTask);
-        // scheduleManager.deleteTask(taskToDelete.id);
+        _scheduleManager.deleteTask(taskToDelete.id);
         // sanitisedSchedule.remove(taskToDelete);
       } else {
         // Different priority
@@ -98,19 +103,19 @@ class ScheduleGenerator {
     return true;
   }
 
-  static void moveOrPostponeTask(List<TaskModel> schedule, TaskModel task) {
+  void moveOrPostponeTask(List<TaskModel> schedule, TaskModel task) {
     //todo Implement this method
     // USER selects to move or postpone task
     if (checkMovePossible(schedule, task)) {
       // Move is possible
       // if (await someComponent.userSelectMoveOrPostpone(task)) {
-      //   scheduleManager.moveTask(task);
+      // _scheduleManager.moveTask(task); todo implement this
       // } else {
-      //   scheduleManager.postponeTask(task);
+      _scheduleManager.postPoneTask(task.id);
       // }
     } else {
       // Move is impossible
-      // scheduleManager.postponeTask(task);
+      _scheduleManager.postPoneTask(task.id);
     }
   }
 }

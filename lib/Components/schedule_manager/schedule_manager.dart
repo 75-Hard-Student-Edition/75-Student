@@ -2,6 +2,7 @@ import 'package:student_75/models/task_model.dart';
 import 'package:student_75/components/schedule.dart';
 import 'package:student_75/components/points_manager.dart';
 import 'package:student_75/components/notification_manager.dart';
+import 'package:student_75/components/schedule_manager/schedule_generator.dart';
 
 // Interface for ScheduleManager to interact with the GUI
 abstract class IScheduleManager {
@@ -150,147 +151,11 @@ class ScheduleManager implements IScheduleManager {
       // DatabaseService.updateUserRecord(); // Reset streak somehow
     }
 
-    //* 2. Fetch new automatic schedule
-    List<TaskModel> newScheduleTasks =
-        []; //todo Fetch new schedule from database
-
-    //* 3. Order new schedule
-    List<TaskModel> sanitisedSchedule = santitiseSchedule(newScheduleTasks);
+    //* 2. Generate new schedule
+    ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
+    final List<TaskModel> sanitisedSchedule = scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
     todaysSchedule = Schedule(tasks: sanitisedSchedule);
-  }
-
-  List<TaskModel> santitiseSchedule(List<TaskModel> schedule) {
-    /* 
-    Cases:
-      1. No overlap - move to next task
-
-      The rest of the cases are all overlaps.
-      Note that in overlap cases, the user will be notified whenever the schedule
-      is changed (e.g., pass is not clean) reguardless of whether user input is 
-      required or not.
-      
-      2. Neither tasks movable
-        a. Different priority - delete lower priority
-        b. Same priority - USER selects which task to delete
-      3. One task movable
-        a. Move is possible - USER selects to move or postpone task
-        b. Move is impossible - postpone task
-      4. Both tasks movable
-        a. Same priority - USER selects which task to edit
-          i. Move is possible - USER selects to move or postpone task
-          ii. Move is impossible - postpone task
-        b. Different priority - edit lower priority task
-          i. Move is possible - USER selects to move or postpone task
-          ii. Move is impossible - postpone task
-    */
-
-    // Empty or singleton schedules are automatically valid
-    if (schedule.isEmpty || schedule.length == 1) return schedule;
-
-    // Sort Schedule by start time
-    schedule.sort((a, b) => a.startTime.compareTo(b.startTime));
-
-    bool passIsClean = false;
-    while (!passIsClean) {
-      passIsClean = true;
-      int nextTaskIndex = 1;
-
-      // Need to break any time the pass is not clean to ensure we are not mutating the list while iterating
-      while (nextTaskIndex < schedule.length && passIsClean) {
-        TaskModel currentTask = schedule[nextTaskIndex - 1];
-        TaskModel nextTask = schedule[nextTaskIndex];
-
-        // Check for overlap
-        if (!currentTask.endTime.isAfter(nextTask.startTime)) {
-          // If there is no overlap, move to the next task
-          nextTaskIndex++;
-          continue;
-        }
-
-        // Handle overlap
-        passIsClean = false;
-
-        // List containing the tasks that are movable
-        List<TaskModel> movableTasks =
-            [currentTask, nextTask].where((task) => task.isMovable).toList();
-
-        // List containing the task with the lower priority
-        // If they have the same priority, both will be in the list
-        List<TaskModel> lowerPriority = [currentTask, nextTask]
-            .where((task) =>
-                task.priority.index ==
-                [currentTask, nextTask]
-                    .map((t) => t.priority.index)
-                    .reduce((a, b) => a > b ? a : b))
-            .toList();
-
-        if (movableTasks.isEmpty) {
-          if (lowerPriority.length == 1) {
-            // If neither task is movable, but one has higher priority, postpone the lower priority task
-            deleteTask(lowerPriority[0].id);
-            // notificationManager.deleteTask(higherPriority[0].id);
-          } else {
-            //todo maybe we now need extra functionality for the notificationManager
-            //todo or maybe this is an entirely new component?
-            // taskToDelete = notificationManager.selectTaskToDelete(higherPriority[0].id, higherPriority[1].id);
-            // deleteTask(taskToDelete.id);
-          }
-          //? Maybe continue instead im not sure
-          break;
-        }
-
-        if (movableTasks.length == 2) {
-          if (lowerPriority.length == 2) {
-            // If both tasks are movable and have the same priority, ask the user which to edit
-            // taskToEdit = notificationManager.selectTaskToEdit(movableTasks[0].id, movableTasks[1].id);
-            int taskToEdit = movableTasks[0].id; //! temporary
-            bool moveIsPossible = checkMovePossible(schedule, taskToEdit);
-            if (moveIsPossible) {
-              // notificationManager.moveOrPostponeTask(taskToEdit);
-            } else {
-              // notificationManager.postponeTask(taskToEdit);
-            }
-          } else {
-            bool moveIsPossible =
-                checkMovePossible(schedule, lowerPriority[0].id);
-            if (moveIsPossible) {
-              // notificationManager.moveOrPostponeTask(movableTasks[0].id);
-            } else {
-              // notificationManager.postponeTask(movableTasks[0].id);
-            }
-          }
-        } else {
-          bool moveIsPossible =
-              checkMovePossible(schedule, lowerPriority[0].id);
-          if (moveIsPossible) {
-            // notificationManager.moveOrPostponeTask(movableTasks[0].id);
-          } else {
-            // notificationManager.postponeTask(movableTasks[0].id);
-          }
-        }
-      }
-    }
-    return schedule;
-  }
-
-  bool checkMovePossible(List<TaskModel> schedule, int taskIndex) {
-    //todo Implement this - make no change if not possible
-    return true;
-  }
-
-  void handleOverlap(TaskModel task, TaskModel nextTask) async {
-    bool passIsClean = false;
-    List<TaskModel> movableTasks =
-        [task, nextTask].where((task) => task.isMovable).toList();
-    // Task with lower priority, null if priorities are the same
-    TaskModel? lowerPriority = task.priority.index > nextTask.priority.index
-        ? nextTask
-        : task.priority.index < nextTask.priority.index
-            ? task
-            : null;
-
-    if (movableTasks.isEmpty) {}
   }
 }
