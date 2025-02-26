@@ -2,7 +2,7 @@ import 'package:student_75/models/task_model.dart';
 import 'package:student_75/components/schedule_manager/schedule_manager.dart';
 
 class ScheduleGenerator {
-  IScheduleManager _scheduleManager;
+  ScheduleManager _scheduleManager;
 
   ScheduleGenerator(this._scheduleManager);
 
