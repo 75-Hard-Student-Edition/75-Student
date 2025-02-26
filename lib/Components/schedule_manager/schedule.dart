@@ -2,6 +2,9 @@ import 'package:student_75/models/task_model.dart';
 
 class Schedule {
   List<TaskModel> tasks;
+  bool get isEmpty => tasks.isEmpty;
+  int get length => tasks.length;
+  TaskModel get last => tasks.last;
 
   Schedule({required this.tasks});
 

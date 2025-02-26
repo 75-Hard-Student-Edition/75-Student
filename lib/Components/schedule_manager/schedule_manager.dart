@@ -1,5 +1,5 @@
 import 'package:student_75/models/task_model.dart';
-import 'package:student_75/Components/schedule.dart';
+import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/Components/notification_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
@@ -153,9 +153,9 @@ class ScheduleManager implements IScheduleManager {
 
     //* 2. Generate new schedule
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final List<TaskModel> sanitisedSchedule = scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule = scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
-    todaysSchedule = Schedule(tasks: sanitisedSchedule);
+    todaysSchedule = sanitisedSchedule;
   }
 }

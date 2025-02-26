@@ -1,4 +1,5 @@
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
 class ScheduleGenerator {
@@ -6,19 +7,19 @@ class ScheduleGenerator {
 
   ScheduleGenerator(this._scheduleManager);
 
-  List<TaskModel> generateSanitisedSchedule() {
-    List<TaskModel> schedule = []; // databaseService.getSchedule(); or smtn
+  Schedule generateSanitisedSchedule() {
+    Schedule schedule = Schedule(tasks: []); // databaseService.getSchedule(); or smtn
     if (schedule.isEmpty || schedule.length == 1) return schedule;
 
-    schedule.sort((a, b) => a.startTime.compareTo(b.startTime));
+    schedule.sort();
 
     bool passIsClean = false;
     while (!passIsClean) {
       passIsClean = true;
 
       for (int i = 0; i < schedule.length - 1; i++) {
-        TaskModel currentTask = schedule[i];
-        TaskModel nextTask = schedule[i + 1];
+        TaskModel currentTask = schedule.getTaskModel(i);
+        TaskModel nextTask = schedule.getTaskModel(i + 1);
 
         if (!currentTask.endTime.isAfter(nextTask.startTime)) {
           continue;
@@ -50,9 +51,8 @@ class ScheduleGenerator {
   ///     b. Different priority - edit lower priority task
   ///       i. Move is possible - USER selects to move or postpone task
   ///       ii. Move is impossible - postpone task
-  List<TaskModel> handleOverlap(
-      List<TaskModel> schedule, TaskModel currentTask, TaskModel nextTask) {
-    List<TaskModel> sanitisedSchedule = schedule;
+  Schedule handleOverlap(Schedule schedule, TaskModel currentTask, TaskModel nextTask) {
+    Schedule sanitisedSchedule = schedule;
     List<TaskModel> movableTasks = [currentTask, nextTask].where((task) => task.isMovable).toList();
     TaskModel? lowerPriority = currentTask.priority.index > nextTask.priority.index
         ? nextTask
@@ -68,12 +68,12 @@ class ScheduleGenerator {
         // taskToDelete = await someComponent.userSelectTaskToDelete(currentTask, nextTask);
         TaskModel taskToDelete = currentTask; // todo implement this
         _scheduleManager.deleteTask(taskToDelete.id);
-        sanitisedSchedule.remove(taskToDelete);
+        sanitisedSchedule.remove(taskToDelete.id);
       } else {
         // Different priority
         // Delete lower priority task
         _scheduleManager.deleteTask(lowerPriority.id);
-        sanitisedSchedule.remove(lowerPriority);
+        sanitisedSchedule.remove(lowerPriority.id);
       }
       return sanitisedSchedule;
     }
@@ -101,14 +101,14 @@ class ScheduleGenerator {
     return sanitisedSchedule;
   }
 
-  static bool checkMovePossible(List<TaskModel> schedule, TaskModel task) {
+  static bool checkMovePossible(Schedule schedule, TaskModel task) {
     // Check if task can be moved to a different time
     // return true if possible, false otherwise
     Duration taskDuration = task.endTime.difference(task.startTime);
 
     for (int i = 0; i < schedule.length - 1; i++) {
-      TaskModel currentTask = schedule[i];
-      TaskModel nextTask = schedule[i + 1];
+      TaskModel currentTask = schedule.getTaskModel(i);
+      TaskModel nextTask = schedule.getTaskModel(i + 1);
 
       if (currentTask.id == task.id || nextTask.id == task.id) continue;
 
@@ -126,7 +126,7 @@ class ScheduleGenerator {
     return timeToBedtime >= taskDuration;
   }
 
-  Future<void> moveOrPostponeTask(List<TaskModel> schedule, TaskModel task) async {
+  Future<void> moveOrPostponeTask(Schedule schedule, TaskModel task) async {
     //todo Implement this method
     // USER selects to move or postpone task
     if (checkMovePossible(schedule, task)) {
