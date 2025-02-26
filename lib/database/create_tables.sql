@@ -1,57 +1,100 @@
--- Create ENUM types
-CREATE TYPE difficulty_enum AS ENUM ('easy', 'medium', 'hard');
-CREATE TYPE day_enum AS ENUM ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
-CREATE TYPE category_enum AS ENUM ('academic', 'social', 'health', 'employment', 'chores');
+/*
+This code has been re-written to be compatible with SQLite
 
--- Create User table
-CREATE TABLE "User" (
-    user_id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(100) NOT NULL,
-    difficulty difficulty_enum NOT NULL,
+SQLite has fewer datatypes and fewer options for integrity constraints
+than other database engines. 
+This means that integrity will need to be ensured in the code that 
+interfaces with the database, rather than the database itself.
+ */
+
+-- Create difficulty table (formerly enum)
+CREATE TABLE IF NOT EXISTS "difficulty" (
+    difficulty_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    difficulty_str TEXT
+) STRICT;
+
+INSERT INTO "difficulty" (difficulty_str) VALUES
+('easy'),
+('medium'),
+('hard');
+
+-- Create day table (formerly enum)
+CREATE TABLE IF NOT EXISTS "day" (
+    day_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    day_str TEXT
+) STRICT;
+
+INSERT INTO "day" (day_str) VALUES
+('Monday'),
+('Tuesday'),
+('Wednesday'),
+('Thursday'),
+('Friday'),
+('Saturday'),
+('Sunday');
+
+-- Create category table (formerly enum)
+CREATE TABLE IF NOT EXISTS "category" (
+    category_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category_str TEXT
+) STRICT;
+
+INSERT INTO "category" (category_str) VALUES
+('academic'),
+('social'),
+('health'),
+('employment'),
+('chores');
+
+-- Create user table
+CREATE TABLE "user" (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,                 -- forrmely VARCHAR(50)
+    email TEXT NOT NULL UNIQUE,             -- formerly VARCHAR(100)
+    password TEXT NOT NULL,                 -- formerly VARCHAR(100)
+    difficulty_id INTEGER NOT NULL REFERENCES "difficulty"(difficulty_id) ON DELETE CASCADE,
     streak INT DEFAULT 0,
-    sleep_duration INTERVAL,
-    winddown_interval INTERVAL
-);
+    sleep_duration TEXT,                    -- formerly INTERVAL
+    winddown_interval TEXT                  -- formerly INTERVAL
+) STRICT;
 
--- Create User_Category_Priority table
-CREATE TABLE "User_Category_Priority" (
-    user_id INT REFERENCES "User"(user_id) ON DELETE CASCADE,
-    category category_enum NOT NULL,
+-- Create user_category_priority table
+CREATE TABLE "user_category_priority" (
+    user_id INTEGER REFERENCES "user"(user_id) ON DELETE CASCADE,
+    category_id INT NOT NULL REFERENCES "category"(category_id) ON DELETE CASCADE,
     category_priority INT NOT NULL,
-    PRIMARY KEY (user_id, category)
-);
+    PRIMARY KEY (user_id, category_id)
+) STRICT;
 
--- Create Location table
-CREATE TABLE "Location" (
-    location_id SERIAL PRIMARY KEY,
-    location_name VARCHAR(50) NOT NULL,
-    latitude DECIMAL(10, 8) NOT NULL,
-    longitude DECIMAL(11, 8) NOT NULL,
+-- Create location table
+CREATE TABLE "location" (
+    location_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    location_name TEXT NOT NULL,    -- formerly VARCHAR(50)
+    latitude REAL NOT NULL,         -- formerly DECIMAL(10, 8)
+    longitude REAL NOT NULL,        -- formerly DECIMAL(11, 8) -- idk why they were different
     radius_meters INT NOT NULL
-);
+) STRICT;
 
 -- Create Task table
-CREATE TABLE "Task" (
-    task_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES "User"(user_id) ON DELETE CASCADE,
-    location_id INT REFERENCES "Location"(location_id) ON DELETE SET NULL,
-    category category_enum NOT NULL,
-    title VARCHAR(100) NOT NULL,
-    description VARCHAR(250),
-    is_moveable BOOLEAN DEFAULT FALSE,
-    is_complete BOOLEAN DEFAULT FALSE,
-    start_time TIMESTAMP,
-    end_time TIMESTAMP,
-    repeat_period INTERVAL,
-    notify_interval INTERVAL
-);
+CREATE TABLE "task" (
+    task_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES "user"(user_id) ON DELETE CASCADE,
+    location_id INTEGER REFERENCES "location"(location_id) ON DELETE SET NULL,
+    category_id INTEGER NOT NULL REFERENCES "category"(category_id) ON DELETE CASCADE,
+    title TEXT NOT NULL, -- formerly VARCHAR(100)
+    description TEXT, -- formerly VARCHAR(250)
+    is_moveable INTEGER DEFAULT 0, -- formerly BOOLEAN
+    is_complete INTEGER DEFAULT 0, -- formerly BOOLEAN
+    start_time TEXT, -- formerly TIMESTAMP
+    end_time TEXT, -- formerly TIMESTAMP
+    repeat_period TEXT, -- formerly INTERVAL
+    notify_interval TEXT NOT NULL -- formerly INTERVAL
+) STRICT;
 
 -- Create Alarm table
-CREATE TABLE "Alarm" (
-    user_id INT REFERENCES "User"(user_id) ON DELETE CASCADE,
-    day day_enum NOT NULL,
-    time TIME NOT NULL,
-    PRIMARY KEY (user_id, day)
-);
+CREATE TABLE "alarm" (
+    user_id INT REFERENCES "user"(user_id) ON DELETE CASCADE,
+    day_id INTEGER NOT NULL REFERENCES "day"(day_id) ON DELETE CASCADE,
+    time TEXT NOT NULL, -- formerly TIME
+    PRIMARY KEY (user_id, day_id)
+) STRICT;
