@@ -5,10 +5,23 @@ class Schedule {
 
   Schedule({required this.tasks});
 
+  void sort() => tasks.sort((a, b) => a.startTime.compareTo(b.startTime));
+
   // Method to add a task to the schedule
   void add(TaskModel task) {
-    //todo add error checking to make sure that task times do not overlap
     tasks.add(task);
+    sort();
+    int i = getTaskIndex(task.id);
+    if (i == 0 || i == tasks.length - 1) return;
+
+    TaskModel prevTask = tasks[i - 1];
+    if (prevTask.endTime.isAfter(task.startTime)) {
+      //todo handle overlap
+    }
+    TaskModel nextTask = tasks[i + 1];
+    if (task.endTime.isAfter(nextTask.startTime)) {
+      //todo handle overlap
+    }
   }
 
   // Method to remove a task from the schedule by task ID

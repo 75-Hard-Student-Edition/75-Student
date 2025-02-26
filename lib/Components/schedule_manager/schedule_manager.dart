@@ -142,7 +142,7 @@ class ScheduleManager implements IScheduleManager {
         // Add task to backlog - have to figure this out in the database
         backlog.add(task);
       } else {
-        //! Have to decide what to do if the task is not complete or movable
+        deleteTask(task.id);
       }
     }
     if (pointsManager.determinePass()) {

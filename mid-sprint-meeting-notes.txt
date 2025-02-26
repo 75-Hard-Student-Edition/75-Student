@@ -18,9 +18,8 @@ PRINCE
     - Add PointsManager add/remove task method?
 
 CHARLIE 
-    - Both immovable needs to return error to frontend and schedule higher priority
-        - Same priority needs to be decided by user
-    - Movable
-        - Lower priority gets user notification - move or postpone?
-        - Equal priority gets user notification - which task?, move or postpone?
+    - write alert callback methods for ScheduleManager
+    - Write moveTask method
+    - Maybe sort out actually using the schedule class
+        - Fix it up first
         
