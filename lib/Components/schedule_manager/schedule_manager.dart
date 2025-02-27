@@ -137,7 +137,7 @@ class ScheduleManager implements IScheduleManager {
   @override
   void postPoneTask(int taskId) {
     // Add task to backlog
-    final TaskModel? task = todaysSchedule.getTaskModel(taskId);
+    final TaskModel? task = todaysSchedule.getTaskModelFromId(taskId);
     if (task == null) {
       throw TaskNotFoundException(
           "Task with id '$taskId' not found in schedule when trying to postpone");
@@ -149,7 +149,7 @@ class ScheduleManager implements IScheduleManager {
 
   @override
   void completeTask(int taskId) {
-    final int taskIndex = todaysSchedule.getTaskIndex(taskId);
+    final int taskIndex = todaysSchedule.getTaskIndexFromId(taskId);
     final TaskModel task = todaysSchedule.tasks[taskIndex];
     todaysSchedule.tasks[taskIndex] = task.copyWith(isComplete: true);
   }

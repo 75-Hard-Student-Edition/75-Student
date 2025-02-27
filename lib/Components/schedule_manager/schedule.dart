@@ -15,7 +15,7 @@ class Schedule {
   void add(TaskModel task) {
     tasks.add(task);
     sort();
-    int i = getTaskIndex(task.id);
+    int i = getTaskIndexFromId(task.id);
     if (i == 0 || i == tasks.length - 1) return;
 
     TaskModel prevTask = tasks[i - 1];
@@ -33,7 +33,7 @@ class Schedule {
   // Method to remove a task from the schedule by task ID
   void remove(int taskId) {
     //! Use the getTaskIndex method to get the index of the task
-    TaskModel? task = getTaskModel(taskId);
+    TaskModel? task = getTaskModelFromId(taskId);
     if (task == null) {
       throw TaskNotFoundException(
           "Task with id '$taskId' not found in schedule when trying to remove");
@@ -46,7 +46,7 @@ class Schedule {
     // need clarification on this.
   }
 
-  int getTaskIndex(int taskId) {
+  int getTaskIndexFromId(int taskId) {
     for (int i = 0; i < tasks.length; i++) {
       TaskModel task = tasks[i];
       if (task.id == taskId) return i;
@@ -54,8 +54,8 @@ class Schedule {
     return -1;
   }
 
-  TaskModel? getTaskModel(int taskId) {
-    int index = getTaskIndex(taskId);
+  TaskModel? getTaskModelFromId(int taskId) {
+    int index = getTaskIndexFromId(taskId);
     if (index == -1) return null;
     return tasks[index];
   }
