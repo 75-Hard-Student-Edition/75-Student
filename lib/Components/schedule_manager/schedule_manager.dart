@@ -137,7 +137,11 @@ class ScheduleManager implements IScheduleManager {
   @override
   void postPoneTask(int taskId) {
     // Add task to backlog
-    final TaskModel task = todaysSchedule.getTaskModel(taskId);
+    final TaskModel? task = todaysSchedule.getTaskModel(taskId);
+    if (task == null) {
+      throw TaskNotFoundException(
+          "Task with id '$taskId' not found in schedule when trying to postpone");
+    }
     backlog.add(task);
     // Remove task from schedule
     deleteTask(taskId);

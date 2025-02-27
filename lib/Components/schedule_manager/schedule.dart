@@ -34,7 +34,10 @@ class Schedule {
   void remove(int taskId) {
     //! Use the getTaskIndex method to get the index of the task
     TaskModel? task = getTaskModel(taskId);
-    if (task == null) throw TaskNotFoundException("Task with id '$taskId' not found in schedule");
+    if (task == null) {
+      throw TaskNotFoundException(
+          "Task with id '$taskId' not found in schedule when trying to remove");
+    }
     tasks.remove(task);
   }
 

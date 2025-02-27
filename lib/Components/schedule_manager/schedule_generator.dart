@@ -3,7 +3,7 @@ import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
 class ScheduleGenerator {
-  ScheduleManager _scheduleManager;
+  final ScheduleManager _scheduleManager;
 
   ScheduleGenerator(this._scheduleManager);
 
@@ -18,8 +18,8 @@ class ScheduleGenerator {
       passIsClean = true;
 
       for (int i = 0; i < schedule.length - 1; i++) {
-        TaskModel currentTask = schedule.getTaskModel(i);
-        TaskModel nextTask = schedule.getTaskModel(i + 1);
+        TaskModel currentTask = schedule.tasks[i];
+        TaskModel nextTask = schedule.tasks[i + 1];
 
         if (!currentTask.endTime.isAfter(nextTask.startTime)) {
           continue;
@@ -107,8 +107,8 @@ class ScheduleGenerator {
     Duration taskDuration = task.endTime.difference(task.startTime);
 
     for (int i = 0; i < schedule.length - 1; i++) {
-      TaskModel currentTask = schedule.getTaskModel(i);
-      TaskModel nextTask = schedule.getTaskModel(i + 1);
+      TaskModel currentTask = schedule.tasks[i];
+      TaskModel nextTask = schedule.tasks[i + 1];
 
       if (currentTask.id == task.id || nextTask.id == task.id) continue;
 
