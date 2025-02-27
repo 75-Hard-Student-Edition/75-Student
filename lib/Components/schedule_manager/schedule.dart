@@ -32,7 +32,6 @@ class Schedule {
 
   // Method to remove a task from the schedule by task ID
   void remove(int taskId) {
-    //! Use the getTaskIndex method to get the index of the task
     TaskModel? task = getTaskModelFromId(taskId);
     if (task == null) {
       throw TaskNotFoundException(
@@ -41,9 +40,14 @@ class Schedule {
     tasks.remove(task);
   }
 
-  // Method to set the tasks to a new list
-  void setTasks(List<TaskModel> newTasks) {
-    // need clarification on this.
+  void editTask(TaskModel newTask) {
+    int i = getTaskIndexFromId(newTask.id);
+    if (i == -1) {
+      throw TaskNotFoundException(
+          "Task with id '${newTask.id}' not found in schedule when trying to edit");
+    }
+    tasks[i] = newTask;
+    sort();
   }
 
   int getTaskIndexFromId(int taskId) {
