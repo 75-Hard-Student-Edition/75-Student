@@ -19,6 +19,14 @@ abstract class IScheduleManager {
   void scheduleBacklogSuggestion(int taskId);
 }
 
+class TaskOverlapException implements Exception {
+  final String message;
+  TaskOverlapException(this.message);
+
+  @override
+  String toString() => 'TaskOverlapException: $message';
+}
+
 class Backlog {
   /* Stub implementation of Backlog */
   void add(TaskModel task) {}
@@ -74,7 +82,15 @@ class ScheduleManager implements IScheduleManager {
   @override
   void addTask(TaskModel task) {
     // Add task to schedule
-    todaysSchedule.add(task);
+    try {
+      todaysSchedule.add(task);
+    } on TaskOverlapException catch (e) {
+      //todo use passed callback function to display error message
+      print(e.toString());
+    } catch (e) {
+      // Handle other exceptions
+      print("Uncaught Exception on addTask: ${e.toString()}");
+    }
     // Add notification for task
     notificationManager.addNotification(task);
     //todo Update points

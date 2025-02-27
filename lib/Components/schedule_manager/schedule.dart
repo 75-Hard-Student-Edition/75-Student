@@ -1,4 +1,5 @@
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
 class Schedule {
   List<TaskModel> tasks;
@@ -19,11 +20,13 @@ class Schedule {
 
     TaskModel prevTask = tasks[i - 1];
     if (prevTask.endTime.isAfter(task.startTime)) {
-      //todo handle overlap
+      remove(task.id);
+      throw TaskOverlapException("Task overlaps with previous task");
     }
     TaskModel nextTask = tasks[i + 1];
     if (task.endTime.isAfter(nextTask.startTime)) {
-      //todo handle overlap
+      remove(task.id);
+      throw TaskOverlapException("Task overlaps with next task");
     }
   }
 
