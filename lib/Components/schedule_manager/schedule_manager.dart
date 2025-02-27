@@ -27,6 +27,14 @@ class TaskOverlapException implements Exception {
   String toString() => 'TaskOverlapException: $message';
 }
 
+class TaskNotFoundException implements Exception {
+  final String message;
+  TaskNotFoundException(this.message);
+
+  @override
+  String toString() => 'TaskNotFoundException: $message';
+}
+
 class Backlog {
   /* Stub implementation of Backlog */
   void add(TaskModel task) {}
@@ -102,7 +110,15 @@ class ScheduleManager implements IScheduleManager {
   @override
   void deleteTask(int taskId) {
     // Remove task from schedule
-    todaysSchedule.remove(taskId);
+    try {
+      todaysSchedule.remove(taskId);
+    } on TaskNotFoundException catch (e) {
+      //todo use passed callback function to display error message
+      print(e.toString());
+    } catch (e) {
+      // Handle other exceptions
+      print("Uncaught Exception on deleteTask: ${e.toString()}");
+    }
     // Remove notification for task
     notificationManager.removeNotification(taskId);
     //todo Update points

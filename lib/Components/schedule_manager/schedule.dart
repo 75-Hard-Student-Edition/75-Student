@@ -33,7 +33,9 @@ class Schedule {
   // Method to remove a task from the schedule by task ID
   void remove(int taskId) {
     //! Use the getTaskIndex method to get the index of the task
-    tasks.remove(taskId);
+    TaskModel? task = getTaskModel(taskId);
+    if (task == null) throw TaskNotFoundException("Task with id '$taskId' not found in schedule");
+    tasks.remove(task);
   }
 
   // Method to set the tasks to a new list
@@ -46,11 +48,12 @@ class Schedule {
       TaskModel task = tasks[i];
       if (task.id == taskId) return i;
     }
-    throw Exception("Task $taskId not found in Schedule");
+    return -1;
   }
 
-  TaskModel getTaskModel(int taskId) {
+  TaskModel? getTaskModel(int taskId) {
     int index = getTaskIndex(taskId);
+    if (index == -1) return null;
     return tasks[index];
   }
 }
