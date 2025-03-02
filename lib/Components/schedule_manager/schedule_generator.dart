@@ -62,7 +62,6 @@ class ScheduleGenerator {
             : null; // Null if equal priority
 
     if (movableTasks.isEmpty) {
-      //todo Implement this case
       if (lowerPriority == null) {
         // Same priority
         // USER selects which task to delete
@@ -88,7 +87,6 @@ class ScheduleGenerator {
     }
 
     // Both tasks movable
-    //todo Implement this case
     if (lowerPriority == null) {
       // Same priority
       // USER selects which task to edit
