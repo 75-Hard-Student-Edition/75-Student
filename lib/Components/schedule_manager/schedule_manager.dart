@@ -1,23 +1,11 @@
+import 'package:student_75/Components/schedule_manager/schedule_manager_interface.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
+import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
 import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/Components/notification_manager.dart';
-import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
 
 // Interface for ScheduleManager to interact with the GUI
-abstract class IScheduleManager {
-  // ScheduleManager -> GUI methods
-  List<TaskModel> getSchedule();
-  List<TaskModel> getBacklogSuggestions();
-
-  // GUI -> ScheduleManager methods
-  void addTask(TaskModel task);
-  void deleteTask(int taskId);
-  void editTask(TaskModel task);
-  void postPoneTask(int taskId);
-  void completeTask(int taskId);
-  void scheduleBacklogSuggestion(int taskId);
-}
 
 class TaskOverlapException implements Exception {
   final String message;
@@ -66,9 +54,10 @@ class ScheduleManager implements IScheduleManager {
   late Backlog backlog;
   late PointsManager pointsManager;
   late NotificationManager notificationManager;
+  late Future<bool> Function(String, String, String) scheduleConflictDecision;
 
-  ScheduleManager() {
-    //! All this data needs to be fetched by database service in constructor
+  ScheduleManager(this.scheduleConflictDecision) {
+    //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog();
     pointsManager = PointsManager(
