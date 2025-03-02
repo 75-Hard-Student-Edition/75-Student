@@ -1,23 +1,11 @@
+import 'package:student_75/Components/schedule_manager/schedule_manager_interface.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
+import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
 import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/Components/notification_manager.dart';
-import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
 
 // Interface for ScheduleManager to interact with the GUI
-abstract class IScheduleManager {
-  // ScheduleManager -> GUI methods
-  List<TaskModel> getSchedule();
-  List<TaskModel> getBacklogSuggestions();
-
-  // GUI -> ScheduleManager methods
-  void addTask(TaskModel task);
-  void deleteTask(int taskId);
-  void editTask(TaskModel task);
-  void postPoneTask(int taskId);
-  void completeTask(int taskId);
-  void scheduleBacklogSuggestion(int taskId);
-}
 
 class TaskOverlapException implements Exception {
   final String message;
@@ -66,9 +54,11 @@ class ScheduleManager implements IScheduleManager {
   late Backlog backlog;
   late PointsManager pointsManager;
   late NotificationManager notificationManager;
+  late Future<bool> Function(String, String, String) userBinarySelectCallback;
+  late void Function(String) displayErrorCallback;
 
-  ScheduleManager() {
-    //! All this data needs to be fetched by database service in constructor
+  ScheduleManager(this.userBinarySelectCallback, this.displayErrorCallback) {
+    //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog();
     pointsManager = PointsManager(
@@ -85,6 +75,13 @@ class ScheduleManager implements IScheduleManager {
   @override
   //todo Decide on some way of deciding peak depth
   List<TaskModel> getBacklogSuggestions() => backlog.peak(5);
+  @override
+  Future<bool> userBinarySelect(String choice1, String choice2, String message) =>
+      userBinarySelectCallback(choice1, choice2, message);
+  @override
+  void displayError(String message) {
+    displayErrorCallback(message);
+  }
 
   //* == GUI -> ScheduleManager methods ==
   @override
@@ -93,11 +90,10 @@ class ScheduleManager implements IScheduleManager {
     try {
       todaysSchedule.add(task);
     } on TaskOverlapException catch (e) {
-      //todo use passed callback function to display error message
-      print(e.toString());
+      displayError(e.toString());
     } catch (e) {
       // Handle other exceptions
-      print("Uncaught Exception on addTask: ${e.toString()}");
+      displayError("Uncaught Exception on addTask: ${e.toString()}");
     }
     // Add notification for task
     notificationManager.addNotification(task);
@@ -113,11 +109,10 @@ class ScheduleManager implements IScheduleManager {
     try {
       todaysSchedule.remove(taskId);
     } on TaskNotFoundException catch (e) {
-      //todo use passed callback function to display error message
-      print(e.toString());
+      displayError(e.toString());
     } catch (e) {
       // Handle other exceptions
-      print("Uncaught Exception on deleteTask: ${e.toString()}");
+      displayError("Uncaught Exception on deleteTask: ${e.toString()}");
     }
     // Remove notification for task
     notificationManager.removeNotification(taskId);
@@ -165,7 +160,7 @@ class ScheduleManager implements IScheduleManager {
   }
 
   //* == Internal methods ==
-  void endOfDayProcess() {
+  Future<void> endOfDayProcess() async {
     //* 1. Process old schedule
     for (final task in todaysSchedule.tasks) {
       if (task.isComplete) {
@@ -189,7 +184,7 @@ class ScheduleManager implements IScheduleManager {
 
     //* 2. Generate new schedule
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule = scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
     todaysSchedule = sanitisedSchedule;
