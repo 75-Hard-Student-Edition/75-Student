@@ -7,7 +7,7 @@ class ScheduleGenerator {
 
   ScheduleGenerator(this._scheduleManager);
 
-  Schedule generateSanitisedSchedule() {
+  Future<Schedule> generateSanitisedSchedule() async {
     Schedule schedule = Schedule(tasks: []); // databaseService.getSchedule(); or smtn
     if (schedule.isEmpty || schedule.length == 1) return schedule;
 
@@ -27,7 +27,7 @@ class ScheduleGenerator {
 
         // Overlap detected
         passIsClean = false;
-        schedule = handleOverlap(schedule, currentTask, nextTask);
+        schedule = await handleOverlap(schedule, currentTask, nextTask);
         break;
       }
     }
@@ -51,7 +51,8 @@ class ScheduleGenerator {
   ///     b. Different priority - edit lower priority task
   ///       i. Move is possible - USER selects to move or postpone task
   ///       ii. Move is impossible - postpone task
-  Schedule handleOverlap(Schedule schedule, TaskModel currentTask, TaskModel nextTask) {
+  Future<Schedule> handleOverlap(
+      Schedule schedule, TaskModel currentTask, TaskModel nextTask) async {
     Schedule sanitisedSchedule = schedule;
     List<TaskModel> movableTasks = [currentTask, nextTask].where((task) => task.isMovable).toList();
     TaskModel? lowerPriority = currentTask.priority.index > nextTask.priority.index
@@ -65,8 +66,10 @@ class ScheduleGenerator {
       if (lowerPriority == null) {
         // Same priority
         // USER selects which task to delete
-        // taskToDelete = await someComponent.userSelectTaskToDelete(currentTask, nextTask);
-        TaskModel taskToDelete = currentTask; // todo implement this
+        TaskModel taskToDelete = (await _scheduleManager.userBinarySelect(currentTask.id.toString(),
+                nextTask.id.toString(), "Which task would you like to delete?"))
+            ? currentTask
+            : nextTask;
         _scheduleManager.deleteTask(taskToDelete.id);
         sanitisedSchedule.remove(taskToDelete.id);
       } else {
@@ -89,8 +92,10 @@ class ScheduleGenerator {
     if (lowerPriority == null) {
       // Same priority
       // USER selects which task to edit
-      // TaskModel taskToEdit = await someComponent.userSelectTaskToEdit(currentTask, nextTask);
-      TaskModel taskToEdit = currentTask; // todo implement this
+      TaskModel taskToEdit = (await _scheduleManager.userBinarySelect(currentTask.id.toString(),
+              nextTask.id.toString(), "Which task would you like to edit?"))
+          ? currentTask
+          : nextTask;
       moveOrPostponeTask(schedule, taskToEdit);
     } else {
       // Different priority
@@ -127,15 +132,17 @@ class ScheduleGenerator {
   }
 
   Future<void> moveOrPostponeTask(Schedule schedule, TaskModel task) async {
-    //todo Implement this method
     // USER selects to move or postpone task
     if (checkMovePossible(schedule, task)) {
       // Move is possible
-      // if (await someComponent.userSelectMoveOrPostpone(task)) {
-      // _scheduleManager.moveTask(task); todo implement this
-      // } else {
-      _scheduleManager.postPoneTask(task.id);
-      // }
+      if (await _scheduleManager.userBinarySelect(
+          "Move", "Postpone", "Would you like to move or postpone the task?")) {
+        // Move task
+        // _scheduleManager.moveTask(task); // todo implement this
+      } else {
+        // Postpone task
+        _scheduleManager.postPoneTask(task.id);
+      }
     } else {
       // Move is impossible
       _scheduleManager.postPoneTask(task.id);

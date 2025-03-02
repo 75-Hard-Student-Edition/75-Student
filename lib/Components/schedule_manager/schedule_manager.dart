@@ -54,9 +54,9 @@ class ScheduleManager implements IScheduleManager {
   late Backlog backlog;
   late PointsManager pointsManager;
   late NotificationManager notificationManager;
-  late Future<bool> Function(String, String, String) scheduleConflictDecision;
+  late Future<bool> Function(String, String, String) userBinarySelectCallback;
 
-  ScheduleManager(this.scheduleConflictDecision) {
+  ScheduleManager(this.userBinarySelectCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog();
@@ -74,6 +74,9 @@ class ScheduleManager implements IScheduleManager {
   @override
   //todo Decide on some way of deciding peak depth
   List<TaskModel> getBacklogSuggestions() => backlog.peak(5);
+  @override
+  Future<bool> userBinarySelect(String choice1, String choice2, String message) =>
+      userBinarySelectCallback(choice1, choice2, message);
 
   //* == GUI -> ScheduleManager methods ==
   @override
@@ -154,7 +157,7 @@ class ScheduleManager implements IScheduleManager {
   }
 
   //* == Internal methods ==
-  void endOfDayProcess() {
+  Future<void> endOfDayProcess() async {
     //* 1. Process old schedule
     for (final task in todaysSchedule.tasks) {
       if (task.isComplete) {
@@ -178,7 +181,7 @@ class ScheduleManager implements IScheduleManager {
 
     //* 2. Generate new schedule
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule = scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
     todaysSchedule = sanitisedSchedule;
