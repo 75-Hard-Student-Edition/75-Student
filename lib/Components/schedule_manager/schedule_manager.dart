@@ -55,8 +55,9 @@ class ScheduleManager implements IScheduleManager {
   late PointsManager pointsManager;
   late NotificationManager notificationManager;
   late Future<bool> Function(String, String, String) userBinarySelectCallback;
+  late void Function(String) displayErrorCallback;
 
-  ScheduleManager(this.userBinarySelectCallback) {
+  ScheduleManager(this.userBinarySelectCallback, this.displayErrorCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog();
@@ -77,6 +78,10 @@ class ScheduleManager implements IScheduleManager {
   @override
   Future<bool> userBinarySelect(String choice1, String choice2, String message) =>
       userBinarySelectCallback(choice1, choice2, message);
+  @override
+  void displayError(String message) {
+    displayErrorCallback(message);
+  }
 
   //* == GUI -> ScheduleManager methods ==
   @override
@@ -85,11 +90,10 @@ class ScheduleManager implements IScheduleManager {
     try {
       todaysSchedule.add(task);
     } on TaskOverlapException catch (e) {
-      //todo use passed callback function to display error message
-      print(e.toString());
+      displayError(e.toString());
     } catch (e) {
       // Handle other exceptions
-      print("Uncaught Exception on addTask: ${e.toString()}");
+      displayError("Uncaught Exception on addTask: ${e.toString()}");
     }
     // Add notification for task
     notificationManager.addNotification(task);
@@ -105,11 +109,10 @@ class ScheduleManager implements IScheduleManager {
     try {
       todaysSchedule.remove(taskId);
     } on TaskNotFoundException catch (e) {
-      //todo use passed callback function to display error message
-      print(e.toString());
+      displayError(e.toString());
     } catch (e) {
       // Handle other exceptions
-      print("Uncaught Exception on deleteTask: ${e.toString()}");
+      displayError("Uncaught Exception on deleteTask: ${e.toString()}");
     }
     // Remove notification for task
     notificationManager.removeNotification(taskId);

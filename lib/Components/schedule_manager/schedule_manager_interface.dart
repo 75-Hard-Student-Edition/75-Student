@@ -5,6 +5,7 @@ abstract class IScheduleManager {
   List<TaskModel> getSchedule();
   List<TaskModel> getBacklogSuggestions();
   Future<bool> userBinarySelect(String choice1, String choice2, String message);
+  void displayError(String message);
 
   // GUI -> ScheduleManager methods
   void addTask(TaskModel task);
