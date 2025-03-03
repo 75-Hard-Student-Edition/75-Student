@@ -4,26 +4,33 @@ class PointsManager {
   int maxPoints;
   int currentPoints;
   int pointsToPass;
+  int completedTaskPoints;
 
 
   PointsManager({
     required this.maxPoints,
     required this.currentPoints,
     required this.pointsToPass,
+    required this.completedTaskPoints
   });
 
   // Method to calculate the total points
-  void calculateTotalPoints(List<TaskModel> allTasks) {
-    currentPoints = 0;
+  void calculatePoints(List<TaskModel> calTasks) {
+    totalPoints = 0;
     for (var task in allTasks) {
       int taskPoint = task.getPoint();
-      currentPoints += taskPoint;
+      totalPoints += taskPoint;
     }
   }
 
-  // Method to mark a task as completed and add points
-  void completeTask(TaskModel task) {
-    // could this be in the task model class instead?
+  void completedTasks() {
+    List<TaskModel> todaysTask = ScheduleManager.returnTodaySchedule();
+    List<TaskModel> completedTask = todaysTask.where((task) => task.isComplete).toList();
+    completedTaskPoints = calculatePoints(completedTask);
+  }
+
+  void calcPointsToPass() {
+    pointsToPass = currentPoints - completedTaskPoints;
   }
 
   // Method to determine if the user has passed
@@ -33,14 +40,5 @@ class PointsManager {
     }
     return false;
   }
-
-  // Method to simulate a successful day
-  void passDay() {
-    // could we achieve the same with the determinepass method?
-  }
-
-  // Method to simulate a failed day
-  void failDay() {
-    // could we achieve the same with the determinepass method?
-  }
+  
 }
