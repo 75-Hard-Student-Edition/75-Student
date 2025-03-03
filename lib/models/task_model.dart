@@ -87,10 +87,4 @@ class TaskModel {
       notifyBefore: notifyBefore ?? this.notifyBefore,
     );
   }
-
-  int getPoint() {
-    int point = 0;
-    return point;
-  }
-
 }
