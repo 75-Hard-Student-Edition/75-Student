@@ -71,7 +71,7 @@ class ScheduleManager implements IScheduleManager {
 
   //* == ScheduleManager -> GUI methods ==
   @override
-  List<TaskModel> getSchedule() => todaysSchedule.tasks;
+  Schedule getSchedule() => todaysSchedule;
   @override
   //todo Decide on some way of deciding peak depth
   List<TaskModel> getBacklogSuggestions() => backlog.peak(5);
