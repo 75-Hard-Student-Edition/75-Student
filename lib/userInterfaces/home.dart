@@ -1,13 +1,10 @@
 //home page
 
-//todo Implement and pass as userBinarySelect to ScheduleManager
-// Display popup error message with the two provided choices
-// Return bool: true if choice1 is selected, false if choice2 is selected
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
+import 'package:student_75/Components/schedule_manager/schedule.dart'; // Correct Schedule import
 
 void main() {
   runApp(MyApp());
@@ -30,7 +27,7 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   final ScheduleManager scheduleManager = ScheduleManager(); // Backend instance
-  List<TaskModel> taskList = []; // Stores tasks
+  Schedule currentSchedule = Schedule(tasks: []); // Stores tasks
 
   @override
   void initState() {
@@ -89,9 +86,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   /// Tasks from backend
   void _fetchSchedule() {
     setState(() {
-      taskList = scheduleManager.getSchedule();
+      currentSchedule = scheduleManager.getSchedule();
     });
-    print("Fetched schedule from backend: ${taskList.length} tasks loaded.");
+    print("Fetched schedule from backend: ${currentSchedule.length} tasks loaded.");
   }
 
   @override
@@ -121,8 +118,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Widget _buildHeader(BuildContext context, String day, String month) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double topPadding =
-        MediaQuery.of(context).padding.top; // Extra padding for iPhone 15 Pro
+    double topPadding = MediaQuery.of(context).padding.top; // Extra padding for iPhone 15 Pro
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
@@ -133,8 +129,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             children: [
               Text(
                 day,
-                style: TextStyle(
-                    fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold),
               ),
               Text(
                 month.toUpperCase(),
@@ -153,13 +148,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.local_fire_department,
-                    color: Colors.orange, size: screenWidth * 0.06),
+                Icon(Icons.local_fire_department, color: Colors.orange, size: screenWidth * 0.06),
                 Text(
                   "25", // Streak number
-                  style: TextStyle(
-                      fontSize: screenWidth * 0.05,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -196,9 +188,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         child: Text(
                           hourText,
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: screenWidth * 0.03),
+                          style: TextStyle(color: Colors.black54, fontSize: screenWidth * 0.03),
                         ),
                       ),
                     ),
@@ -207,12 +197,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               );
             }),
           ),
-          //_buildDraggableTimeBlock(context, "Math Class", Colors.red.withOpacity(0.3), Colors.red, 8, 10, 0),
-          //_buildDraggableTimeBlock(context, "Physics", Colors.blue.withOpacity(0.3), Colors.blue, 10.5, 11.5, 1),
-          //_buildDraggableTimeBlock(context, "History", Colors.green.withOpacity(0.3), Colors.green, 12, 13, 2),
-          //_buildDraggableTimeBlock(context, "English", Colors.orange.withOpacity(0.3), Colors.orange, 13.5, 15.5, 3),
-          //_buildDraggableTimeBlock(context, "Computer Science", Colors.purple.withOpacity(0.3), Colors.purple, 16, 17, 4),
-          for (var task in taskList) _buildDraggableTimeBlock(context, task),
+          for (var task in currentSchedule.tasks) _buildDraggableTimeBlock(context, task),
         ],
       ),
     );
@@ -228,7 +213,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [Colors.red, Colors.orange, Colors.green]), //need to assign to categories
+              gradient: LinearGradient(
+                  colors: [Colors.red, Colors.orange, Colors.green]), //need to assign to categories
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -255,105 +241,91 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     Color taskColor = _getTaskColor(task.category);
 
-        return Positioned(
-          top: hourHeight * task.startTime.hour +
-              (task.startTime.minute / 60) * hourHeight,
-          left: screenWidth * 0.15,
-          child: GestureDetector(
-            // change start time
-            onVerticalDragUpdate: task.isMovable
-                ? (details) {
-                    setState(() {
-                      DateTime newStart = task.startTime.add(Duration(
-                          minutes: (details.primaryDelta! / hourHeight * 60)
-                              .round()));
+    return Positioned(
+      top: hourHeight * task.startTime.hour + (task.startTime.minute / 60) * hourHeight,
+      left: screenWidth * 0.15,
+      child: GestureDetector(
+        // change start time
+        onVerticalDragUpdate: task.isMovable
+            ? (details) {
+                setState(() {
+                  DateTime newStart = task.startTime
+                      .add(Duration(minutes: (details.primaryDelta! / hourHeight * 60).round()));
 
-                      // Ensure new start time is valid
-                      if (newStart.isBefore(task.endTime)) {
-                        TaskModel updatedTask =
-                            task.copyWith(startTime: newStart);
-                        scheduleManager.editTask(updatedTask);
-                        print(
-                            "Moved Task: '${task.name}' to ${DateFormat('HH:mm').format(newStart)}");
-                      }
-                    });
+                  // Ensure new start time is valid
+                  if (newStart.isBefore(task.endTime)) {
+                    TaskModel updatedTask = task.copyWith(startTime: newStart);
+                    scheduleManager.editTask(updatedTask);
+                    print("Moved Task: '${task.name}' to ${DateFormat('HH:mm').format(newStart)}");
                   }
-                : null,
+                });
+              }
+            : null,
 
-            // Change task duration
-            onPanUpdate: task.isMovable
-                ? (details) {
-                    setState(() {
-                      Duration newDuration = task.endTime
-                              .difference(task.startTime) +
-                          Duration(
-                              minutes: (details.primaryDelta! / hourHeight * 60)
-                                  .round());
+        // Change task duration
+        onPanUpdate: task.isMovable
+            ? (details) {
+                setState(() {
+                  Duration newDuration = task.endTime.difference(task.startTime) +
+                      Duration(minutes: (details.primaryDelta! / hourHeight * 60).round());
 
-                      if (newDuration.inMinutes > 10) {
-                        // no 0-minute tasks
-                        TaskModel updatedTask = task.copyWith(
-                            endTime: task.startTime.add(newDuration));
-                        scheduleManager.editTask(updatedTask);
-                        print(
-                            "Resized Task: '${task.name}' - New Duration: ${newDuration.inMinutes} minutes");
-                      }
-                    });
+                  if (newDuration.inMinutes > 10) {
+                    // no 0-minute tasks
+                    TaskModel updatedTask = task.copyWith(endTime: task.startTime.add(newDuration));
+                    scheduleManager.editTask(updatedTask);
+                    print(
+                        "Resized Task: '${task.name}' - New Duration: ${newDuration.inMinutes} minutes");
                   }
-                : null,
+                });
+              }
+            : null,
 
-            child: Container(
-              width: screenWidth * 0.75,
-              height:
-                  hourHeight * task.endTime.difference(task.startTime).inHours,
-              decoration: BoxDecoration(
-                color: taskColor.withOpacity(0.3),
-                border: Border.all(color: taskColor, width: 2),
-                borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: screenWidth * 0.75,
+          height: hourHeight * task.endTime.difference(task.startTime).inHours,
+          decoration: BoxDecoration(
+            color: taskColor.withOpacity(0.3),
+            border: Border.all(color: taskColor, width: 2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Stack(
+            children: [
+              Center(
+                child: Text(task.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Text(task.name,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  ),
 
-                  // Toggle circle
-                  Positioned(
-                    left: 8,
-                    top: (hourHeight *
-                                task.endTime
-                                    .difference(task.startTime)
-                                    .inHours) /
-                            2 -
-                        10,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          TaskModel updatedTask = task.copyWith(isComplete: !task.isComplete);
-                          scheduleManager.editTask(updatedTask); 
-                          print("Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
-                          _fetchSchedule(); // refresh UI
-                        });
-                      },
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: taskColor, width: 2),
-                          color: task.isComplete ? taskColor : Colors.white,
-                        ),
-                      ),
+              // Toggle circle
+              Positioned(
+                left: 8,
+                top: (hourHeight * task.endTime.difference(task.startTime).inHours) / 2 - 10,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      TaskModel updatedTask = task.copyWith(isComplete: !task.isComplete);
+                      scheduleManager.editTask(updatedTask);
+                      print(
+                          "Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
+                      _fetchSchedule(); // refresh UI
+                    });
+                  },
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: taskColor, width: 2),
+                      color: task.isComplete ? taskColor : Colors.white,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        );
-      }
+        ),
+      ),
+    );
   }
+}
 
 class BottomNavBar extends StatelessWidget {
   @override
@@ -393,9 +365,11 @@ class BottomNavBar extends StatelessWidget {
 
 /* todo ADD NEW TASK popup to actually trial placement on homepage:
 - Start Page with no */
+//todo Implement and pass as userBinarySelect to ScheduleManager
+// Display popup error message with the two provided choices
+// Return bool: true if choice1 is selected, false if choice2 is selected
 
-Future<bool> popupTwoChoices(
-    String choice1, String choice2, String message) async {
+Future<bool> popupTwoChoices(String choice1, String choice2, String message) async {
   return true;
 }
 

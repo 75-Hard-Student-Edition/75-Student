@@ -191,8 +191,4 @@ class ScheduleManager implements IScheduleManager {
     //* 4. Add new schedule to todays schedule
     todaysSchedule = sanitisedSchedule;
   }
-
-  Schedule returnTodaySchedule() {
-    return todaysSchedule;
-  }
 }
