@@ -1,3 +1,4 @@
+import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/models/task_model.dart';
 
 class PointsManager {
@@ -6,27 +7,27 @@ class PointsManager {
   int pointsToPass;
   int completedTaskPoints;
 
-
-  PointsManager({
-    required this.maxPoints,
-    required this.currentPoints,
-    required this.pointsToPass,
-    required this.completedTaskPoints
-  });
+  PointsManager(
+      {required this.maxPoints,
+      required this.currentPoints,
+      required this.pointsToPass,
+      required this.completedTaskPoints});
 
   // Method to calculate the total points
-  void calculatePoints(List<TaskModel> calTasks) {
-    totalPoints = 0;
-    for (var task in allTasks) {
-      int taskPoint = task.getPoint();
-      totalPoints += taskPoint;
+  int calculatePoints(List<TaskModel> calTasks) {
+    int totalPoints = 0;
+    for (var task in calTasks) {
+      // int taskPoints = task.getPoint();
+      // totalPoints += taskPoints;
     }
+    return totalPoints;
   }
 
   void completedTasks() {
-    List<TaskModel> todaysTask = ScheduleManager.returnTodaySchedule();
-    List<TaskModel> completedTask = todaysTask.where((task) => task.isComplete).toList();
-    completedTaskPoints = calculatePoints(completedTask);
+    // List<TaskModel> todaysTask = ScheduleManager.returnTodaySchedule();
+    // List<TaskModel> completedTask =
+    //     todaysTask.where((task) => task.isComplete).toList();
+    // completedTaskPoints = calculatePoints(completedTask);
   }
 
   void calcPointsToPass() {
@@ -40,5 +41,4 @@ class PointsManager {
     }
     return false;
   }
-  
 }

@@ -52,20 +52,20 @@ class Backlog {
 class ScheduleManager implements IScheduleManager {
   late Schedule todaysSchedule;
   late Backlog backlog;
-  late PointsManager pointsManager;
+  //late PointsManager pointsManager;
   late NotificationManager notificationManager;
   late Future<bool> Function(String, String, String) userBinarySelectCallback;
   late void Function(String) displayErrorCallback;
 
-  ScheduleManager(this.userBinarySelectCallback, this.displayErrorCallback) {
+  ScheduleManager(){//this.userBinarySelectCallback, this.displayErrorCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog();
-    pointsManager = PointsManager(
-      maxPoints: 100,
-      currentPoints: 0,
-      pointsToPass: 50,
-    );
+    /* pointsManager = PointsManager(
+        maxPoints: 100,
+        currentPoints: 0,
+        pointsToPass: 50,
+        completedTaskPoints: 0); */
     notificationManager = NotificationManager(notifications: []);
   }
 
@@ -76,7 +76,8 @@ class ScheduleManager implements IScheduleManager {
   //todo Decide on some way of deciding peak depth
   List<TaskModel> getBacklogSuggestions() => backlog.peak(5);
   @override
-  Future<bool> userBinarySelect(String choice1, String choice2, String message) =>
+  Future<bool> userBinarySelect(
+          String choice1, String choice2, String message) =>
       userBinarySelectCallback(choice1, choice2, message);
   @override
   void displayError(String message) {
@@ -176,21 +177,22 @@ class ScheduleManager implements IScheduleManager {
         deleteTask(task.id);
       }
     }
-    if (pointsManager.determinePass()) {
+    //if (pointsManager.determinePass()) {
       // DatabaseService.updateUserRecord(); // Increment streak somehow
-    } else {
+    //} else {
       // DatabaseService.updateUserRecord(); // Reset streak somehow
-    }
+    //}
 
     //* 2. Generate new schedule
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule =
+        await scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
     todaysSchedule = sanitisedSchedule;
   }
 
-    Schedule returnTodaySchedule() {
-      return todaysSchedule;
+  Schedule returnTodaySchedule() {
+    return todaysSchedule;
   }
 }

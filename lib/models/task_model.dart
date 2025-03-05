@@ -10,7 +10,7 @@ class TaskModel {
   final String description;
 
   final bool isMovable;
-  final bool isComplete = false;
+  bool isComplete;
 
   final TaskCategory category;
   final TaskPriority priority;
@@ -28,6 +28,7 @@ class TaskModel {
     required this.name,
     this.description = '',
     required this.isMovable,
+    this.isComplete = false,
     required this.category,
     required this.priority,
     this.location,
@@ -77,6 +78,7 @@ class TaskModel {
       name: name ?? this.name,
       description: description ?? this.description,
       isMovable: isMovable ?? this.isMovable,
+      isComplete: isComplete ?? this.isComplete,
       category: category ?? this.category,
       priority: priority ?? this.priority,
       location: location ?? this.location,
