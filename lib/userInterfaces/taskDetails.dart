@@ -1,4 +1,7 @@
+//import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart';
 
@@ -9,7 +12,7 @@ class TaskDetails extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onComplete;
 
-  TaskDetails({
+  const TaskDetails({super.key, 
     required this.task,
     required this.onEdit,
     required this.onComplete,
@@ -21,12 +24,12 @@ class TaskDetails extends StatelessWidget {
     Color taskColor = _getTaskColor(task.category);
 
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: taskColor, width: 2),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +38,7 @@ class TaskDetails extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.school, color: taskColor, size: 40),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -48,18 +51,18 @@ class TaskDetails extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           // Date & Time
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("📅 ${DateFormat('dd/MM/yyyy').format(task.startTime)}", style: TextStyle(fontSize: 14, color: Colors.black54)),
+              Text("📅 ${DateFormat('dd/MM/yyyy').format(task.startTime)}", style: const TextStyle(fontSize: 14, color: Colors.black54)),
               Text("⏰ ${DateFormat('HH:mm').format(task.startTime)} - ${DateFormat('HH:mm').format(task.endTime)}",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           // Description
           if (task.description.isNotEmpty)
@@ -72,7 +75,7 @@ class TaskDetails extends StatelessWidget {
           if (task.notifyBefore.inMinutes > 0)
             _buildSection("🔔 Notify", "Remind ${task.notifyBefore.inMinutes} minutes before"),
 
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
 
           // Buttons
           Row(
@@ -87,7 +90,7 @@ class TaskDetails extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           // Edit Task Button
           Center(
@@ -95,10 +98,10 @@ class TaskDetails extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: taskColor,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
               ),
               onPressed: onEdit,
-              child: Text("Edit Task", style: TextStyle(color: Colors.white)),
+              child: const Text("Edit Task", style: TextStyle(color: Colors.white)),
             ),
           ),
         ],
@@ -110,17 +113,17 @@ class TaskDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(height: 5),
-        Text(content, style: TextStyle(color: Colors.black54)),
-        SizedBox(height: 10),
+        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 5),
+        Text(content, style: const TextStyle(color: Colors.black54)),
+        const SizedBox(height: 10),
       ],
     );
   }
 
   Widget _buildBadge(String text, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(6)),
       child: Text(text.toUpperCase(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: color)),
     );
@@ -130,7 +133,7 @@ class TaskDetails extends StatelessWidget {
     return Column(
       children: [
         Icon(icon, color: color, size: 30),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
