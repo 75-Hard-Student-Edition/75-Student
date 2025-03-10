@@ -18,7 +18,7 @@ abstract class IAccountManager {
   void saveUserDetails(UserAccountModel userAccount);
 
   // Database -> AccountManager methods
-  UserAccountModel loadUserDetails(int userId);
+  UserAccountModel fetchUserDetails(int userId);
 
   // AccountManager -> PointsManager methods
   Difficulty getDifficulty();
