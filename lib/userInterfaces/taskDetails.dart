@@ -1,11 +1,7 @@
-//import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart';
-
-
 
 class TaskDetails extends StatelessWidget {
   final TaskModel task;

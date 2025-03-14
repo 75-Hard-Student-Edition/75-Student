@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_75/userInterfaces/home.dart';
 
 class CategoryRankingScreen extends StatefulWidget {
   @override
@@ -75,7 +76,10 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
             // Next Button
             ElevatedButton(
               onPressed: () {
-                print("button");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ScheduleScreen()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 17, 174, 145),
