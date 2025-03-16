@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/userInterfaces/taskDetails.dart';
+import 'package:student_75/userInterfaces/addTask.dart';
 import 'package:student_75/userInterfaces/home.dart';
 
 void main() {
@@ -53,7 +54,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isMovable: true,
       category: TaskCategory.academic, // Example category
       priority: TaskPriority.high, // Example priority
-      //location: location(name: "Room 101"), // Example location
+      //location: location(name: "Room 101"), 
       startTime: DateTime(2025, 3, 5, 9, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 15),
@@ -66,7 +67,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isMovable: false, // Fixed schedule
       category: TaskCategory.social,
       priority: TaskPriority.medium,
-      //location: Location(name: "Physics Building"),
+      //location: Location(name: "Comp Building"),
       startTime: DateTime(2025, 3, 5, 11, 0),
       duration: const Duration(hours: 1, minutes: 30),
       notifyBefore: const Duration(minutes: 30),
@@ -128,7 +129,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Widget _buildHeader(BuildContext context, String day, String month) {
     double screenWidth = MediaQuery.of(context).size.width;
     double topPadding =
-        MediaQuery.of(context).padding.top; // Extra padding for iPhone 15 Pro
+        MediaQuery.of(context).padding.top; 
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
@@ -290,7 +291,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               }
             : null,
 
-        // 🟢 **Resize Task: Change Task Duration**
+        // **Resize Task: Change Task Duration**
         onPanUpdate: task.isMovable
             ? (details) {
                 setState(() {
@@ -326,14 +327,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 child: TaskDetails(
                   task: task,
                   onEdit: () {
-                    print("✏️ Edit Task '${task.name}'");
+                    print("Edit Task '${task.name}'");
                     Navigator.pop(context);
                     // Open Edit Task Screen Here
                   },
                   onComplete: () {
                     TaskModel updatedTask = task.copyWith(isComplete: !task.isComplete);
                     scheduleManager.editTask(updatedTask);
-                    print("✅ Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
+                    print("Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
                     _fetchSchedule(); // Refresh UI
                     Navigator.pop(context);
                   },
@@ -376,7 +377,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           task.copyWith(isComplete: !task.isComplete);
                       scheduleManager.editTask(updatedTask);
                       print(
-                          "✅ Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
+                          "Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
                       _fetchSchedule(); // Refresh gui
                     });
                   },
@@ -420,6 +421,24 @@ class BottomNavBar extends StatelessWidget {
             icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
               print("Add Task button pressed."); // Debug
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent, 
+                barrierColor: Colors.black.withOpacity(0.5), 
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)), 
+                ),
+                builder: (context) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 80),
+                    child: FractionallySizedBox(
+                      widthFactor: 0.9, 
+                      child: AddTaskScreen(),
+                    ),
+                  );
+                },
+              );
             },
           ),
           IconButton(
