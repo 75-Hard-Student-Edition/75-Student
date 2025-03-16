@@ -10,12 +10,15 @@ import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/userInterfaces/taskDetails.dart';
 import 'package:student_75/userInterfaces/addTask.dart';
+import 'package:student_75/userInterfaces/home.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,6 +29,8 @@ class MyApp extends StatelessWidget {
 }
 
 class ScheduleScreen extends StatefulWidget {
+  const ScheduleScreen({super.key});
+
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
@@ -51,8 +56,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       priority: TaskPriority.high, // Example priority
       //location: location(name: "Room 101"), 
       startTime: DateTime(2025, 3, 5, 9, 0),
-      duration: Duration(hours: 1),
-      notifyBefore: Duration(minutes: 15),
+      duration: const Duration(hours: 1),
+      notifyBefore: const Duration(minutes: 15),
     ));
 
     scheduleManager.addTask(TaskModel(
@@ -64,8 +69,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       priority: TaskPriority.medium,
       //location: Location(name: "Comp Building"),
       startTime: DateTime(2025, 3, 5, 11, 0),
-      duration: Duration(hours: 1, minutes: 30),
-      notifyBefore: Duration(minutes: 30),
+      duration: const Duration(hours: 1, minutes: 30),
+      notifyBefore: const Duration(minutes: 30),
     ));
 
     print("Test tasks added.");
@@ -91,7 +96,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   /// Tasks from backend
   void _fetchSchedule() {
     setState(() {
-      taskList = scheduleManager.getSchedule();
+      taskList = scheduleManager.getSchedule().tasks;
     });
     print("Fetched schedule from backend: ${taskList.length} tasks loaded.");
   }
@@ -147,7 +152,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               ),
             ],
           ),
-          SizedBox(height: 10), // Space for progress bar
+          const SizedBox(height: 10), // Space for progress bar
 
           // Streak
           Align(
@@ -230,7 +235,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
+              gradient: const LinearGradient(colors: [
                 Colors.red,
                 Colors.orange,
                 Colors.green
@@ -313,7 +318,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             builder: (context) {
@@ -353,7 +358,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               Center(
                 child: Text(
                   task.name,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
 
@@ -396,20 +401,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 }
 
 class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
       color: Colors.teal,
-      shape: CircularNotchedRectangle(),
+      shape: const CircularNotchedRectangle(),
       notchMargin: 6,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-            icon: Icon(Icons.home, color: Colors.white),
+            icon: const Icon(Icons.home, color: Colors.white),
             onPressed: () {},
           ),
-          SizedBox(width: 40), // Space for FAB
+          const SizedBox(width: 40), // Space for FAB
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
@@ -435,11 +442,11 @@ class BottomNavBar extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.white),
+            icon: const Icon(Icons.settings, color: Colors.white),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
+            icon: const Icon(Icons.menu, color: Colors.white),
             onPressed: () {},
           ),
         ],

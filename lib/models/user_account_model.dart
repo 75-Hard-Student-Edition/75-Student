@@ -22,4 +22,25 @@ class UserAccountModel {
     required this.bedtimes,
     required this.bedtimeNotifyBefore,
   });
+
+  UserAccountModel copyWith({
+    int? id,
+    String? username,
+    int? streak,
+    Difficulty? difficulty,
+    List<TaskCategory>? categoryOrder,
+    Duration? sleepDuration,
+    Map<String, TimeOfDay>? bedtimes,
+    Duration? bedtimeNotifyBefore,
+  }) {
+    return UserAccountModel(
+      id: id ?? this.id,
+      username: username ?? this.username,
+      difficulty: difficulty ?? this.difficulty,
+      categoryOrder: categoryOrder ?? this.categoryOrder,
+      sleepDuration: sleepDuration ?? this.sleepDuration,
+      bedtimes: bedtimes ?? this.bedtimes,
+      bedtimeNotifyBefore: bedtimeNotifyBefore ?? this.bedtimeNotifyBefore,
+    );
+  }
 }
