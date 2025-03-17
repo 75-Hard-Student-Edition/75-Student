@@ -12,11 +12,11 @@ class AddTaskScreen extends StatelessWidget {
     return Container(
       height: screenHeight * 0.95,
       decoration: BoxDecoration(
-        color: Color(0xFFB2DFDB), 
+        color: const Color(0xFFDCF0EE), 
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Color.fromARGB(255, 3, 138, 116), width: 5), 
+        border: Border.all(color: const Color(0xFF56C1B7), width: 5), 
       ),
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           _buildHeader(context),
@@ -36,20 +36,21 @@ class AddTaskScreen extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 21, 172, 124),
+        color: const Color(0xFF56C1B7),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: const Color.fromARGB(255, 20, 79, 69),
+            color:  Color(0xFF545454),
             offset: Offset(0, 0),
             blurRadius: 6,
           ), 
         ],
       ),
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-      child: Text(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
+      child: const Text(
         "Add New Task",
         style: TextStyle(
+          fontFamily: 'kdamThmorPro',
           fontSize: 15,
           fontWeight: FontWeight.bold,
           color: Colors.white,
@@ -60,20 +61,31 @@ class AddTaskScreen extends StatelessWidget {
 
   /// Date Selector
   Widget _buildDateSelector() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center, 
-      children: [
-        Icon(Icons.calendar_today, color: Colors.white), 
-        SizedBox(width: 5),
-        Text(
-          "26/01/2025",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.white, 
-        ),
-        ),
-      ]
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center, 
+        children: [
+          const Icon(Icons.calendar_today, color: Color(0xFFBABABA)), 
+          const SizedBox(width: 5),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFFBABABA), width: 1.5),
+              borderRadius: BorderRadius.circular(8), 
+            ),
+            child: const Text(
+              "26/01/2025",
+              style: TextStyle(
+                fontFamily: 'kdamThmorPro',
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFBABABA) 
+            ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -87,8 +99,8 @@ class AddTaskScreen extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center, 
             children: [
-              Text("Time: ", style: TextStyle(color: Colors.grey[700])),
-              SizedBox(width: 5), 
+              Text("Time: ", style: TextStyle(color: Colors.grey[700], fontFamily: 'kdamThmorPro'),),
+              const SizedBox(width: 5), 
               _buildTimePicker("12:00"), 
               _buildTimePicker("12:45"), 
             ],
@@ -101,12 +113,12 @@ class AddTaskScreen extends StatelessWidget {
 
   Widget _buildTimePicker(String time) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(time, style: TextStyle(fontSize: 16)),
+      child: Text(time, style: const TextStyle(fontSize: 16)),
     );
   }
 
@@ -117,17 +129,17 @@ class AddTaskScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Duration", style: TextStyle(fontSize: 16)), 
-          SizedBox(height: 8),
+          const Text("Duration", style: TextStyle(fontSize: 16)), 
+          const SizedBox(height: 8),
           Container(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2), 
-                  offset: Offset(4, 4),
+                  offset: const Offset(4, 4),
                   blurRadius: 6,
                 ),
               ],
@@ -151,12 +163,12 @@ class AddTaskScreen extends StatelessWidget {
 
   Widget _buildDurationButton(String label, int duration) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.teal[200],
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(label, style: TextStyle(color: Colors.white)),
+      child: Text(label, style: const TextStyle(color: Colors.white)),
     );
   }
 
@@ -170,21 +182,21 @@ class AddTaskScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildCategoryChip("Academic", Colors.blue),
-              SizedBox(width: 10),
-              _buildCategoryChip("Social", Colors.green),
-              SizedBox(width: 10),
-              _buildCategoryChip("Health", Colors.red),
+              _buildCategoryChip("Academic",const Color(0xFF81E4F0)),
+              const SizedBox(width: 10),
+              _buildCategoryChip("Social", const Color(0xFF8AD483)),
+              const SizedBox(width: 10),
+              _buildCategoryChip("Health", const Color(0xFFFF4F4F)),
             ],
           ),
-          SizedBox(height: 10), 
+          const SizedBox(height: 10), 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildCategoryChip("Employment", Colors.orange),
-              SizedBox(width: 10),
-              _buildCategoryChip("Chore", Colors.purple),
-              SizedBox(width: 10),
+              _buildCategoryChip("Employment", const Color(0xFFEDBF45)),
+              const SizedBox(width: 10),
+              _buildCategoryChip("Chore", const Color(0xFFE997CD)),
+              const SizedBox(width: 10),
               _buildCategoryChip("Hobby", Colors.cyan),
             ],
           ),
@@ -193,14 +205,15 @@ class AddTaskScreen extends StatelessWidget {
     );
   }
 
+
   Widget _buildCategoryChip(String label, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Text(label, style: TextStyle(color: Colors.white)),
+      child: Text(label, style: const TextStyle(color: Colors.white)),
     );
   }
 
@@ -211,17 +224,17 @@ class AddTaskScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Repeat", style: TextStyle(fontSize: 16)),
-          SizedBox(height: 8),
+          const Text("Repeat", style: TextStyle(fontSize: 16)),
+          const SizedBox(height: 8),
           Container(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2),
-                  offset: Offset(4, 4),
+                  offset: const Offset(4, 4),
                   blurRadius: 6,
                 ),
               ],
@@ -243,12 +256,12 @@ class AddTaskScreen extends StatelessWidget {
 
   Widget _buildRepeatButton(String label) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.teal[300],
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Text(label, style: TextStyle(color: Colors.white)),
+      child: Text(label, style: const TextStyle(color: Colors.white)),
     );
   }
 
@@ -272,7 +285,7 @@ class AddTaskScreen extends StatelessWidget {
       child: TextField(
         decoration: InputDecoration(
           hintText: hint,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
@@ -287,11 +300,11 @@ class AddTaskScreen extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
+            child: const Text("Cancel"),
           ),
           ElevatedButton(
             onPressed: () {}, // no backend logic yet
-            child: Text("Save Task"),
+            child: const Text("Save Task"),
           ),
         ],
       ),

@@ -138,15 +138,15 @@ class TaskDetails extends StatelessWidget {
   Color _getTaskColor(TaskCategory category) {
     switch (category) {
       case TaskCategory.academic:
-        return Colors.blue;
+        return const Color(0xFF81E4F0);
       case TaskCategory.social:
-        return Colors.green;
+        return const Color(0xFF8AD483);
       case TaskCategory.health:
-        return Colors.red;
+        return const Color(0xFFFF4F4F);
       case TaskCategory.employment:
-        return Colors.orange;
+        return const Color(0xFFEDBF45);
       case TaskCategory.chore:
-        return Colors.purple;
+        return const Color(0xFFE997CD);
       case TaskCategory.hobby:
         return Colors.cyan;
     }

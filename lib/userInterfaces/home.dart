@@ -10,10 +10,10 @@ import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/userInterfaces/taskDetails.dart';
 import 'package:student_75/userInterfaces/addTask.dart';
-import 'package:student_75/userInterfaces/home.dart';
+
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: ScheduleScreen(),
     );
@@ -79,15 +79,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Color _getTaskColor(TaskCategory category) {
     switch (category) {
       case TaskCategory.academic:
-        return Colors.blue;
+        return const Color(0xFF81E4F0);
       case TaskCategory.social:
-        return Colors.green;
+        return const Color(0xFF8AD483);
       case TaskCategory.health:
-        return Colors.red;
+        return const Color(0xFFFF4F4F);
       case TaskCategory.employment:
-        return Colors.orange;
+        return const Color(0xFFEDBF45);
       case TaskCategory.chore:
-        return Colors.purple;
+        return const Color(0xFFE997CD);
       case TaskCategory.hobby:
         return Colors.cyan;
     }
@@ -110,7 +110,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: Column(
         children: [
           SizedBox(height: topPadding + 10),
@@ -141,14 +141,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               Text(
                 day,
                 style: TextStyle(
-                    fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold),
+                    fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold, fontFamily: 'kdamThmorPro'),
               ),
               Text(
                 month.toUpperCase(),
                 style: TextStyle(
                     fontSize: screenWidth * 0.05,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[700]),
+                    color: Colors.grey[700],
+                    fontFamily: 'kdamThmorPro'),
               ),
             ],
           ),
@@ -166,7 +167,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   "25", // Streak number
                   style: TextStyle(
                       fontSize: screenWidth * 0.05,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'kdamThmorPro'),
                 ),
               ],
             ),
@@ -205,7 +207,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: screenWidth * 0.03),
+                              fontSize: screenWidth * 0.03,
+                              fontFamily: 'kdamThmorPro'),
                         ),
                       ),
                     ),
@@ -358,7 +361,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               Center(
                 child: Text(
                   task.name,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'kdamThmorPro'),
                 ),
               ),
 
@@ -426,11 +429,11 @@ class BottomNavBar extends StatelessWidget {
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent, 
                 barrierColor: Colors.black.withOpacity(0.5), 
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)), 
                 ),
                 builder: (context) {
-                  return Padding(
+                  return const Padding(
                     padding: EdgeInsets.only(bottom: 80),
                     child: FractionallySizedBox(
                       widthFactor: 0.9, 
