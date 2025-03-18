@@ -14,6 +14,7 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
     {"name": "Career", "color": Colors.orangeAccent},
     {"name": "Mindfulness", "color": Colors.pinkAccent},
   ];
+  
 
   List<Map<String, dynamic>?> droppedItems = List.filled(5, null);
 
@@ -169,3 +170,7 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
     );
   }
 }
+
+//todo: change the colors to match formatting of homePage and addTask
+//todo: change the categories to match the categories listed as enum in task_model (import)
+//todo: allow for drag out of the box as well as drag in and keep formatting 
