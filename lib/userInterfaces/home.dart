@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
+import 'package:student_75/Components/schedule_manager/schedule.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -26,7 +27,7 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   final ScheduleManager scheduleManager = ScheduleManager(); // Backend instance
-  List<TaskModel> taskList = []; // Stores tasks
+  Schedule schedule = Schedule(tasks: []); // Stores tasks
 
   @override
   void initState() {
@@ -85,9 +86,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   /// Tasks from backend
   void _fetchSchedule() {
     setState(() {
-      taskList = scheduleManager.getSchedule();
+      schedule = scheduleManager.getSchedule();
     });
-    print("Fetched schedule from backend: ${taskList.length} tasks loaded.");
+    print("Fetched schedule from backend: ${schedule.length} tasks loaded.");
   }
 
   @override
@@ -208,7 +209,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           //_buildDraggableTimeBlock(context, "History", Colors.green.withOpacity(0.3), Colors.green, 12, 13, 2),
           //_buildDraggableTimeBlock(context, "English", Colors.orange.withOpacity(0.3), Colors.orange, 13.5, 15.5, 3),
           //_buildDraggableTimeBlock(context, "Computer Science", Colors.purple.withOpacity(0.3), Colors.purple, 16, 17, 4),
-          for (var task in taskList) _buildDraggableTimeBlock(context, task),
+          for (var task in scheduleManager.getSchedule().tasks)
+            _buildDraggableTimeBlock(context, task),
         ],
       ),
     );
