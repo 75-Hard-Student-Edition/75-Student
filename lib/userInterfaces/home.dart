@@ -6,17 +6,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
+import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
+import 'package:student_75/userInterfaces/taskDetails.dart';
+import 'package:student_75/userInterfaces/addTask.dart';
+
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: ScheduleScreen(),
     );
@@ -24,6 +29,8 @@ class MyApp extends StatelessWidget {
 }
 
 class ScheduleScreen extends StatefulWidget {
+  const ScheduleScreen({super.key});
+
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
@@ -47,10 +54,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isMovable: true,
       category: TaskCategory.academic, // Example category
       priority: TaskPriority.high, // Example priority
-      //location: location(name: "Room 101"), // Example location
+      //location: location(name: "Room 101"), 
       startTime: DateTime(2025, 3, 5, 9, 0),
-      duration: Duration(hours: 1),
-      notifyBefore: Duration(minutes: 15),
+      duration: const Duration(hours: 1),
+      notifyBefore: const Duration(minutes: 15),
     ));
 
     scheduleManager.addTask(TaskModel(
@@ -60,10 +67,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isMovable: false, // Fixed schedule
       category: TaskCategory.social,
       priority: TaskPriority.medium,
-      //location: Location(name: "Physics Building"),
+      //location: Location(name: "Comp Building"),
       startTime: DateTime(2025, 3, 5, 11, 0),
-      duration: Duration(hours: 1, minutes: 30),
-      notifyBefore: Duration(minutes: 30),
+      duration: const Duration(hours: 1, minutes: 30),
+      notifyBefore: const Duration(minutes: 30),
     ));
 
     print("Test tasks added.");
@@ -72,15 +79,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Color _getTaskColor(TaskCategory category) {
     switch (category) {
       case TaskCategory.academic:
-        return Colors.blue;
+        return const Color(0xFF81E4F0);
       case TaskCategory.social:
-        return Colors.green;
+        return const Color(0xFF8AD483);
       case TaskCategory.health:
-        return Colors.red;
+        return const Color(0xFFFF4F4F);
       case TaskCategory.employment:
-        return Colors.orange;
+        return const Color(0xFFEDBF45);
       case TaskCategory.chore:
-        return Colors.purple;
+        return const Color(0xFFE997CD);
       case TaskCategory.hobby:
         return Colors.cyan;
     }
@@ -89,7 +96,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   /// Tasks from backend
   void _fetchSchedule() {
     setState(() {
-      taskList = scheduleManager.getSchedule();
+      taskList = scheduleManager.getSchedule().tasks;
     });
     print("Fetched schedule from backend: ${taskList.length} tasks loaded.");
   }
@@ -103,7 +110,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: Column(
         children: [
           SizedBox(height: topPadding + 10),
@@ -122,7 +129,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Widget _buildHeader(BuildContext context, String day, String month) {
     double screenWidth = MediaQuery.of(context).size.width;
     double topPadding =
-        MediaQuery.of(context).padding.top; // Extra padding for iPhone 15 Pro
+        MediaQuery.of(context).padding.top; 
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
@@ -134,18 +141,19 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               Text(
                 day,
                 style: TextStyle(
-                    fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold),
+                    fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold, fontFamily: 'kdamThmorPro'),
               ),
               Text(
                 month.toUpperCase(),
                 style: TextStyle(
                     fontSize: screenWidth * 0.05,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[700]),
+                    color: Colors.grey[700],
+                    fontFamily: 'kdamThmorPro'),
               ),
             ],
           ),
-          SizedBox(height: 10), // Space for progress bar
+          const SizedBox(height: 10), // Space for progress bar
 
           // Streak
           Align(
@@ -159,7 +167,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   "25", // Streak number
                   style: TextStyle(
                       fontSize: screenWidth * 0.05,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'kdamThmorPro'),
                 ),
               ],
             ),
@@ -198,7 +207,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: screenWidth * 0.03),
+                              fontSize: screenWidth * 0.03,
+                              fontFamily: 'kdamThmorPro'),
                         ),
                       ),
                     ),
@@ -228,7 +238,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [Colors.red, Colors.orange, Colors.green]), //need to assign to categories
+              gradient: const LinearGradient(colors: [
+                Colors.red,
+                Colors.orange,
+                Colors.green
+              ]), //need to assign to categories
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -255,133 +269,187 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     Color taskColor = _getTaskColor(task.category);
 
-        return Positioned(
-          top: hourHeight * task.startTime.hour +
-              (task.startTime.minute / 60) * hourHeight,
-          left: screenWidth * 0.15,
-          child: GestureDetector(
-            // change start time
-            onVerticalDragUpdate: task.isMovable
-                ? (details) {
-                    setState(() {
-                      DateTime newStart = task.startTime.add(Duration(
-                          minutes: (details.primaryDelta! / hourHeight * 60)
-                              .round()));
+    return Positioned(
+      top: hourHeight * task.startTime.hour +
+          (task.startTime.minute / 60) * hourHeight,
+      left: screenWidth * 0.15,
+      child: GestureDetector(
+        // Move Task: Change Start Time
+        onVerticalDragUpdate: task.isMovable
+            ? (details) {
+                setState(() {
+                  DateTime newStart = task.startTime.add(Duration(
+                      minutes:
+                          (details.primaryDelta! / hourHeight * 60).round()));
 
-                      // Ensure new start time is valid
-                      if (newStart.isBefore(task.endTime)) {
-                        TaskModel updatedTask =
-                            task.copyWith(startTime: newStart);
-                        scheduleManager.editTask(updatedTask);
-                        print(
-                            "Moved Task: '${task.name}' to ${DateFormat('HH:mm').format(newStart)}");
-                      }
-                    });
+                  // ✅ Ensure new start time is valid
+                  if (newStart.isBefore(task.endTime)) {
+                    TaskModel updatedTask = task.copyWith(startTime: newStart);
+                    scheduleManager.editTask(updatedTask);
+                    print(
+                        "Moved Task: '${task.name}' → ${DateFormat('HH:mm').format(newStart)}");
+                    _fetchSchedule(); // Refresh UI
                   }
-                : null,
+                });
+              }
+            : null,
 
-            // Change task duration
-            onPanUpdate: task.isMovable
-                ? (details) {
-                    setState(() {
-                      Duration newDuration = task.endTime
-                              .difference(task.startTime) +
+        // **Resize Task: Change Task Duration**
+        onPanUpdate: task.isMovable
+            ? (details) {
+                setState(() {
+                  Duration newDuration =
+                      task.endTime.difference(task.startTime) +
                           Duration(
                               minutes: (details.primaryDelta! / hourHeight * 60)
                                   .round());
 
-                      if (newDuration.inMinutes > 10) {
-                        // no 0-minute tasks
-                        TaskModel updatedTask = task.copyWith(
-                            endTime: task.startTime.add(newDuration));
-                        scheduleManager.editTask(updatedTask);
-                        print(
-                            "Resized Task: '${task.name}' - New Duration: ${newDuration.inMinutes} minutes");
-                      }
-                    });
+                  // at least 10 minutes
+                  if (newDuration.inMinutes >= 10) {
+                    TaskModel updatedTask =
+                        task.copyWith(endTime: task.startTime.add(newDuration));
+                    scheduleManager.editTask(updatedTask);
+                    print(
+                        "Resized Task: '${task.name}' → New Duration: ${newDuration.inMinutes} min");
+                    _fetchSchedule(); // Refresh UI
                   }
-                : null,
+                });
+              }
+            : null,
 
-            child: Container(
-              width: screenWidth * 0.75,
-              height:
-                  hourHeight * task.endTime.difference(task.startTime).inHours,
-              decoration: BoxDecoration(
-                color: taskColor.withOpacity(0.3),
-                border: Border.all(color: taskColor, width: 2),
-                borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (context) {
+              return FractionallySizedBox(
+                heightFactor: 0.5, //half height
+                child: TaskDetails(
+                  task: task,
+                  onEdit: () {
+                    print("Edit Task '${task.name}'");
+                    Navigator.pop(context);
+                    // Open Edit Task Screen Here
+                  },
+                  onComplete: () {
+                    TaskModel updatedTask = task.copyWith(isComplete: !task.isComplete);
+                    scheduleManager.editTask(updatedTask);
+                    print("Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
+                    _fetchSchedule(); // Refresh UI
+                    Navigator.pop(context);
+                  },
+                ),
+              );
+            },
+          );
+        },
+
+        child: Container(
+          width: screenWidth * 0.75,
+          height: hourHeight *
+              (task.endTime.difference(task.startTime).inMinutes / 60),
+          decoration: BoxDecoration(
+            color: taskColor.withOpacity(0.3),
+            border: Border.all(color: taskColor, width: 2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Stack(
+            children: [
+              Center(
+                child: Text(
+                  task.name,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'kdamThmorPro'),
+                ),
               ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Text(task.name,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  ),
 
-                  // Toggle circle
-                  Positioned(
-                    left: 8,
-                    top: (hourHeight *
-                                task.endTime
-                                    .difference(task.startTime)
-                                    .inHours) /
-                            2 -
-                        10,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          TaskModel updatedTask = task.copyWith(isComplete: !task.isComplete);
-                          scheduleManager.editTask(updatedTask); 
-                          print("Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
-                          _fetchSchedule(); // refresh UI
-                        });
-                      },
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: taskColor, width: 2),
-                          color: task.isComplete ? taskColor : Colors.white,
-                        ),
-                      ),
+              // Toggle Circle 
+              Positioned(
+                left: 8,
+                top: (hourHeight *
+                            (task.endTime.difference(task.startTime).inMinutes /
+                                60)) /
+                        2 -
+                    10,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      TaskModel updatedTask =
+                          task.copyWith(isComplete: !task.isComplete);
+                      scheduleManager.editTask(updatedTask);
+                      print(
+                          "Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
+                      _fetchSchedule(); // Refresh gui
+                    });
+                  },
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: taskColor, width: 2),
+                      color: task.isComplete ? taskColor : Colors.white,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        );
-      }
+        ),
+      ),
+    );
   }
+}
 
 class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
       color: Colors.teal,
-      shape: CircularNotchedRectangle(),
+      shape: const CircularNotchedRectangle(),
       notchMargin: 6,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-            icon: Icon(Icons.home, color: Colors.white),
+            icon: const Icon(Icons.home, color: Colors.white),
             onPressed: () {},
           ),
-          SizedBox(width: 40), // Space for FAB
+          const SizedBox(width: 40), // Space for FAB
           IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
+            icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
               print("Add Task button pressed."); // Debug
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent, 
+                barrierColor: Colors.black.withOpacity(0.5), 
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)), 
+                ),
+                builder: (context) {
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: 80),
+                    child: FractionallySizedBox(
+                      widthFactor: 0.9, 
+                      child: AddTaskScreen(),
+                    ),
+                  );
+                },
+              );
             },
           ),
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.white),
+            icon: const Icon(Icons.settings, color: Colors.white),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
+            icon: const Icon(Icons.menu, color: Colors.white),
             onPressed: () {},
           ),
         ],

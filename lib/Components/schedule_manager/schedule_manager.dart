@@ -2,7 +2,6 @@ import 'package:student_75/Components/schedule_manager/schedule_manager_interfac
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
-import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/Components/notification_manager.dart';
 
 // Interface for ScheduleManager to interact with the GUI
