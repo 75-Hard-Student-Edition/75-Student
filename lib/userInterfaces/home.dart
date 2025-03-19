@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
+import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/userInterfaces/taskDetails.dart';
 import 'package:student_75/userInterfaces/addTask.dart';
