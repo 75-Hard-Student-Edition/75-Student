@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-// test
-=======
 import 'package:flutter/material.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -178,4 +175,3 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 }
->>>>>>> notifications-page
