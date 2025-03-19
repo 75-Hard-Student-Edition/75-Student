@@ -50,8 +50,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       priority: TaskPriority.high, // Example priority
       //location: location(name: "Room 101"), // Example location
       startTime: DateTime(2025, 3, 5, 9, 0),
-      duration: Duration(hours: 1),
-      notifyBefore: Duration(minutes: 15),
+      duration: const Duration(hours: 1),
+      notifyBefore: const Duration(minutes: 15),
     ));
 
     scheduleManager.addTask(TaskModel(
@@ -63,8 +63,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       priority: TaskPriority.medium,
       //location: Location(name: "Physics Building"),
       startTime: DateTime(2025, 3, 5, 11, 0),
-      duration: Duration(hours: 1, minutes: 30),
-      notifyBefore: Duration(minutes: 30),
+      duration: const Duration(hours: 1, minutes: 30),
+      notifyBefore: const Duration(minutes: 30),
     ));
 
     print("Test tasks added.");
@@ -73,15 +73,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Color _getTaskColor(TaskCategory category) {
     switch (category) {
       case TaskCategory.academic:
-        return Colors.blue;
+        return const Color(0xFF81E4F0);
       case TaskCategory.social:
-        return Colors.green;
+        return const Color(0xFF8AD483);
       case TaskCategory.health:
-        return Colors.red;
+        return const Color(0xFFF67373);
       case TaskCategory.employment:
-        return Colors.orange;
+        return const Color(0xFFEDBF45);
       case TaskCategory.chore:
-        return Colors.purple;
+        return const Color(0xFFE997CD);
       case TaskCategory.hobby:
         return Colors.cyan;
     }
@@ -172,7 +172,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               ),
             ],
           ),
-          SizedBox(height: 10), // Space for progress bar
+          const SizedBox(height: 10), // Space for progress bar
 
           // Streak
           Align(
@@ -257,7 +257,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
+              gradient: const LinearGradient(colors: [
                 Colors.red,
                 Colors.orange,
                 Colors.green
@@ -349,7 +349,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               Center(
                 child: Text(task.name,
                     style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
 
               // Toggle circle
@@ -392,7 +392,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 class BottomNavBar extends StatelessWidget {
   final ScheduleManager scheduleManager;
 
-  final Function(TaskModel) onTaskAdded; // ✅ Add callback parameter
+  final Function(TaskModel) onTaskAdded; 
 
   const BottomNavBar(
       {super.key, required this.scheduleManager, required this.onTaskAdded});
@@ -401,35 +401,57 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       color: Colors.teal,
-      shape: CircularNotchedRectangle(),
+      shape: const CircularNotchedRectangle(),
       notchMargin: 6,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-            icon: Icon(Icons.home, color: Colors.white),
+            icon: const Icon(Icons.home, color: Colors.white),
             onPressed: () {},
           ),
-          SizedBox(width: 40), // Space for FAB
+          const SizedBox(width: 40), 
           IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddTaskScreen(scheduleManager: scheduleManager)),
-              ).then((newTask) {
-                if (newTask != null && newTask is TaskModel) {
-                  onTaskAdded(newTask); // ✅ Ensure the UI updates
-                }
-              });
+            icon: const Icon(Icons.add, color: Colors.white),
+            onPressed: () async {
+              final newTask = await showModalBottomSheet<TaskModel>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                barrierColor: Colors.black.withOpacity(0.5),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                builder: (context) {
+                  return Align(
+                    alignment: Alignment.bottomCenter, 
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 50), 
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.95, 
+                        decoration: const BoxDecoration(
+                          color: Color(0x00FFFFFF),
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                        ),
+                        child: SingleChildScrollView(
+                          child: AddTaskScreen(scheduleManager: scheduleManager),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+              if (newTask != null) {
+                onTaskAdded(newTask);
+              }
             },
           ),
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.white),
+            icon: const Icon(Icons.settings, color: Colors.white),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
+            icon: const Icon(Icons.menu, color: Colors.white),
             onPressed: () {},
           ),
         ],

@@ -32,7 +32,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   bool _isMovable = false;
   bool _isComplete = false;
   DateTime _startTime = DateTime.now();
-  Duration? _period; // For storing repeat period
+  Duration? _period; 
   //Location? _taskLocation;
 
   List<TaskModel> taskList = [];
@@ -47,21 +47,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-        child: Container(
-      height: screenHeight * 0.8,
+      return SafeArea(
+    child: Container(
+      height: screenHeight * 0.8,  
       decoration: BoxDecoration(
         color: _selectedCategoryColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(color: _selectedCategoryBorderColor, width: 5),
       ),
       padding: const EdgeInsets.all(5),
       child: SingleChildScrollView(
-        //scrolling
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: screenHeight * 0.7,
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -73,12 +68,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               _buildCategorySelector(),
               _buildRepeatOptions(),
               _buildLocationNotesLinks(),
-              Expanded(child: _buildSaveCancelButtons(context)),
+              SizedBox(child: _buildSaveCancelButtons(context)),
             ],
           ),
         ),
       ),
-    ));
+    );
   }
 
   Future<void> _showCupertinoInputDialog(
@@ -228,10 +223,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ],
         ),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
-        child: Text(
+        child: const Text(
           "Add New Task",
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'kdamThmorPro',
             fontSize: 15,
             fontWeight: FontWeight.bold,
@@ -732,7 +727,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               shadows: [
                 Shadow(
                   color: Colors.black.withOpacity(0.5),
-                  offset: Offset(1, 1),
+                  offset: const Offset(1, 1),
                   blurRadius: 3,
                 ),
               ],
@@ -1055,7 +1050,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 startTime: startTime,
                 duration: Duration(minutes: _selectedDuration),
                 //notifyBefore: _notifyBefore,
-                period: _period, // Optional
+                period: _period, 
               );
 
               print("Saving Task:");
@@ -1068,10 +1063,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               print("Location: ${newTask.location?.name ?? 'No location'}");
               print("Notes: ${newTask.description}");
 
-              // ✅ Add task to Schedule Manager (Backend)
+            
               scheduleManager.addTask(newTask);
 
-              // ✅ Pass task back to previous screen
               Navigator.pop(context, newTask);
             },
             child: const Text(
