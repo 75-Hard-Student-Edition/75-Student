@@ -56,7 +56,8 @@ class ScheduleManager implements IScheduleManager {
   late Future<bool> Function(String, String, String) userBinarySelectCallback;
   late void Function(String) displayErrorCallback;
 
-  ScheduleManager(){//this.userBinarySelectCallback, this.displayErrorCallback) {
+  ScheduleManager() {
+    //this.userBinarySelectCallback, this.displayErrorCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog();
@@ -70,10 +71,10 @@ class ScheduleManager implements IScheduleManager {
 
   //* == ScheduleManager -> GUI methods ==
   @override
-  Schedule getSchedule() => todaysSchedule;
+  Schedule get schedule => todaysSchedule;
   @override
+  List<TaskModel> getBacklogSuggestions() => backlog.peak(3);
   //todo Decide on some way of deciding peak depth
-  List<TaskModel> getBacklogSuggestions() => backlog.peak(5);
   @override
   Future<bool> userBinarySelect(
           String choice1, String choice2, String message) =>
@@ -177,9 +178,9 @@ class ScheduleManager implements IScheduleManager {
       }
     }
     //if (pointsManager.determinePass()) {
-      // DatabaseService.updateUserRecord(); // Increment streak somehow
+    // DatabaseService.updateUserRecord(); // Increment streak somehow
     //} else {
-      // DatabaseService.updateUserRecord(); // Reset streak somehow
+    // DatabaseService.updateUserRecord(); // Reset streak somehow
     //}
 
     //* 2. Generate new schedule

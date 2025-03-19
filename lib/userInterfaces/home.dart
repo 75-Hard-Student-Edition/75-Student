@@ -86,7 +86,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   /// Tasks from backend
   void _fetchSchedule() {
     setState(() {
-      schedule = scheduleManager.getSchedule();
+      schedule = scheduleManager.schedule;
     });
     print("Fetched schedule from backend: ${schedule.length} tasks loaded.");
   }
@@ -209,7 +209,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           //_buildDraggableTimeBlock(context, "History", Colors.green.withOpacity(0.3), Colors.green, 12, 13, 2),
           //_buildDraggableTimeBlock(context, "English", Colors.orange.withOpacity(0.3), Colors.orange, 13.5, 15.5, 3),
           //_buildDraggableTimeBlock(context, "Computer Science", Colors.purple.withOpacity(0.3), Colors.purple, 16, 17, 4),
-          for (var task in scheduleManager.getSchedule().tasks)
+          for (var task in scheduleManager.schedule.tasks)
             _buildDraggableTimeBlock(context, task),
         ],
       ),
