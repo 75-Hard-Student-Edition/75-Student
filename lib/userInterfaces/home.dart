@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
+import 'package:student_75/userInterfaces/addTask.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -26,13 +27,16 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  final ScheduleManager scheduleManager = ScheduleManager(); // Backend instance
+  final ScheduleManager scheduleManager = ScheduleManager(  
+    displayErrorCallback: (String message) {
+    print("Error: $message"); // ✅ Handles the error properly
+  },); // Backend instance
   Schedule schedule = Schedule(tasks: []); // Stores tasks
 
   @override
   void initState() {
     super.initState();
-    _addTestTasks();
+    //_addTask(newTask);
     _fetchSchedule();
   }
 
@@ -91,6 +95,29 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     print("Fetched schedule from backend: ${schedule.length} tasks loaded.");
   }
 
+  void _addTask(TaskModel newTask) {
+    setState(() {
+      scheduleManager.addTask(newTask);
+      _fetchSchedule(); // Refresh UI
+    });
+  }
+
+  void _navigateToAddTaskScreen() async {
+    final newTask = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              AddTaskScreen(scheduleManager: scheduleManager)),
+    );
+
+    if (newTask != null && newTask is TaskModel) {
+      setState(() {
+        scheduleManager.addTask(newTask); // ✅ Add the new task
+        _fetchSchedule(); // ✅ Refresh the UI
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -100,7 +127,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(
+        scheduleManager: scheduleManager,
+        onTaskAdded: _addTask, // ✅ Pass the function to update UI
+      ),
       body: Column(
         children: [
           SizedBox(height: topPadding + 10),
@@ -212,6 +242,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           for (var task in scheduleManager.schedule.tasks)
             _buildDraggableTimeBlock(context, task),
         ],
+        
       ),
     );
   }
@@ -252,6 +283,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   // Draggable & Resizable
   Widget _buildDraggableTimeBlock(BuildContext context, TaskModel task) {
+    print("Rendering Task: ${task.name} at ${task.startTime}");
+    
     double screenWidth = MediaQuery.of(context).size.width;
     double hourHeight = 50;
 
@@ -357,6 +390,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 }
 
 class BottomNavBar extends StatelessWidget {
+  final ScheduleManager scheduleManager;
+
+  final Function(TaskModel) onTaskAdded; // ✅ Add callback parameter
+
+  const BottomNavBar(
+      {super.key, required this.scheduleManager, required this.onTaskAdded});
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -374,7 +414,14 @@ class BottomNavBar extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
-              print("Add Task button pressed."); // Debug
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddTaskScreen(scheduleManager: scheduleManager)),
+              ).then((newTask) {
+                if (newTask != null && newTask is TaskModel) {
+                  onTaskAdded(newTask); // ✅ Ensure the UI updates
+                }
+              });
             },
           ),
           IconButton(

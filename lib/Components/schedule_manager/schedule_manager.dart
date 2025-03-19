@@ -56,7 +56,8 @@ class ScheduleManager implements IScheduleManager {
   late Future<bool> Function(String, String, String) userBinarySelectCallback;
   late void Function(String) displayErrorCallback;
 
-  ScheduleManager() {
+  ScheduleManager({required this.displayErrorCallback}) {
+    
     //this.userBinarySelectCallback, this.displayErrorCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
