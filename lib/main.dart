@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/category_ranking.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
+import 'package:student_75/userInterfaces/difficulty_page.dart';
 
 Future<void> main() async {
   // Ensure that the Flutter binding is initialized before calling any plugins
@@ -10,7 +11,6 @@ Future<void> main() async {
 
   // Load the app settings
   // await AppSettings.loadSettings();
-
 
   runApp(
     const MyApp(),
@@ -20,8 +20,6 @@ Future<void> main() async {
     ),*/
   );
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -35,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: CategoryRankingScreen(),
+      home: DifficultyPage(),
     );
   }
 }
@@ -51,4 +49,3 @@ Bottom Nav:
 
 //todo: 1, 2, 3, 4, 6, 7, 8, 9
 //! bottom nav pages and 3. need to be done before 1 and 2
-
