@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:student_75/models/task_model.dart';
+import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({super.key});
+  final ScheduleManager scheduleManager;
+  const AddTaskScreen({super.key, required this.scheduleManager});
 
   @override
-  _AddTaskScreenState createState() => _AddTaskScreenState();
+  _AddTaskScreenState createState() => _AddTaskScreenState(scheduleManager);
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
+  final ScheduleManager scheduleManager;
   String _selectedTime = "00:00";
   String _endTime = "00:00";
   int _selectedDuration = 0;
@@ -22,25 +26,37 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Color _selectedCategoryBorderColor = const Color(0xFF56C1B7);
   Color _textColor = const Color(0xFFFFFFFF);
 
+  _AddTaskScreenState(this.scheduleManager);
+  TaskCategory? _selectedCategory;
+  String? _selectedRepeatOption;
+  bool _isMovable = false;
+  bool _isComplete = false;
+  DateTime _startTime = DateTime.now();
+  Duration? _period; 
+  //Location? _taskLocation;
+
+  List<TaskModel> taskList = [];
+
+  void saveTask(TaskModel task) {
+    taskList.add(task);
+    print("Task Saved: ${task.name}");
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      height: screenHeight * 0.95,
+      return SafeArea(
+    child: Container(
+      height: screenHeight * 0.8,  
       decoration: BoxDecoration(
         color: _selectedCategoryColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(color: _selectedCategoryBorderColor, width: 5),
       ),
       padding: const EdgeInsets.all(5),
       child: SingleChildScrollView(
-        //scrolling
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: screenHeight * 0.9,
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -52,7 +68,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               _buildCategorySelector(),
               _buildRepeatOptions(),
               _buildLocationNotesLinks(),
-              _buildSaveCancelButtons(context),
+              SizedBox(child: _buildSaveCancelButtons(context)),
             ],
           ),
         ),
@@ -209,6 +225,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
         child: const Text(
           "Add New Task",
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontFamily: 'kdamThmorPro',
             fontSize: 15,
@@ -624,22 +641,27 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildCategoryChip("Academic", const Color(0xFF81E4F0)),
+                  _buildCategoryChip("Academic", const Color(0xFF81E4F0),
+                      TaskCategory.academic),
                   const SizedBox(width: 8),
-                  _buildCategoryChip("Social", const Color(0xFF8AD483)),
+                  _buildCategoryChip(
+                      "Social", const Color(0xFF8AD483), TaskCategory.social),
                   const SizedBox(width: 8),
-                  _buildCategoryChip("Health", const Color(0xFFF67373)),
+                  _buildCategoryChip(
+                      "Health", const Color(0xFFF67373), TaskCategory.health),
                 ],
               ),
               const SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildCategoryChip("Chore", const Color(0xFFE997CD)),
+                  _buildCategoryChip(
+                      "Chore", const Color(0xFFE997CD), TaskCategory.chore),
                   const SizedBox(width: 8),
-                  _buildCategoryChip("Hobby", Colors.cyan),
+                  _buildCategoryChip("Hobby", Colors.cyan, TaskCategory.hobby),
                   const SizedBox(width: 8),
-                  _buildCategoryChip("Employment", const Color(0xFFEDBF45)),
+                  _buildCategoryChip("Employment", const Color(0xFFEDBF45),
+                      TaskCategory.employment),
                 ],
               ),
             ],
@@ -649,19 +671,17 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
-  String? _selectedCategory;
-
-  Widget _buildCategoryChip(String label, Color color) {
-    bool isSelected = _selectedCategory == label;
+  Widget _buildCategoryChip(String label, Color color, TaskCategory category) {
+    bool isSelected = _selectedCategory == category;
     return GestureDetector(
       onTap: () {
         setState(() {
-          if (_selectedCategory == label) {
+          if (_selectedCategory == category) {
             _selectedCategory = null;
             _selectedCategoryColor = const Color(0xFFDCF0EE);
             _selectedCategoryBorderColor = const Color(0xFF56C1B7);
           } else {
-            _selectedCategory = label;
+            _selectedCategory = category;
             _selectedCategoryColor = lightenColor(color, 0.4);
             _selectedCategoryBorderColor = darkenColor(color, 0.2);
           }
@@ -707,7 +727,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               shadows: [
                 Shadow(
                   color: Colors.black.withOpacity(0.5),
-                  offset: Offset(1, 1),
+                  offset: const Offset(1, 1),
                   blurRadius: 3,
                 ),
               ],
@@ -733,13 +753,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildRepeatButton("Once"),
+                    _buildRepeatButton("Once", Duration.zero),
                     const SizedBox(width: 5),
-                    _buildRepeatButton("Weekly"),
+                    _buildRepeatButton("Weekly", const Duration(days: 7)),
                     const SizedBox(width: 5),
-                    _buildRepeatButton("Fortnightly"),
+                    _buildRepeatButton("Fortnightly", const Duration(days: 14)),
                     const SizedBox(width: 5),
-                    _buildRepeatButton("Monthly"),
+                    _buildRepeatButton("Monthly", const Duration(days: 30)),
                   ],
                 ),
               ),
@@ -752,12 +772,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
-  Widget _buildRepeatButton(String label) {
-    bool isSelected = _selectedCategory == label;
+  Widget _buildRepeatButton(String label, Duration period) {
+    bool isSelected = _selectedRepeatOption == label;
+
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedCategory = label;
+          _selectedRepeatOption = label;
         });
       },
       child: Container(
@@ -984,7 +1005,69 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            onPressed: () {}, // No backend logic yet
+            onPressed: () {
+              if (_taskName.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Task name cannot be empty!")),
+                );
+                return;
+              }
+
+              if (_selectedCategory == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Please select a category!")),
+                );
+                return;
+              }
+
+              if (_selectedDuration <= 0) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text("Please select a valid duration!")),
+                );
+                return;
+              }
+
+              DateTime startTime = DateTime(
+                _selectedDate.year,
+                _selectedDate.month,
+                _selectedDate.day,
+                int.parse(_selectedTime.split(":")[0]),
+                int.parse(_selectedTime.split(":")[1]),
+              );
+
+              int taskId = DateTime.now().millisecondsSinceEpoch;
+
+              TaskModel newTask = TaskModel(
+                id: taskId,
+                name: _taskName,
+                description: _notes,
+                isMovable: _isMovable,
+                isComplete: _isComplete,
+                category: _selectedCategory!,
+                priority: TaskPriority.medium,
+                //location: _location.isNotEmpty ? Location(name: _location) : null,
+                startTime: startTime,
+                duration: Duration(minutes: _selectedDuration),
+                //notifyBefore: _notifyBefore,
+                period: _period, 
+              );
+
+              print("Saving Task:");
+              print("ID: ${newTask.id}");
+              print("Name: ${newTask.name}");
+              print("Start Time: ${newTask.startTime}");
+              print("Duration: ${newTask.duration.inMinutes} minutes");
+              print("Category: ${newTask.category}");
+              print("Repeat (Period): ${newTask.period?.inDays ?? 0} days");
+              print("Location: ${newTask.location?.name ?? 'No location'}");
+              print("Notes: ${newTask.description}");
+
+            
+              scheduleManager.addTask(newTask);
+
+              Navigator.pop(context, newTask);
+            },
             child: const Text(
               "SAVE",
               style: TextStyle(
