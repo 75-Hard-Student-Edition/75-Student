@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
@@ -11,15 +12,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   bool announceNotifications = false;
   bool showPrevious = true;
   bool snooze = true;
+  DateTime selectedNotificationTime = DateTime.now();
+  DateTime selectedWindDownTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFE6F2F0),
       body: SafeArea(
         child: Column(
           children: [
             _buildHeader(context),
+            _buildAlwaysVisibleNotificationWindow(),
             _buildNotificationSettings(context),
           ],
         ),
@@ -33,7 +37,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       child: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.arrow_back, size: 28),
+            icon: Icon(Icons.arrow_back, size: 28, color: Colors.black),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -41,9 +45,47 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           Spacer(),
           Text(
             "Notifications",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF248F84)),
           ),
           Spacer(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAlwaysVisibleNotificationWindow() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 5)
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Current Notification Settings",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF248F84))),
+          SizedBox(height: 10),
+          Text(
+              "Notification Time: ${selectedNotificationTime.hour}:${selectedNotificationTime.minute} ${selectedNotificationTime.hour < 12 ? "AM" : "PM"}",
+              style: TextStyle(fontSize: 16)),
+          SizedBox(height: 5),
+          Text(
+              "Wind Down Time: ${selectedWindDownTime.hour}:${selectedWindDownTime.minute} ${selectedWindDownTime.hour < 12 ? "AM" : "PM"}",
+              style: TextStyle(fontSize: 16)),
         ],
       ),
     );
@@ -65,7 +107,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 "When the task ends"
               ]),
               SizedBox(height: 20),
-              _buildTimePicker("Set Reminders", "Wind down time reminder"),
+              _buildCupertinoTimePicker("Set Reminders"),
               SizedBox(height: 20),
               _buildToggleOption(
                   "Announce Notifications", announceNotifications, (value) {
@@ -94,7 +136,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF248F84)),
         ),
         SizedBox(height: 8),
         DropdownButtonFormField(
@@ -116,46 +161,40 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  Widget _buildTimePicker(String title, String subtitle) {
-    TimeOfDay selectedTime = TimeOfDay(hour: 9, minute: 15);
-
+  Widget _buildCupertinoTimePicker(String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF248F84)),
         ),
         SizedBox(height: 8),
-        GestureDetector(
-          onTap: () async {
-            TimeOfDay? pickedTime = await showTimePicker(
+        CupertinoButton(
+          child: Text("Select Time"),
+          onPressed: () {
+            showModalBottomSheet(
               context: context,
-              initialTime: selectedTime,
+              builder: (BuildContext builder) {
+                return Container(
+                  height: 250,
+                  color: Colors.white,
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.time,
+                    initialDateTime: selectedWindDownTime,
+                    onDateTimeChanged: (DateTime newTime) {
+                      setState(() {
+                        selectedWindDownTime = newTime;
+                      });
+                    },
+                  ),
+                );
+              },
             );
-            if (pickedTime != null) {
-              setState(() {
-                selectedTime = pickedTime;
-              });
-            }
           },
-          child: Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${selectedTime.hour}:${selectedTime.minute} ${selectedTime.period == DayPeriod.am ? "AM" : "PM"}",
-                  style: TextStyle(fontSize: 16),
-                ),
-                Icon(Icons.access_time),
-              ],
-            ),
-          ),
         ),
       ],
     );
@@ -166,10 +205,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: TextStyle(fontSize: 16)),
+        Text(title, style: TextStyle(fontSize: 16, color: Color(0xFF248F84))),
         Switch(
           value: value,
           onChanged: onChanged,
+          activeColor: Color(0xFF248F84),
         ),
       ],
     );
