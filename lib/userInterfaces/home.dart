@@ -23,10 +23,11 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  final ScheduleManager scheduleManager = ScheduleManager(  
+  final ScheduleManager scheduleManager = ScheduleManager(
     displayErrorCallback: (String message) {
-    print("Error: $message"); // ✅ Handles the error properly
-  },); // Backend instance
+      print("Error: $message"); // ✅ Handles the error properly
+    },
+  ); // Backend instance
   Schedule schedule = Schedule(tasks: []); // Stores tasks
 
   @override
@@ -101,9 +102,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   void _navigateToAddTaskScreen() async {
     final newTask = await Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) =>
-              AddTaskScreen(scheduleManager: scheduleManager)),
+      MaterialPageRoute(builder: (context) => AddTaskScreen(scheduleManager: scheduleManager)),
     );
 
     if (newTask != null && newTask is TaskModel) {
@@ -125,7 +124,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
         scheduleManager: scheduleManager,
-        onTaskAdded: _addTask, // ✅ Pass the function to update UI
+        refreshSchedule: _fetchSchedule, // ✅ Pass the function to update UI
       ),
       body: Column(
         children: [
@@ -228,10 +227,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           //_buildDraggableTimeBlock(context, "History", Colors.green.withOpacity(0.3), Colors.green, 12, 13, 2),
           //_buildDraggableTimeBlock(context, "English", Colors.orange.withOpacity(0.3), Colors.orange, 13.5, 15.5, 3),
           //_buildDraggableTimeBlock(context, "Computer Science", Colors.purple.withOpacity(0.3), Colors.purple, 16, 17, 4),
-          for (var task in scheduleManager.schedule.tasks)
-            _buildDraggableTimeBlock(context, task),
+          for (var task in scheduleManager.schedule.tasks) _buildDraggableTimeBlock(context, task),
         ],
-        
       ),
     );
   }
@@ -246,11 +243,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [
-                Colors.red,
-                Colors.orange,
-                Colors.green
-              ]), //need to assign to categories
+              gradient: const LinearGradient(
+                  colors: [Colors.red, Colors.orange, Colors.green]), //need to assign to categories
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -273,31 +267,28 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   // Draggable & Resizable
   Widget _buildDraggableTimeBlock(BuildContext context, TaskModel task) {
     print("Rendering Task: ${task.name} at ${task.startTime}");
-    
+
     double screenWidth = MediaQuery.of(context).size.width;
     double hourHeight = 50;
 
     Color taskColor = _getTaskColor(task.category);
 
     return Positioned(
-      top: hourHeight * task.startTime.hour +
-          (task.startTime.minute / 60) * hourHeight,
+      top: hourHeight * task.startTime.hour + (task.startTime.minute / 60) * hourHeight,
       left: screenWidth * 0.15,
       child: GestureDetector(
         // change start time
         onVerticalDragUpdate: task.isMovable
             ? (details) {
                 setState(() {
-                  DateTime newStart = task.startTime.add(Duration(
-                      minutes:
-                          (details.primaryDelta! / hourHeight * 60).round()));
+                  DateTime newStart = task.startTime
+                      .add(Duration(minutes: (details.primaryDelta! / hourHeight * 60).round()));
 
                   // Ensure new start time is valid
                   if (newStart.isBefore(task.endTime)) {
                     TaskModel updatedTask = task.copyWith(startTime: newStart);
                     scheduleManager.editTask(updatedTask);
-                    print(
-                        "Moved Task: '${task.name}' to ${DateFormat('HH:mm').format(newStart)}");
+                    print("Moved Task: '${task.name}' to ${DateFormat('HH:mm').format(newStart)}");
                   }
                 });
               }
@@ -307,16 +298,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         onPanUpdate: task.isMovable
             ? (details) {
                 setState(() {
-                  Duration newDuration =
-                      task.endTime.difference(task.startTime) +
-                          Duration(
-                              minutes: (details.primaryDelta! / hourHeight * 60)
-                                  .round());
+                  Duration newDuration = task.endTime.difference(task.startTime) +
+                      Duration(minutes: (details.primaryDelta! / hourHeight * 60).round());
 
                   if (newDuration.inMinutes > 10) {
                     // no 0-minute tasks
-                    TaskModel updatedTask =
-                        task.copyWith(endTime: task.startTime.add(newDuration));
+                    TaskModel updatedTask = task.copyWith(endTime: task.startTime.add(newDuration));
                     scheduleManager.editTask(updatedTask);
                     print(
                         "Resized Task: '${task.name}' - New Duration: ${newDuration.inMinutes} minutes");
@@ -337,22 +324,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             children: [
               Center(
                 child: Text(task.name,
-                    style:
-                        const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
 
               // Toggle circle
               Positioned(
                 left: 8,
-                top: (hourHeight *
-                            task.endTime.difference(task.startTime).inHours) /
-                        2 -
-                    10,
+                top: (hourHeight * task.endTime.difference(task.startTime).inHours) / 2 - 10,
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      TaskModel updatedTask =
-                          task.copyWith(isComplete: !task.isComplete);
+                      TaskModel updatedTask = task.copyWith(isComplete: !task.isComplete);
                       scheduleManager.editTask(updatedTask);
                       print(
                           "Task '${task.name}' marked as ${updatedTask.isComplete ? "Completed" : "Incomplete"}");
@@ -381,10 +363,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 class BottomNavBar extends StatelessWidget {
   final ScheduleManager scheduleManager;
 
-  final Function(TaskModel) onTaskAdded; 
+  final Function refreshSchedule;
 
-  const BottomNavBar(
-      {super.key, required this.scheduleManager, required this.onTaskAdded});
+  const BottomNavBar({super.key, required this.scheduleManager, required this.refreshSchedule});
 
   @override
   Widget build(BuildContext context) {
@@ -399,10 +380,11 @@ class BottomNavBar extends StatelessWidget {
             icon: const Icon(Icons.home, color: Colors.white),
             onPressed: () {},
           ),
-          const SizedBox(width: 40), 
+          const SizedBox(width: 40),
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () async {
+              print("Before add: ${scheduleManager.schedule.toString()}");
               final newTask = await showModalBottomSheet<TaskModel>(
                 context: context,
                 isScrollControlled: true,
@@ -413,11 +395,11 @@ class BottomNavBar extends StatelessWidget {
                 ),
                 builder: (context) {
                   return Align(
-                    alignment: Alignment.bottomCenter, 
+                    alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 50), 
+                      padding: const EdgeInsets.only(bottom: 50),
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.95, 
+                        width: MediaQuery.of(context).size.width * 0.95,
                         decoration: const BoxDecoration(
                           color: Color(0x00FFFFFF),
                           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
@@ -431,8 +413,9 @@ class BottomNavBar extends StatelessWidget {
                 },
               );
               if (newTask != null) {
-                onTaskAdded(newTask);
+                refreshSchedule();
               }
+              print("After add: ${scheduleManager.schedule.toString()}");
             },
           ),
           IconButton(

@@ -87,4 +87,13 @@ class Schedule {
     if (index == -1) return null;
     return tasks[index];
   }
+
+  @override
+  toString() {
+    String out = "Schedule: [\n";
+    for (TaskModel task in tasks) {
+      out += "  $task\n";
+    }
+    return "$out]";
+  }
 }

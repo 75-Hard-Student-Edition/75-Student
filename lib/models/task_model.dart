@@ -90,4 +90,8 @@ class TaskModel {
       notifyBefore: notifyBefore ?? this.notifyBefore,
     );
   }
+
+  @override
+  toString() =>
+      "TaskModel(id: $id, name: $name, description: $description, isMovable: $isMovable, isComplete: $isComplete, category: $category, priority: $priority, location: $location, startTime: $startTime, duration: $duration, endTime: $endTime, nextScheduled: $nextScheduled, period: $period, notifyBefore: $notifyBefore)";
 }
