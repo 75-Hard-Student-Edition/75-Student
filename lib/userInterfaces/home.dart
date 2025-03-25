@@ -333,7 +333,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 top: (hourHeight * task.endTime.difference(task.startTime).inHours) / 2 - 10,
                 child: GestureDetector(
                   onTap: () {
-                    scheduleManager.editTask(task.copyWith(isComplete: !task.isComplete));
+                    scheduleManager.completeTask(task.id);
                     _fetchSchedule(); // refresh UI
                   },
                   child: Container(

@@ -57,7 +57,6 @@ class ScheduleManager implements IScheduleManager {
   late void Function(String) displayErrorCallback;
 
   ScheduleManager({required this.displayErrorCallback}) {
-    
     //this.userBinarySelectCallback, this.displayErrorCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
@@ -77,8 +76,7 @@ class ScheduleManager implements IScheduleManager {
   List<TaskModel> getBacklogSuggestions() => backlog.peak(3);
   //todo Decide on some way of deciding peak depth
   @override
-  Future<bool> userBinarySelect(
-          String choice1, String choice2, String message) =>
+  Future<bool> userBinarySelect(String choice1, String choice2, String message) =>
       userBinarySelectCallback(choice1, choice2, message);
   @override
   void displayError(String message) {
@@ -148,7 +146,7 @@ class ScheduleManager implements IScheduleManager {
   void completeTask(int taskId) {
     final int taskIndex = todaysSchedule.getTaskIndexFromId(taskId);
     final TaskModel task = todaysSchedule.tasks[taskIndex];
-    todaysSchedule.tasks[taskIndex] = task.copyWith(isComplete: true);
+    editTask(task.copyWith(isComplete: !task.isComplete));
   }
 
   @override
@@ -186,8 +184,7 @@ class ScheduleManager implements IScheduleManager {
 
     //* 2. Generate new schedule
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule =
-        await scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
     todaysSchedule = sanitisedSchedule;
