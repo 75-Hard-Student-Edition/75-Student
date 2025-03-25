@@ -17,6 +17,7 @@ class TaskModel {
   final Location? location;
 
   final DateTime startTime;
+  final Duration duration;
   late final DateTime endTime;
   late final DateTime nextScheduled;
   final Duration? period;
@@ -33,7 +34,7 @@ class TaskModel {
     required this.priority,
     this.location,
     required this.startTime,
-    required Duration duration,
+    required this.duration,
     this.period,
     this.notifyBefore = Duration.zero,
   }) {
@@ -68,6 +69,7 @@ class TaskModel {
     TaskPriority? priority,
     Location? location,
     DateTime? startTime,
+    Duration? duration,
     DateTime? endTime,
     DateTime? nextScheduled,
     Duration? period,
@@ -83,8 +85,7 @@ class TaskModel {
       priority: priority ?? this.priority,
       location: location ?? this.location,
       startTime: startTime ?? this.startTime,
-      duration:
-          (endTime ?? this.endTime).difference(startTime ?? this.startTime),
+      duration: duration ?? this.duration,
       period: period ?? this.period,
       notifyBefore: notifyBefore ?? this.notifyBefore,
     );

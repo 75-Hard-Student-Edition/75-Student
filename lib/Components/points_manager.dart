@@ -1,4 +1,3 @@
-import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/models/task_model.dart';
 
 class PointsManager {

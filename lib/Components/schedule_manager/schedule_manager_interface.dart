@@ -3,7 +3,7 @@ import 'package:student_75/Components/schedule_manager/schedule.dart';
 
 abstract class IScheduleManager {
   // ScheduleManager -> GUI methods
-  Schedule getSchedule();
+  Schedule get schedule;
   List<TaskModel> getBacklogSuggestions();
   Future<bool> userBinarySelect(String choice1, String choice2, String message);
   void displayError(String message);
