@@ -40,7 +40,7 @@ class ScheduleManager implements IScheduleManager {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog(initialTasks: []);
-    pointsManager = PointsManager();
+    pointsManager = PointsManager(initialSchedule: todaysSchedule, accountManager: accountManager);
     notificationManager = NotificationManager(notifications: []);
   }
 
