@@ -1,4 +1,5 @@
 import 'package:student_75/Components/schedule_manager/schedule_manager_interface.dart';
+import 'package:student_75/app_settings.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
@@ -47,9 +48,10 @@ class ScheduleManager implements IScheduleManager {
   //* == ScheduleManager -> GUI methods ==
   @override
   Schedule get schedule => todaysSchedule;
+
   @override
-  List<TaskModel> getBacklogSuggestions() => backlog.peak(3);
-  //todo Decide on some way of deciding peak depth
+  List<TaskModel> getBacklogSuggestions() => backlog.peak(AppSettings.backlogPeakDepth);
+
   @override
   Future<bool> userBinarySelect(String choice1, String choice2, String message) =>
       userBinarySelectCallback(choice1, choice2, message);
