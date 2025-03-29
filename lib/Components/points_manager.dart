@@ -1,25 +1,29 @@
+import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
 import "package:student_75/Components/schedule_manager/schedule.dart";
 import 'package:student_75/Components/account_manager/account_manager.dart';
 
 class PointsManager {
-  int maxPoints;
-  int currentPoints;
-  int pointsToPass;
-  int completedTaskPoints;
+  late int maxPoints;
+  late int currentPoints;
+  late int pointsToPass;
   late final AccountManager accountManager;
   late final List<TaskCategory> categoryOrder;
+  Set<int> completedTasks = {};
 
   PointsManager({
     required Schedule initialSchedule,
     required this.accountManager,
   }) {
     categoryOrder = accountManager.getCategoryOrder();
+    maxPoints = 0;
+    currentPoints = 0;
   }
 
   void addTask(TaskModel task) {
     int taskPoints = getTaskPoints(task);
     maxPoints += taskPoints;
+    calculatePointsToPass();
   }
 
   int getTaskPoints(TaskModel task) {
@@ -28,32 +32,29 @@ class PointsManager {
     return taskPoints;
   }
 
-  // Method to calculate the total points
-  int calculatePoints(List<TaskModel> calTasks) {
-    int totalPoints = 0;
-    for (var task in calTasks) {
-      // int taskPoints = task.getPoint();
-      // totalPoints += taskPoints;
+  void completeTask(TaskModel task) {
+    int taskPoints = getTaskPoints(task);
+    currentPoints += taskPoints;
+    completedTasks.add(task.id);
+  }
+
+  void removeTask(TaskModel task) {
+    int taskPoints = getTaskPoints(task);
+    maxPoints -= taskPoints;
+
+    if (maxPoints < 0) {
+      maxPoints = 0;
     }
-    return totalPoints;
-  }
+    calculatePointsToPass();
 
-  void completedTasks() {
-    // List<TaskModel> todaysTask = ScheduleManager.returnTodaySchedule();
-    // List<TaskModel> completedTask =
-    //     todaysTask.where((task) => task.isComplete).toList();
-    // completedTaskPoints = calculatePoints(completedTask);
-  }
-
-  void calcPointsToPass() {
-    pointsToPass = currentPoints - completedTaskPoints;
-  }
-
-  // Method to determine if the user has passed
-  bool determinePass() {
-    if (currentPoints == pointsToPass) {
-      return true;
+    if (completedTasks.contains(task.id)) {
+      currentPoints -= taskPoints;
+      completedTasks.remove(task.id);
     }
-    return false;
   }
+
+  void calculatePointsToPass() =>
+      pointsToPass = (maxPoints * accountManager.getDifficulty().value).round();
+
+  bool determinePass() => currentPoints >= pointsToPass;
 }
