@@ -35,7 +35,7 @@ class ScheduleManager implements IScheduleManager {
     //this.userBinarySelectCallback, this.displayErrorCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
-    backlog = Backlog();
+    backlog = Backlog(initialTasks: []);
     /* pointsManager = PointsManager(
         maxPoints: 100,
         currentPoints: 0,
@@ -112,7 +112,7 @@ class ScheduleManager implements IScheduleManager {
       throw TaskNotFoundException(
           "Task with id '$taskId' not found in schedule when trying to postpone");
     }
-    backlog.add(task);
+    backlog.enqueue(task);
     // Remove task from schedule
     deleteTask(taskId);
   }
@@ -136,6 +136,7 @@ class ScheduleManager implements IScheduleManager {
 
   //* == Internal methods ==
   Future<void> endOfDayProcess() async {
+    backlog.age();
     //* 1. Process old schedule
     for (final task in todaysSchedule.tasks) {
       if (task.isComplete) {
@@ -146,7 +147,7 @@ class ScheduleManager implements IScheduleManager {
         }
       } else if (task.isMovable) {
         // Add task to backlog - have to figure this out in the database
-        backlog.add(task);
+        backlog.enqueue(task);
       } else {
         deleteTask(task.id);
       }
