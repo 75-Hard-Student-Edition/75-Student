@@ -3,6 +3,7 @@ import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
 import 'package:student_75/Components/notification_manager.dart';
+import 'package:student_75/Components/schedule_manager/backlog.dart';
 
 // Interface for ScheduleManager to interact with the GUI
 
@@ -20,32 +21,6 @@ class TaskNotFoundException implements Exception {
 
   @override
   String toString() => 'TaskNotFoundException: $message';
-}
-
-class Backlog {
-  /* Stub implementation of Backlog */
-  void add(TaskModel task) {}
-  TaskModel getTask(int taskId) => TaskModel(
-      id: taskId,
-      name: 'Stub Task',
-      isMovable: true,
-      category: TaskCategory.academic,
-      priority: TaskPriority.low,
-      startTime: DateTime.now(),
-      duration: const Duration(hours: 1),
-      period: const Duration(days: 1));
-  void remove(int taskId) {}
-  List<TaskModel> peak(int depth) => [
-        TaskModel(
-            id: 0,
-            name: 'Stub Task',
-            isMovable: true,
-            category: TaskCategory.academic,
-            priority: TaskPriority.low,
-            startTime: DateTime.now(),
-            duration: const Duration(hours: 1),
-            period: const Duration(days: 1))
-      ];
 }
 
 class ScheduleManager implements IScheduleManager {
