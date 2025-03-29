@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/models/task_model.dart';
 import 'package:student_75/models/user_account_model.dart';
 
 abstract class IAccountManager {
@@ -22,6 +23,7 @@ abstract class IAccountManager {
 
   // AccountManager -> PointsManager methods
   Difficulty getDifficulty();
+  List<TaskCategory> getCategoryOrder();
 
   // PointsManager -> AccountManager methods
   void resetStreak();
