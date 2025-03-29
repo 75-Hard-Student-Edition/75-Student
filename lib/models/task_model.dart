@@ -2,6 +2,19 @@ import 'package:student_75/models/location_model.dart';
 
 enum TaskPriority { low, medium, high }
 
+extension TaskPriorityExtension on TaskPriority {
+  double get value {
+    switch (this) {
+      case TaskPriority.low:
+        return 1;
+      case TaskPriority.medium:
+        return 2;
+      case TaskPriority.high:
+        return 3;
+    }
+  }
+}
+
 enum TaskCategory { academic, social, health, employment, chore, hobby }
 
 class TaskModel {
