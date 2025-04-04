@@ -29,7 +29,7 @@ class PointsManager {
     required this.accountManager,
   }) {
     categoryOrder = accountManager.getCategoryOrder();
-    maxPoints = 0; //todo this should be set to the sum of all tasks in the schedule
+    maxPoints = 0;
     currentPoints = 0;
 
     for (var task in initialSchedule.tasks) {
