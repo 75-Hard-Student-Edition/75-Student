@@ -1,4 +1,6 @@
+import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager_interface.dart';
+import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/app_settings.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
@@ -27,21 +29,18 @@ class TaskNotFoundException implements Exception {
 class ScheduleManager implements IScheduleManager {
   late Schedule todaysSchedule;
   late Backlog backlog;
-  //late PointsManager pointsManager;
+  late PointsManager pointsManager;
+  late AccountManager accountManager;
   late NotificationManager notificationManager;
   late Future<bool> Function(String, String, String) userBinarySelectCallback;
   late void Function(String) displayErrorCallback;
 
-  ScheduleManager({required this.displayErrorCallback}) {
+  ScheduleManager({required this.displayErrorCallback, required this.accountManager}) {
     //this.userBinarySelectCallback, this.displayErrorCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog(initialTasks: []);
-    /* pointsManager = PointsManager(
-        maxPoints: 100,
-        currentPoints: 0,
-        pointsToPass: 50,
-        completedTaskPoints: 0); */
+    pointsManager = PointsManager(initialSchedule: todaysSchedule, accountManager: accountManager);
     notificationManager = NotificationManager(notifications: []);
   }
 

@@ -6,6 +6,7 @@ import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/userInterfaces/addTask.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -23,16 +24,22 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  final ScheduleManager scheduleManager = ScheduleManager(
-    displayErrorCallback: (String message) {
-      print("Error: $message"); // ✅ Handles the error properly
-    },
-  ); // Backend instance
-  Schedule schedule = Schedule(tasks: []); // Stores tasks
+  late final AccountManager accountManager;
+  late final ScheduleManager scheduleManager;
+  late Schedule displaySchedule; // Stores tasks
 
   @override
   void initState() {
     super.initState();
+    accountManager = AccountManager();
+    accountManager.login("username", "password"); //! Temporary test user
+    scheduleManager = ScheduleManager(
+      accountManager: accountManager,
+      displayErrorCallback: (String message) {
+        print("Error: $message"); // ✅ Handles the error properly
+      },
+    );
+    displaySchedule = scheduleManager.schedule;
     //_addTask(newTask);
     _fetchSchedule();
   }
@@ -87,9 +94,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   /// Tasks from backend
   void _fetchSchedule() {
     setState(() {
-      schedule = scheduleManager.schedule;
+      displaySchedule = scheduleManager.schedule;
     });
-    print("Fetched schedule from backend: ${schedule.length} tasks loaded.");
+    print("Fetched schedule from backend: ${displaySchedule.length} tasks loaded.");
   }
 
   void _addTask(TaskModel newTask) {

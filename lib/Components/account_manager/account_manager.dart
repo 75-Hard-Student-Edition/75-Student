@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:student_75/Components/account_manager/account_manager_interface.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/user_account_model.dart';
+import 'package:student_75/models/task_model.dart';
 
 class NoUserSignedInException implements Exception {
   final String message;
@@ -35,7 +36,14 @@ class AccountManager implements IAccountManager {
       id: 0,
       username: username,
       difficulty: Difficulty.easy,
-      categoryOrder: [],
+      categoryOrder: [
+        TaskCategory.academic,
+        TaskCategory.chore,
+        TaskCategory.employment,
+        TaskCategory.health,
+        TaskCategory.hobby,
+        TaskCategory.social
+      ],
       sleepDuration: const Duration(hours: 8),
       bedtimes: {},
       bedtimeNotifyBefore: const Duration(minutes: 30),
@@ -88,6 +96,12 @@ class AccountManager implements IAccountManager {
   Difficulty getDifficulty() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
     return userAccount!.difficulty;
+  }
+
+  @override
+  List<TaskCategory> getCategoryOrder() {
+    if (userAccount == null) throw NoUserSignedInException('No user signed in');
+    return userAccount!.categoryOrder;
   }
 
   //* PointsManager -> AccountManager methods
