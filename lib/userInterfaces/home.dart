@@ -5,10 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
-import 'package:student_75/userInterfaces/addTask.dart';
+import 'package:student_75/userInterfaces/add_task.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,6 +21,8 @@ class MyApp extends StatelessWidget {
 }
 
 class ScheduleScreen extends StatefulWidget {
+  const ScheduleScreen({super.key});
+
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
@@ -44,36 +48,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     _fetchSchedule();
   }
 
-  void _addTestTasks() {
-    scheduleManager.addTask(TaskModel(
-      id: 1,
-      name: "Math Class",
-      description: "Discrete",
-      isMovable: true,
-      category: TaskCategory.academic, // Example category
-      priority: TaskPriority.high, // Example priority
-      //location: location(name: "Room 101"), // Example location
-      startTime: DateTime(2025, 3, 5, 9, 0),
-      duration: const Duration(hours: 1),
-      notifyBefore: const Duration(minutes: 15),
-    ));
-
-    scheduleManager.addTask(TaskModel(
-      id: 2,
-      name: "Comp Lab",
-      description: "SETaP",
-      isMovable: false, // Fixed schedule
-      category: TaskCategory.social,
-      priority: TaskPriority.medium,
-      //location: Location(name: "Physics Building"),
-      startTime: DateTime(2025, 3, 5, 11, 0),
-      duration: const Duration(hours: 1, minutes: 30),
-      notifyBefore: const Duration(minutes: 30),
-    ));
-
-    print("Test tasks added.");
-  }
-
   Color _getTaskColor(TaskCategory category) {
     switch (category) {
       case TaskCategory.academic:
@@ -97,13 +71,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       displaySchedule = scheduleManager.schedule;
     });
     print("Fetched schedule from backend: ${displaySchedule.length} tasks loaded.");
-  }
-
-  void _addTask(TaskModel newTask) {
-    setState(() {
-      scheduleManager.addTask(newTask);
-      _fetchSchedule(); // Refresh UI
-    });
   }
 
   void _navigateToAddTaskScreen() async {
