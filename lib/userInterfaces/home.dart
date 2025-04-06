@@ -73,13 +73,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     print("Fetched schedule from backend: ${displaySchedule.length} tasks loaded.");
   }
 
-  void _addTask(TaskModel newTask) {
-    setState(() {
-      scheduleManager.addTask(newTask);
-      _fetchSchedule(); // Refresh UI
-    });
-  }
-
   void _navigateToAddTaskScreen() async {
     final newTask = await Navigator.push(
       context,
