@@ -48,36 +48,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     _fetchSchedule();
   }
 
-  void _addTestTasks() {
-    scheduleManager.addTask(TaskModel(
-      id: 1,
-      name: "Math Class",
-      description: "Discrete",
-      isMovable: true,
-      category: TaskCategory.academic, // Example category
-      priority: TaskPriority.high, // Example priority
-      //location: location(name: "Room 101"), // Example location
-      startTime: DateTime(2025, 3, 5, 9, 0),
-      duration: const Duration(hours: 1),
-      notifyBefore: const Duration(minutes: 15),
-    ));
-
-    scheduleManager.addTask(TaskModel(
-      id: 2,
-      name: "Comp Lab",
-      description: "SETaP",
-      isMovable: false, // Fixed schedule
-      category: TaskCategory.social,
-      priority: TaskPriority.medium,
-      //location: Location(name: "Physics Building"),
-      startTime: DateTime(2025, 3, 5, 11, 0),
-      duration: const Duration(hours: 1, minutes: 30),
-      notifyBefore: const Duration(minutes: 30),
-    ));
-
-    print("Test tasks added.");
-  }
-
   Color _getTaskColor(TaskCategory category) {
     switch (category) {
       case TaskCategory.academic:
