@@ -24,7 +24,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   String _taskName = "";
   Color _selectedCategoryColor = const Color(0xFFDCF0EE);
   Color _selectedCategoryBorderColor = const Color(0xFF56C1B7);
-  Color _textColor = const Color(0xFFFFFFFF);
+  final Color _textColor = const Color(0xFFFFFFFF);
 
   _AddTaskScreenState(this.scheduleManager);
   TaskCategory? _selectedCategory;

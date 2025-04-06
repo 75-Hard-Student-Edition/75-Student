@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/category_ranking.dart';
 
 class DifficultyPage extends StatelessWidget {
+  const DifficultyPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,14 +12,14 @@ class DifficultyPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           // Back Button (Align to top-left)
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: IconButton(
-                icon: Icon(Icons.arrow_back, size: 30),
+                icon: const Icon(Icons.arrow_back, size: 30),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -25,7 +27,7 @@ class DifficultyPage extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 20), // Space between back button and text
+          const SizedBox(height: 20), // Space between back button and text
           // Title Text
           Text(
             "Select your difficulty...",
@@ -37,31 +39,31 @@ class DifficultyPage extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 70), // Reduce space between text and buttons
+          const SizedBox(height: 70), // Reduce space between text and buttons
           // Buttons
           buttonWidget("EASY", Colors.green),
-          SizedBox(height: 65), // Adjust spacing between buttons
+          const SizedBox(height: 65), // Adjust spacing between buttons
           buttonWidget("MEDIUM", Colors.amber),
-          SizedBox(height: 65),
+          const SizedBox(height: 65),
           buttonWidget("HARD", Colors.red),
 
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
 
           ElevatedButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CategoryRankingScreen()),
+                    builder: (context) => const CategoryRankingScreen()),
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 17, 174, 145),
+              backgroundColor: const Color.fromARGB(255, 17, 174, 145),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
+            child: const Text(
               "NEXT",
               style: TextStyle(
                 color: Colors.white,
@@ -79,13 +81,13 @@ class DifficultyPage extends StatelessWidget {
       onPressed: () {},
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         elevation: 5,
       ),
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'KdamThmorPro',
           fontSize: 22,
           fontWeight: FontWeight.bold,
