@@ -122,9 +122,9 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
   // Drop Target Boxes that Inherit Colors
   Widget buildDropTarget(int index) {
     return DragTarget<Map<String, dynamic>>(
-      onAccept: (data) {
+      onAcceptWithDetails: (data) {
         setState(() {
-          droppedItems[index] = data;
+          droppedItems[index] = data.data;
         });
       },
       builder: (context, candidateData, rejectedData) {
@@ -154,7 +154,7 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [const BoxShadow(color: Colors.black26, blurRadius: 5)],
+        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 5)],
       ),
       child: Text(
         text,

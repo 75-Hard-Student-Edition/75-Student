@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
-import 'package:student_75/userInterfaces/addTask.dart';
+import 'package:student_75/userInterfaces/add_task.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
 
 class MyApp extends StatelessWidget {
