@@ -13,9 +13,14 @@ class AppSettings {
     }
   }
 
-  static double get difficultyEasyValue => settings['difficultyValues']['easy'] ?? 0.5;
-  static double get difficultyMediumValue => settings['difficultyValues']['medium'] ?? 0.75;
-  static double get difficultyHardValue => settings['difficultyValues']['hard'] ?? 1.0;
+static double get difficultyEasyValue =>
+    settings['difficultyValues']?['easy']?.toDouble() ?? 0.5;
+
+static double get difficultyMediumValue =>
+    settings['difficultyValues']?['medium']?.toDouble() ?? 0.75;
+
+static double get difficultyHardValue =>
+    settings['difficultyValues']?['hard']?.toDouble() ?? 1.0;
   static double get locationRadius => settings['locationRadius'] ?? 100.0;
   static int get backlogPeakDepth => settings['backlogPeakDepth'] ?? 3;
 }
