@@ -639,7 +639,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildCategoryChip("Academic", const Color(0xFF81E4F0),
+                  _buildCategoryChip("Academic", const Color(0xFF00BCD4),
                       TaskCategory.academic),
                   const SizedBox(width: 8),
                   _buildCategoryChip(
@@ -656,7 +656,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   _buildCategoryChip(
                       "Chore", const Color(0xFFE997CD), TaskCategory.chore),
                   const SizedBox(width: 8),
-                  _buildCategoryChip("Hobby", Colors.cyan, TaskCategory.hobby),
+                  _buildCategoryChip("Hobby", const Color(0xFF946AAE), TaskCategory.hobby),
                   const SizedBox(width: 8),
                   _buildCategoryChip("Employment", const Color(0xFFEDBF45),
                       TaskCategory.employment),
