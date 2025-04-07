@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/home.dart';
+import 'package:student_75/models/task_model.dart';
+
 
 class CategoryRankingScreen extends StatefulWidget {
   const CategoryRankingScreen({super.key});
@@ -10,11 +12,11 @@ class CategoryRankingScreen extends StatefulWidget {
 
 class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
   List<Map<String, dynamic>> categories = [
-    {"name": "Academic", "color": Colors.redAccent},
-    {"name": "Social", "color": Colors.greenAccent},
-    {"name": "Health", "color": Colors.blueAccent},
-    {"name": "Career", "color": Colors.orangeAccent},
-    {"name": "Mindfulness", "color": Colors.pinkAccent},
+    {"name": "Academic", "enum": TaskCategory.academic, "color": const Color(0xFF81E4F0)},
+    {"name": "Social", "enum": TaskCategory.social, "color": const Color(0xFF8AD483)},
+    {"name": "Health", "enum": TaskCategory.health, "color": const Color(0xFFF67373)},
+    {"name": "Career", "enum": TaskCategory.employment, "color":const Color(0xFFEDBF45)},
+    {"name": "Mindfulness", "enum": TaskCategory.chore, "color": const Color(0xFFE997CD)},
   ];
 
   List<Map<String, dynamic>?> droppedItems = List.filled(5, null);

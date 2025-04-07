@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: ScheduleScreen(),
     );
@@ -89,7 +89,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
     double topPadding = MediaQuery.of(context).padding.top;
     String currentDay = DateFormat('d').format(DateTime.now());
     String currentMonth = DateFormat('MMM').format(DateTime.now());
@@ -117,7 +116,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Widget _buildHeader(BuildContext context, String day, String month) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double topPadding = MediaQuery.of(context).padding.top; // Extra padding for iPhone 15 Pro
+// Extra padding for iPhone 15 Pro
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),

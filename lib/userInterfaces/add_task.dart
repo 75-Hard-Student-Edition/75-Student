@@ -29,9 +29,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   _AddTaskScreenState(this.scheduleManager);
   TaskCategory? _selectedCategory;
   String? _selectedRepeatOption;
-  bool _isMovable = false;
-  bool _isComplete = false;
-  DateTime _startTime = DateTime.now();
+  final bool _isMovable = false;
+  final bool _isComplete = false;
   Duration? _period; 
   //Location? _taskLocation;
 
@@ -45,7 +44,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
 
       return SafeArea(
     child: Container(

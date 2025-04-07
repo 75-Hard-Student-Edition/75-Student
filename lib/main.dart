@@ -1,6 +1,6 @@
 import 'package:student_75/app_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:student_75/userInterfaces/category_ranking.dart';
+import 'package:student_75/userInterfaces/start_up.dart';
 
 Future<void> main() async {
   // Ensure that the Flutter binding is initialized before calling any plugins
@@ -27,11 +27,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo Not Loading',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00B3A1)),
         useMaterial3: true,
       ),
       //todo this should take us to the login page
-      home: CategoryRankingScreen(),
+      home: const WelcomeScreen(),
     );
   }
 }
