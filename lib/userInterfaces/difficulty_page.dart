@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/category_ranking.dart';
+import 'package:student_75/models/difficulty_enum.dart';
 
-class DifficultyPage extends StatelessWidget {
+class DifficultyPage extends StatefulWidget {
   const DifficultyPage({super.key});
+
+  @override
+  State<DifficultyPage> createState() => _DifficultyPageState();
+}
+
+class _DifficultyPageState extends State<DifficultyPage> {
+  Difficulty? selectedDifficulty;
+
+  Color darkenColor(Color color, double amount) {
+    return Color.fromRGBO(
+      (color.red * (1 - amount)).round(),
+      (color.green * (1 - amount)).round(),
+      (color.blue * (1 - amount)).round(),
+      1,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,69 +46,61 @@ class DifficultyPage extends StatelessWidget {
 
           const SizedBox(height: 20), // Space between back button and text
           // Title Text
-          Text(
+          const Text(
             "Select your difficulty...",
             style: TextStyle(
               fontFamily: 'KdamThmorPro',
               fontSize: 26,
               fontWeight: FontWeight.bold,
-              color: Colors.teal[700],
+              color: Color(0xFF00B3A1),
             ),
           ),
 
-          const SizedBox(height: 70), // Reduce space between text and buttons
+          const SizedBox(height: 70),
           // Buttons
-          buttonWidget("EASY", Colors.green),
-          const SizedBox(height: 65), // Adjust spacing between buttons
-          buttonWidget("MEDIUM", Colors.amber),
-          const SizedBox(height: 65),
-          buttonWidget("HARD", Colors.red),
+          buttonWidget("EASY", const Color(0xFF43C737), Difficulty.easy),
+          const SizedBox(height: 30),
+          buttonWidget("MEDIUM", const Color(0xFFEDBF45), Difficulty.medium),
+          const SizedBox(height: 30),
+          buttonWidget("HARD", const Color(0xFFFF4F4F), Difficulty.hard),
 
-          const SizedBox(height: 40),
-
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const CategoryRankingScreen()),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 17, 174, 145),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: const Text(
-              "NEXT",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'kdamThmorPro',
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Widget buttonWidget(String text, Color color) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 5,
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontFamily: 'KdamThmorPro',
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+  Widget buttonWidget(String text, Color color, Difficulty difficulty) {
+    final bool isSelected = selectedDifficulty == difficulty;
+    
+    return SizedBox(
+      width: 275,
+      height: 100,
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            selectedDifficulty = difficulty;
+          });
+          debugPrint("difficulty: $difficulty");
+          debugPrint("backend value : ${difficulty.value}");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CategoryRankingScreen(),
+            ),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isSelected ? darkenColor(color, 0.3) : color,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          elevation: 5,
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 48,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
     );
