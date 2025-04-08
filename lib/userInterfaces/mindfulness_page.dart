@@ -5,8 +5,36 @@ import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/userInterfaces/profile.dart';
 
-class MindfulnessScreen extends StatelessWidget {
+class MindfulnessScreen extends StatefulWidget {
   const MindfulnessScreen({super.key});
+
+  @override
+  State<MindfulnessScreen> createState() => _MindfulnessScreenState();
+}
+
+class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTickerProviderStateMixin {
+
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +70,8 @@ class MindfulnessScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Text(
                         "25",
                         style: TextStyle(
@@ -75,16 +103,28 @@ class MindfulnessScreen extends StatelessWidget {
             const SizedBox(height: 30),
 
             // will change
-            Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.teal.shade200.withOpacity(0.4),
-              ),
-              child: const Center(
-                child: Icon(Icons.play_arrow_rounded,
-                    size: 40, color: Colors.teal),
+            SizedBox(
+              width: 300,
+              height: 300,
+              child: AnimatedBuilder(
+                animation: _scaleAnimation,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: Stack(
+                      children: [
+                        _buildCircle(offsetX: 0, offsetY: -60),
+                        _buildCircle(offsetX: 45, offsetY: -45),
+                        _buildCircle(offsetX: 60, offsetY: 0),
+                        _buildCircle(offsetX: 45, offsetY: 45),
+                        _buildCircle(offsetX: 0, offsetY: 60),
+                        _buildCircle(offsetX: -45, offsetY: 45),
+                        _buildCircle(offsetX: -60, offsetY: 0),
+                        _buildCircle(offsetX: -45, offsetY: -45),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
 
@@ -145,6 +185,21 @@ class MindfulnessScreen extends StatelessWidget {
               child: const Text("RESTART"),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCircle({required double offsetX, required double offsetY}) {
+    return Positioned(
+      left: 150 + offsetX - 50,
+      top: 150 + offsetY - 50,
+      child: Container(
+        width: 130,
+        height: 130,
+        decoration: const BoxDecoration(
+          color: Color(0x7F00C69B),
+          shape: BoxShape.circle,
         ),
       ),
     );
