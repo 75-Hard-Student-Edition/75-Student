@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/home.dart';
+import 'package:student_75/userInterfaces/profile.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -13,7 +16,7 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFE6F4F3),
-      bottomNavigationBar: const CustomBottomNavBar(),
+      bottomNavigationBar: CustomBottomNavBar(difficulty: Difficulty.easy, topCategory: TaskCategory.academic), // Example difficulty
       body: Padding(
         padding: EdgeInsets.only(top: topPadding + 10, left: 16, right: 16),
         child: Column(
@@ -164,7 +167,13 @@ class SettingsPage extends StatelessWidget {
 }
 
 class CustomBottomNavBar extends StatelessWidget {
-  const CustomBottomNavBar({super.key});
+  final Difficulty difficulty;
+  final TaskCategory topCategory;
+  const CustomBottomNavBar({
+    super.key,
+    required this.difficulty,
+    required this.topCategory,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -183,13 +192,18 @@ class CustomBottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ScheduleScreen()),
+                    MaterialPageRoute(builder: (context) => ScheduleScreen(difficulty: difficulty, topCategory: topCategory)),
                   );
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.person, color: Colors.white, size: 25),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfileScreen(difficulty: difficulty, topCategory: topCategory)),
+                  );
+                },
               ),
               const SizedBox(width: 40), // space taken by FAB
               IconButton(
@@ -197,7 +211,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ScheduleScreen()),
+                    MaterialPageRoute(builder: (context) => ScheduleScreen(difficulty: difficulty, topCategory: topCategory)),
                   );
                 },
               ),

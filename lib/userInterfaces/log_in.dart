@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/sign_up.dart';
 import 'package:student_75/userInterfaces/home.dart';
+import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/models/task_model.dart';
 
 class LogInScreen extends StatelessWidget {
   const LogInScreen({super.key});
@@ -93,7 +95,10 @@ class LogInScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ScheduleScreen()),
+                        MaterialPageRoute(builder: (context) => ScheduleScreen(
+                          difficulty: Difficulty.medium,
+                          topCategory: TaskCategory.academic,
+                        )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
