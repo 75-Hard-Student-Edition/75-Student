@@ -1,5 +1,4 @@
 import 'package:student_75/app_settings.dart';
-import 'package:student_75/models/difficulty_enum.dart';
 
 enum Difficulty { easy, medium, hard }
 

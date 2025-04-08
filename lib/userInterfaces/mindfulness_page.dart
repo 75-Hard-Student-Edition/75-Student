@@ -1,201 +1,188 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:flutter/cupertino.dart';
 
-class MindfulnessPage extends StatefulWidget {
-  @override
-  _MindfulnessPageState createState() => _MindfulnessPageState();
-}
-
-class _MindfulnessPageState extends State<MindfulnessPage> {
-  late VideoPlayerController _controller;
-  Duration duration = Duration(minutes: 30);
-  Timer? _timer;
-  bool isRunning = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.asset('assets/videos/vid2.mp4')
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.setLooping(true);
-      });
-  }
-
-  void startSession() {
-    if (!_controller.value.isPlaying) {
-      _controller.play();
-    }
-
-    _timer = Timer.periodic(Duration(seconds: 1), (_) {
-      setState(() {
-        if (duration.inSeconds > 0) {
-          duration = duration - Duration(seconds: 1);
-        } else {
-          _timer?.cancel();
-          _controller.pause();
-        }
-      });
-    });
-
-    setState(() {
-      isRunning = true;
-    });
-  }
-
-  void stopSession() {
-    _controller.pause();
-    _timer?.cancel();
-    setState(() {
-      isRunning = false;
-    });
-  }
-
-  void restartSession() {
-    _controller.seekTo(Duration.zero);
-    _controller.play();
-    _timer?.cancel();
-    setState(() {
-      duration = Duration(minutes: 30);
-      isRunning = true;
-    });
-    startSession();
-  }
-
-  String formatTime(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    return '${twoDigits(duration.inMinutes)}:${twoDigits(duration.inSeconds.remainder(60))}';
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _timer?.cancel();
-    super.dispose();
-  }
+class MindfulnessScreen extends StatelessWidget {
+  const MindfulnessScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFE6F7F8),
-      body: Center(
+      backgroundColor: const Color(0xFFEAF7F7),
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Title
-            Text(
+            // static rn
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      const Icon(Icons.folder_open_outlined, size: 30),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: const [
+                      Text(
+                        "25",
+                        style: TextStyle(
+                          color: Colors.deepOrange,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(Icons.local_fire_department, color: Colors.deepOrange),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            const Text(
               "Mindfulness",
               style: TextStyle(
-                fontFamily: "kdamThmorPro",
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: const Color.fromARGB(255, 23, 212, 190),
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF00A59B),
               ),
             ),
-            SizedBox(height: 20),
 
-            // Breathing Video
-            _controller.value.isInitialized
-                ? SizedBox(
-                    width: 500, // You can adjust this width as needed
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    ),
-                  )
-                : CircularProgressIndicator(),
+            const SizedBox(height: 30),
 
-            SizedBox(height: 5),
-
-            Icon(
-              Icons.play_arrow,
-              size: 40,
-              color: const Color.fromARGB(255, 23, 212, 190),
+            // will change
+            Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.teal.shade200.withOpacity(0.4),
+              ),
+              child: const Center(
+                child: Icon(Icons.play_arrow_rounded, size: 40, color: Colors.teal),
+              ),
             ),
-            SizedBox(height: 10),
 
-            // Timer
-            Text(
-              formatTime(duration),
+            const SizedBox(height: 20),
+
+            const Text(
+              "30:00",
               style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[700],
+                fontSize: 36,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey,
               ),
             ),
-            SizedBox(height: 5),
-            Text(
+
+            const SizedBox(height: 5),
+
+            const Text(
               "breathe in, breathe out",
               style: TextStyle(
-                fontFamily: "kdamThmorPro",
                 fontSize: 16,
-                color: Colors.grey[600],
+                color: Colors.grey,
               ),
             ),
 
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-            // Buttons Row
+            //  buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // START
                 ElevatedButton(
-                  onPressed: isRunning ? null : startSession,
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    backgroundColor: Colors.green[300],
-                    shadowColor: Colors.grey,
-                    elevation: 4,
+                    backgroundColor: Colors.green.shade300,
+                    shadowColor: Colors.green,
                   ),
-                  child: Text(
-                    "START",
-                    style: TextStyle(fontFamily: "kdamThmorPro"),
-                  ),
+                  onPressed: () {},
+                  child: const Text("START"),
                 ),
-                SizedBox(width: 90),
-
-                // STOP
+                const SizedBox(width: 20),
                 ElevatedButton(
-                  onPressed: isRunning ? stopSession : null,
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    backgroundColor: Colors.red[300],
-                    shadowColor: Colors.grey,
-                    elevation: 4,
+                    backgroundColor: Colors.red.shade300,
+                    shadowColor: Colors.red,
                   ),
-                  child: Text(
-                    "STOP",
-                    style: TextStyle(fontFamily: "kdamThmorPro"),
-                  ),
+                  onPressed: () {},
+                  child: const Text("STOP"),
                 ),
               ],
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 15),
 
-            // RESTART
             ElevatedButton(
-              onPressed: restartSession,
               style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                backgroundColor: Colors.teal[300],
-                shadowColor: Colors.grey,
-                elevation: 4,
+                backgroundColor: Colors.teal,
               ),
-              child: Text(
-                "RESTART",
-                style: TextStyle(fontFamily: "kdamThmorPro"),
-              ),
+              onPressed: () {},
+              child: const Text("RESTART"),
             ),
           ],
+        ),
+      ),
+
+      // ⬇️ Bottom Navigation
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: SizedBox(
+          height: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.home, color: Colors.white),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.person, color: Colors.white),
+                onPressed: () {},
+              ),
+              const SizedBox(width: 40), // For center FAB space
+              IconButton(
+                icon: const Icon(Icons.settings, color: Colors.white),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.white),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+        color: const Color(0xFF3AB5AB),
+      ),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        onPressed: () {},
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+          ),
+          child: Icon(Icons.blur_circular, color: Colors.teal.shade400),
         ),
       ),
     );

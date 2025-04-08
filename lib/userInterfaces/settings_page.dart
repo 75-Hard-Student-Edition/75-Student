@@ -16,7 +16,7 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFE6F4F3),
-      bottomNavigationBar: CustomBottomNavBar(difficulty: Difficulty.easy, topCategory: TaskCategory.academic), // Example difficulty
+      bottomNavigationBar: const CustomBottomNavBar(difficulty: Difficulty.easy, topCategory: TaskCategory.academic), // Example difficulty
       body: Padding(
         padding: EdgeInsets.only(top: topPadding + 10, left: 16, right: 16),
         child: Column(
