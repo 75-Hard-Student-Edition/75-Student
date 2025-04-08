@@ -1,5 +1,3 @@
-//home page
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart'; // Correct TaskModel import
@@ -7,6 +5,7 @@ import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/userInterfaces/add_task.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/userInterfaces/settings_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -195,11 +194,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               );
             }),
           ),
-          //_buildDraggableTimeBlock(context, "Math Class", Colors.red.withOpacity(0.3), Colors.red, 8, 10, 0),
-          //_buildDraggableTimeBlock(context, "Physics", Colors.blue.withOpacity(0.3), Colors.blue, 10.5, 11.5, 1),
-          //_buildDraggableTimeBlock(context, "History", Colors.green.withOpacity(0.3), Colors.green, 12, 13, 2),
-          //_buildDraggableTimeBlock(context, "English", Colors.orange.withOpacity(0.3), Colors.orange, 13.5, 15.5, 3),
-          //_buildDraggableTimeBlock(context, "Computer Science", Colors.purple.withOpacity(0.3), Colors.purple, 16, 17, 4),
           for (var task in scheduleManager.schedule.tasks) _buildDraggableTimeBlock(context, task),
         ],
       ),
@@ -337,65 +331,89 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.teal,
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 6,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.home, color: Colors.white),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 40),
-          IconButton(
-            icon: const Icon(Icons.add, color: Colors.white),
-            onPressed: () async {
-              print("Before add: ${scheduleManager.schedule.toString()}");
-              final newTask = await showModalBottomSheet<TaskModel>(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                barrierColor: Colors.black.withOpacity(0.5),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (context) {
-                  return Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 50),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.95,
-                        decoration: const BoxDecoration(
-                          color: Color(0x00FFFFFF),
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                        ),
-                        child: SingleChildScrollView(
-                          child: AddTaskScreen(scheduleManager: scheduleManager),
-                        ),
-                      ),
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        BottomAppBar(
+          color: const Color(0xFF00B3A1),
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 6,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                  icon: const Icon(Icons.person, color: Colors.white, size: 25), onPressed: () {}),
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.white, size: 25),
+                onPressed: () async {
+                  print("Before add: ${scheduleManager.schedule.toString()}");
+                  final newTask = await showModalBottomSheet<TaskModel>(
+                    context: context,
+                    isScrollControlled: true,
+                    isDismissible: true,
+                    enableDrag: true,
+                    backgroundColor: Colors.transparent,
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                     ),
+                    builder: (context) {
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 50),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.95,
+                            decoration: const BoxDecoration(
+                              color: Color(0x00FFFFFF),
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                            ),
+                            child: SingleChildScrollView(
+                              child: AddTaskScreen(scheduleManager: scheduleManager),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                  if (newTask != null) {
+                    refreshSchedule();
+                  }
+                  print("After add: ${scheduleManager.schedule.toString()}");
+                },
+              ),
+              const SizedBox(width: 40),
+              IconButton(
+                icon: const Icon(Icons.blur_on, color: Colors.white, size: 25),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.settings, color: Colors.white, size: 25),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingsPage()),
                   );
                 },
-              );
-              if (newTask != null) {
-                refreshSchedule();
-              }
-              print("After add: ${scheduleManager.schedule.toString()}");
-            },
+              ),
+            ],
           ),
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
+        ),
+        Positioned(
+          bottom: 50,
+          child: FloatingActionButton(
             onPressed: () {},
+            backgroundColor: Colors.white,
+            elevation: 4,
+            shape: const CircleBorder(),
+            child: const Icon(
+              Icons.home,
+              color: Color(0xFF00B3A1),
+              size: 40,
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
