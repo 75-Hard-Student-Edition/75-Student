@@ -8,37 +8,23 @@ import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/userInterfaces/add_task.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ScheduleScreen(),
-    );
-  }
-}
-
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({super.key});
+  final AccountManager accountManager;
+  const ScheduleScreen({super.key, required this.accountManager});
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  late final AccountManager accountManager;
   late final ScheduleManager scheduleManager;
   late Schedule displaySchedule; // Stores tasks
 
   @override
   void initState() {
     super.initState();
-    accountManager = AccountManager();
-    accountManager.login("username", "password"); //! Temporary test user
     scheduleManager = ScheduleManager(
-      accountManager: accountManager,
+      accountManager: super.widget.accountManager,
       displayErrorCallback: (String message) {
         print("Error: $message"); // ✅ Handles the error properly
       },

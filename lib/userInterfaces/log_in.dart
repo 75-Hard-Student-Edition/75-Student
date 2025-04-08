@@ -92,9 +92,18 @@ class LogInScreen extends StatelessWidget {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
+                      // Log in to the account using the AccountManager
+                      accountManager.login("username",
+                          "password"); //todo @widad: replace with actual values from the text fields
+                      //todo also add error handling like with sign up
+
+                      // Navigate to the ScheduleScreen after logging in
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ScheduleScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => ScheduleScreen(
+                                  accountManager: accountManager,
+                                )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
