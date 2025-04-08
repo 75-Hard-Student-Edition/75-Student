@@ -43,60 +43,24 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
     return Scaffold(
       backgroundColor: const Color(0xFFEAF7F7),
       body: SafeArea(
-        child: Column(
-          children: [
+        child: Padding(
+          padding: EdgeInsets.only(top: 40),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
             // static rn
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      const Icon(Icons.folder_open_outlined, size: 30),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Row(
-                    children: [
-                      Text(
-                        "25",
-                        style: TextStyle(
-                          color: Colors.deepOrange,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                      Icon(Icons.local_fire_department,
-                          color: Colors.deepOrange),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            const Text(
-              "Mindfulness",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF00A59B),
+            
+            const Padding(
+              padding: EdgeInsets.only(top: 0),
+              child: Text(
+                "Mindfulness",
+                style: TextStyle(
+                  fontFamily: 'KdamThmorPro',
+                  fontSize: 35,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF00A59B),
+                ),
               ),
             ),
 
@@ -148,8 +112,11 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
                 color: Colors.grey,
               ),
             ),
+          
 
             const SizedBox(height: 30),
+
+          
 
             //  buttons
             Row(
@@ -187,6 +154,7 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
           ],
         ),
       ),
+      )
     );
   }
 
