@@ -95,7 +95,7 @@ class LogInScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ScheduleScreen(
+                        MaterialPageRoute(builder: (context) => const ScheduleScreen(
                           difficulty: Difficulty.medium,
                           topCategory: TaskCategory.academic,
                         )),
