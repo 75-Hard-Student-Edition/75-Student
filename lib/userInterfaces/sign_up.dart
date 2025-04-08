@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/log_in.dart';
 import 'package:student_75/userInterfaces/difficulty_page.dart';
@@ -327,7 +328,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (_formKey.currentState!.validate()) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const DifficultyPage()),
+                          MaterialPageRoute(
+                              builder: (context) => DifficultyPage(
+                                    signUpFlowState: UserAccountModel(
+                                        id: 0,
+                                        username: "testUser",
+                                        difficulty: null,
+                                        categoryOrder: null,
+                                        sleepDuration: null,
+                                        bedtimes: null,
+                                        bedtimeNotifyBefore: null),
+                                    accountManager: super.widget.accountManager,
+                                  )),
                         );
                       }
                     },

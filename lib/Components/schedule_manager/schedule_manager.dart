@@ -42,6 +42,9 @@ class ScheduleManager implements IScheduleManager {
     backlog = Backlog(initialTasks: []);
     pointsManager = PointsManager(initialSchedule: todaysSchedule, accountManager: accountManager);
     notificationManager = NotificationManager(notifications: []);
+
+    print("ScheduleManager initialised with the following account data:");
+    print(accountManager.userAccount.toString());
   }
 
   //* == ScheduleManager -> GUI methods ==

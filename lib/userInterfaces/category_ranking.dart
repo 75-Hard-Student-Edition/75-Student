@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/models/task_model.dart';
 
 class CategoryRankingScreen extends StatefulWidget {
-  const CategoryRankingScreen({super.key});
+  final AccountManager accountManager;
+  final UserAccountModel signUpFlowState;
+  const CategoryRankingScreen(
+      {super.key, required this.accountManager, required this.signUpFlowState});
 
   @override
   _CategoryRankingScreenState createState() => _CategoryRankingScreenState();
@@ -11,36 +16,12 @@ class CategoryRankingScreen extends StatefulWidget {
 
 class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
   List<Map<String, dynamic>> categories = [
-    {
-      "name": "Academic",
-      "enum": TaskCategory.academic,
-      "color": const Color(0xFF00BCD4)
-    },
-    {
-      "name": "Social",
-      "enum": TaskCategory.social,
-      "color": const Color(0xFF8AD483)
-    },
-    {
-      "name": "Health",
-      "enum": TaskCategory.health,
-      "color": const Color(0xFFF67373)
-    },
-    {
-      "name": "Employment",
-      "enum": TaskCategory.employment,
-      "color": const Color(0xFFEDBF45)
-    },
-    {
-      "name": "Chore",
-      "enum": TaskCategory.chore,
-      "color": const Color(0xFFE997CD)
-    },
-    {
-      "name": "Hobby",
-      "enum": TaskCategory.hobby,
-      "color": const Color(0xFF946AAE)
-    },
+    {"name": "Academic", "enum": TaskCategory.academic, "color": const Color(0xFF00BCD4)},
+    {"name": "Social", "enum": TaskCategory.social, "color": const Color(0xFF8AD483)},
+    {"name": "Health", "enum": TaskCategory.health, "color": const Color(0xFFF67373)},
+    {"name": "Employment", "enum": TaskCategory.employment, "color": const Color(0xFFEDBF45)},
+    {"name": "Chore", "enum": TaskCategory.chore, "color": const Color(0xFFE997CD)},
+    {"name": "Hobby", "enum": TaskCategory.hobby, "color": const Color(0xFF946AAE)},
   ];
 
   List<Map<String, dynamic>?> droppedItems = List.filled(6, null);
@@ -55,20 +36,19 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
             Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 36.0, left: 16.0, right: 16.0),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, size: 30),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 36.0, left: 16.0, right: 16.0),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, size: 30),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
             ),
-          ), 
-          
+
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Column(
@@ -157,24 +137,37 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
             ElevatedButton(
               onPressed: () {
                 rankedCategories = droppedItems
-                  .where((item) => item != null)
-                  .map((item) => item!["enum"])
-                  .toList()
-                  .cast<TaskCategory>();
+                    .where((item) => item != null)
+                    .map((item) => item!["enum"])
+                    .toList()
+                    .cast<TaskCategory>();
 
-              debugPrint("Saved rankedCategories: $rankedCategories");
+                super.widget.accountManager.createAccount(
+                      super.widget.signUpFlowState.copyWith(
+                            categoryOrder: rankedCategories,
+                            bedtimeNotifyBefore: null, //! Needs a page
+                            bedtimes: null, //! Needs a page
+                            sleepDuration: null, //! Needs a page
+                          ),
+                    );
 
-              Map<TaskCategory, double> categoryRanks = {
-                for (int i = 0; i < rankedCategories.length; i++) rankedCategories[i]: 3.0 - (i * 0.5)
-              };
+                debugPrint("Saved rankedCategories: $rankedCategories");
 
-              categoryRanks.forEach((category, rank) {
-                debugPrint("$category value: $rank");
-              });
+                // Map<TaskCategory, double> categoryRanks = {
+                //   for (int i = 0; i < rankedCategories.length; i++)
+                //     rankedCategories[i]: 3.0 - (i * 0.5)
+                // };
+
+                // categoryRanks.forEach((category, rank) {
+                //   debugPrint("$category value: $rank");
+                // });
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ScheduleScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => ScheduleScreen(
+                            accountManager: super.widget.accountManager,
+                          )),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -235,30 +228,27 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
       },
       builder: (context, candidateData, rejectedData) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          width: 350,
-          height: 50,
-          decoration: BoxDecoration(
-            color: droppedItems[index] != null
-                ? droppedItems[index]!["color"]
-                : Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 5)],
-          ),
-          child: Center(
-            child: Text(
-              droppedItems[index]?["name"] ?? "",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontFamily: 'kdamThmorPro',
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            width: 350,
+            height: 50,
+            decoration: BoxDecoration(
+              color: droppedItems[index] != null ? droppedItems[index]!["color"] : Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 5)],
             ),
-          )
-        );
+            child: Center(
+              child: Text(
+                droppedItems[index]?["name"] ?? "",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'kdamThmorPro',
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ));
       },
     );
   }

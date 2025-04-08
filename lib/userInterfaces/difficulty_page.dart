@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/userInterfaces/category_ranking.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 
 class DifficultyPage extends StatefulWidget {
-  const DifficultyPage({super.key});
+  final AccountManager accountManager;
+  final UserAccountModel signUpFlowState;
+  const DifficultyPage({super.key, required this.accountManager, required this.signUpFlowState});
 
   @override
   State<DifficultyPage> createState() => _DifficultyPageState();
@@ -63,7 +67,6 @@ class _DifficultyPageState extends State<DifficultyPage> {
           buttonWidget("MEDIUM", const Color(0xFFEDBF45), Difficulty.medium),
           const SizedBox(height: 30),
           buttonWidget("HARD", const Color(0xFFFF4F4F), Difficulty.hard),
-
         ],
       ),
     );
@@ -71,7 +74,7 @@ class _DifficultyPageState extends State<DifficultyPage> {
 
   Widget buttonWidget(String text, Color color, Difficulty difficulty) {
     final bool isSelected = selectedDifficulty == difficulty;
-    
+
     return SizedBox(
       width: 275,
       height: 100,
@@ -85,7 +88,12 @@ class _DifficultyPageState extends State<DifficultyPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CategoryRankingScreen(),
+              builder: (context) => CategoryRankingScreen(
+                accountManager: super.widget.accountManager,
+                signUpFlowState: super.widget.signUpFlowState.copyWith(
+                      difficulty: selectedDifficulty,
+                    ),
+              ),
             ),
           );
         },

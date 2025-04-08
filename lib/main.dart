@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00B3A1)),
         useMaterial3: true,
       ),
-      //todo this should take us to the login page
       home: WelcomeScreen(),
     );
   }

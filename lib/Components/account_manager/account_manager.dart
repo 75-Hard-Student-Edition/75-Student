@@ -57,6 +57,8 @@ class AccountManager implements IAccountManager {
   @override
   void createAccount(UserAccountModel account) {
     //todo save account details to database
+    //! temporary stub login because database is not implemented yet
+    userAccount = account; // Once db is implemented, login() should be called after this method
   }
 
   @override
@@ -95,13 +97,19 @@ class AccountManager implements IAccountManager {
   @override
   Difficulty getDifficulty() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
-    return userAccount!.difficulty;
+    if (userAccount!.difficulty == null) {
+      throw NoUserSignedInException('No difficulty set for user');
+    }
+    return userAccount!.difficulty!;
   }
 
   @override
   List<TaskCategory> getCategoryOrder() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
-    return userAccount!.categoryOrder;
+    if (userAccount!.categoryOrder == null) {
+      throw NoUserSignedInException('No category order set for user');
+    }
+    return userAccount!.categoryOrder!;
   }
 
   //* PointsManager -> AccountManager methods
@@ -127,9 +135,12 @@ class AccountManager implements IAccountManager {
   @override
   TimeOfDay getBedtime() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
+    if (userAccount!.bedtimes == null) {
+      throw NoUserSignedInException('No bedtimes set for user');
+    }
     final int dayIndex = DateTime.now().weekday;
     final String day =
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][dayIndex];
-    return userAccount!.bedtimes[day]!;
+    return userAccount!.bedtimes![day]!;
   }
 }

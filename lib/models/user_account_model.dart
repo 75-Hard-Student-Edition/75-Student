@@ -6,11 +6,11 @@ class UserAccountModel {
   final int id;
   final String username;
   final int streak = 0;
-  final Difficulty difficulty;
-  final List<TaskCategory> categoryOrder;
-  final Duration sleepDuration;
-  final Map<String, TimeOfDay> bedtimes;
-  final Duration bedtimeNotifyBefore;
+  final Difficulty? difficulty;
+  final List<TaskCategory>? categoryOrder;
+  final Duration? sleepDuration;
+  final Map<String, TimeOfDay>? bedtimes;
+  final Duration? bedtimeNotifyBefore;
 
   UserAccountModel({
     required this.id,
@@ -41,5 +41,10 @@ class UserAccountModel {
       bedtimes: bedtimes ?? this.bedtimes,
       bedtimeNotifyBefore: bedtimeNotifyBefore ?? this.bedtimeNotifyBefore,
     );
+  }
+
+  @override
+  String toString() {
+    return 'UserAccountModel{id: $id, username: $username, difficulty: $difficulty, categoryOrder: $categoryOrder, sleepDuration: $sleepDuration, bedtimes: $bedtimes, bedtimeNotifyBefore: $bedtimeNotifyBefore}';
   }
 }
