@@ -6,21 +6,20 @@ import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/userInterfaces/add_task.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/userInterfaces/settings_page.dart';
+import 'package:student_75/userInterfaces/difficulty_page.dart';
+import 'package:student_75/userInterfaces/profile.dart';
+import 'package:student_75/models/difficulty_enum.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ScheduleScreen(),
-    );
-  }
-}
 
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({super.key});
+  final TaskCategory topCategory;
+  final Difficulty difficulty;
+  
+  const ScheduleScreen({
+    super.key,
+    required this.difficulty,
+    required this.topCategory,
+  });
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
@@ -60,7 +59,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       case TaskCategory.chore:
         return const Color(0xFFE997CD);
       case TaskCategory.hobby:
-        return Colors.cyan;
+        return const Color(0xFF946AAE);
     }
   }
 
@@ -80,8 +79,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     if (newTask != null && newTask is TaskModel) {
       setState(() {
-        scheduleManager.addTask(newTask); // ✅ Add the new task
-        _fetchSchedule(); // ✅ Refresh the UI
+        scheduleManager.addTask(newTask); 
+        _fetchSchedule(); 
       });
     }
   }
@@ -96,7 +95,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
         scheduleManager: scheduleManager,
-        refreshSchedule: _fetchSchedule, // ✅ Pass the function to update UI
+        refreshSchedule: _fetchSchedule, 
+        difficulty: widget.difficulty,
+        topCategory: widget.topCategory,
       ),
       body: Column(
         children: [
@@ -324,10 +325,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
 class BottomNavBar extends StatelessWidget {
   final ScheduleManager scheduleManager;
-
   final Function refreshSchedule;
+  final Difficulty difficulty;
+  final TaskCategory topCategory;
 
-  const BottomNavBar({super.key, required this.scheduleManager, required this.refreshSchedule});
+  const BottomNavBar({
+    super.key,
+    required this.scheduleManager,
+    required this.refreshSchedule,
+    required this.difficulty,
+    required this.topCategory,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -342,7 +350,37 @@ class BottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                  icon: const Icon(Icons.person, color: Colors.white, size: 25), onPressed: () {}),
+                icon: const Icon(Icons.person, color: Colors.white, size: 25),
+                onPressed: () async {
+                  await showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    isDismissible: true,
+                    enableDrag: true,
+                    backgroundColor: Colors.transparent,
+                    //barrierColor: Colors.black.withOpacity(0.5),
+                    shape: const ContinuousRectangleBorder(),
+                    builder: (context) {
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 50),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 1,
+                            decoration: const BoxDecoration(
+                              color: Color(0x00FFFFFF),
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                            ),
+                            child: SingleChildScrollView(
+                              child: ProfileScreen(difficulty: difficulty, topCategory: topCategory),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
               IconButton(
                 icon: const Icon(Icons.add, color: Colors.white, size: 25),
                 onPressed: () async {

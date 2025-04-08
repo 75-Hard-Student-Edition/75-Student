@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/models/difficulty_enum.dart';
 
 class CategoryRankingScreen extends StatefulWidget {
-  const CategoryRankingScreen({super.key});
+  final Difficulty difficulty;
+  const CategoryRankingScreen({super.key, required this.difficulty});
 
   @override
   _CategoryRankingScreenState createState() => _CategoryRankingScreenState();
@@ -168,13 +170,15 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                 for (int i = 0; i < rankedCategories.length; i++) rankedCategories[i]: 3.0 - (i * 0.5)
               };
 
+              TaskCategory topCategory = rankedCategories.isNotEmpty ? rankedCategories[0] : TaskCategory.academic;
+
               categoryRanks.forEach((category, rank) {
                 debugPrint("$category value: $rank");
               });
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ScheduleScreen()),
+                  MaterialPageRoute(builder: (context) => ScheduleScreen(difficulty: widget.difficulty, topCategory: topCategory,)),
                 );
               },
               style: ElevatedButton.styleFrom(

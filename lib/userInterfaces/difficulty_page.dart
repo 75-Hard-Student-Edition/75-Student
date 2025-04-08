@@ -85,7 +85,7 @@ class _DifficultyPageState extends State<DifficultyPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CategoryRankingScreen(),
+              builder: (context) => CategoryRankingScreen(difficulty: difficulty),
             ),
           );
         },

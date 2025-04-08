@@ -147,7 +147,7 @@ class TaskDetails extends StatelessWidget {
       case TaskCategory.chore:
         return const Color(0xFFE997CD);
       case TaskCategory.hobby:
-        return Colors.cyan;
+        return const Color(0xFF946AAE);
     }
   }
 }
