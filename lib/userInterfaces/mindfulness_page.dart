@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/models/task_model.dart';
+import 'package:student_75/userInterfaces/home.dart';
+import 'package:student_75/userInterfaces/profile.dart';
 
 class MindfulnessScreen extends StatelessWidget {
   const MindfulnessScreen({super.key});
@@ -15,7 +19,8 @@ class MindfulnessScreen extends StatelessWidget {
           children: [
             // static rn
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -48,7 +53,8 @@ class MindfulnessScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 4),
-                      Icon(Icons.local_fire_department, color: Colors.deepOrange),
+                      Icon(Icons.local_fire_department,
+                          color: Colors.deepOrange),
                     ],
                   ),
                 ],
@@ -77,7 +83,8 @@ class MindfulnessScreen extends StatelessWidget {
                 color: Colors.teal.shade200.withOpacity(0.4),
               ),
               child: const Center(
-                child: Icon(Icons.play_arrow_rounded, size: 40, color: Colors.teal),
+                child: Icon(Icons.play_arrow_rounded,
+                    size: 40, color: Colors.teal),
               ),
             ),
 
@@ -140,51 +147,87 @@ class MindfulnessScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
 
-      // ⬇️ Bottom Navigation
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: SizedBox(
-          height: 70,
+class CustomBottomNavBar extends StatelessWidget {
+  final Difficulty difficulty;
+  final TaskCategory topCategory;
+  const CustomBottomNavBar({
+    super.key,
+    required this.difficulty,
+    required this.topCategory,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        BottomAppBar(
+          color: const Color(0xFF00B3A1),
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 6,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: const Icon(Icons.home, color: Colors.white),
-                onPressed: () {},
+                icon: const Icon(Icons.home, color: Colors.white, size: 25),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ScheduleScreen(
+                            difficulty: difficulty, topCategory: topCategory)),
+                  );
+                },
               ),
               IconButton(
-                icon: const Icon(Icons.person, color: Colors.white),
-                onPressed: () {},
+                icon: const Icon(Icons.person, color: Colors.white, size: 25),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfileScreen(
+                            difficulty: difficulty, topCategory: topCategory)),
+                  );
+                },
               ),
-              const SizedBox(width: 40), // For center FAB space
+              const SizedBox(width: 40), // space taken by FAB
               IconButton(
-                icon: const Icon(Icons.settings, color: Colors.white),
-                onPressed: () {},
+                icon: const Icon(Icons.add, color: Colors.white, size: 25),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ScheduleScreen(
+                            difficulty: difficulty, topCategory: topCategory)),
+                  );
+                },
               ),
               IconButton(
-                icon: const Icon(Icons.add, color: Colors.white),
+                icon: const Icon(Icons.blur_on, color: Colors.white, size: 25),
                 onPressed: () {},
               ),
             ],
           ),
         ),
-        color: const Color(0xFF3AB5AB),
-      ),
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: () {},
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
+        Positioned(
+          bottom: 50,
+          child: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: Colors.white,
+            elevation: 4,
+            shape: const CircleBorder(),
+            child: const Icon(
+              Icons.settings,
+              color: Color(0xFF00B3A1),
+              size: 40,
+            ),
           ),
-          child: Icon(Icons.blur_circular, color: Colors.teal.shade400),
         ),
-      ),
+      ],
     );
   }
 }
