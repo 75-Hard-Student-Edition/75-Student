@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/log_in.dart';
 import 'package:student_75/userInterfaces/difficulty_page.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  final AccountManager accountManager;
+  const SignUpScreen({super.key, required this.accountManager});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -17,18 +19,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   String _selectedCountryCode = '+44'; // UK default
   final List<Map<String, String>> _countryData = [
     {'code': '+1', 'flag': '🇺🇸'},
     {'code': '+44', 'flag': '🇬🇧'},
-    {'code': '+1', 'flag': '🇨🇦'}, 
-    {'code': '+966', 'flag': '🇸🇦'}, 
-    {'code': '+974', 'flag': '🇶🇦'}, 
-    {'code': '+61', 'flag': '🇦🇺'}, 
-    {'code': '+33', 'flag': '🇫🇷'}, 
-    {'code': '+353', 'flag': '🇮🇪'}, 
+    {'code': '+1', 'flag': '🇨🇦'},
+    {'code': '+966', 'flag': '🇸🇦'},
+    {'code': '+974', 'flag': '🇶🇦'},
+    {'code': '+61', 'flag': '🇦🇺'},
+    {'code': '+33', 'flag': '🇫🇷'},
+    {'code': '+353', 'flag': '🇮🇪'},
   ];
   String _selectedInputType = 'Email'; // other variable
 
@@ -53,8 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   iconSize: 28,
                   onPressed: () => Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen()),
+                    MaterialPageRoute(builder: (context) => WelcomeScreen()),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -77,9 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Text(
                     'Sign Up',
                     style: TextStyle(
-                        fontFamily: 'KdamThmorPro',
-                        fontSize: 24,
-                        color: Color(0xFF00B3A1)),
+                        fontFamily: 'KdamThmorPro', fontSize: 24, color: Color(0xFF00B3A1)),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -145,7 +143,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             hintText: _selectedInputType == 'Email' ? 'Email' : 'Mobile',
                             filled: true,
                             fillColor: const Color(0xFFEBEFF0),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -153,7 +152,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           validator: (value) {
                             if (_selectedInputType == 'Email') {
-                              if (value == null || value.isEmpty || !(value.contains('@') && value.contains('.'))) {
+                              if (value == null ||
+                                  value.isEmpty ||
+                                  !(value.contains('@') && value.contains('.'))) {
                                 return 'Enter a valid email';
                               }
                             } else {
@@ -187,17 +188,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: 'Full Name',
                       filled: true,
                       fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 18),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
                       ),
                     ),
                     validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          value.split(' ').length < 2) {
+                      if (value == null || value.isEmpty || value.split(' ').length < 2) {
                         return 'Enter your Full Name';
                       }
                       return null;
@@ -223,8 +221,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: 'Username',
                       filled: true,
                       fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 18),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -252,8 +249,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: 'Password',
                       filled: true,
                       fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 18),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -281,8 +277,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: 'Confirm Password',
                       filled: true,
                       fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 18),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -303,13 +298,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Already have an account? ",
-                        style: TextStyle(color: Colors.grey)),
+                    const Text("Already have an account? ", style: TextStyle(color: Colors.grey)),
                     GestureDetector(
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LogInScreen()),
+                            builder: (context) => LogInScreen(
+                                  accountManager: super.widget.accountManager,
+                                )),
                       ),
                       child: const Text(
                         "Log in",
@@ -331,8 +327,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (_formKey.currentState!.validate()) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => const DifficultyPage()),
+                          MaterialPageRoute(builder: (context) => const DifficultyPage()),
                         );
                       }
                     },

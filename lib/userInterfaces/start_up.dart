@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/log_in.dart';
 import 'package:student_75/userInterfaces/sign_up.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+  final AccountManager accountManager = AccountManager();
+  WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF00B3A1), 
+      backgroundColor: const Color(0xFF00B3A1),
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Padding(
-                padding: EdgeInsets.only(top: 24.0), 
+                padding: EdgeInsets.only(top: 24.0),
                 child: Column(
                   children: [
                     Text(
@@ -39,7 +41,10 @@ class WelcomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LogInScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => LogInScreen(
+                              accountManager: accountManager,
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -47,8 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 ),
                 child: const SizedBox(
                   width: 75,
@@ -70,7 +74,10 @@ class WelcomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => SignUpScreen(
+                              accountManager: accountManager,
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -78,8 +85,7 @@ class WelcomeScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 ),
                 child: const SizedBox(
                   width: 75,

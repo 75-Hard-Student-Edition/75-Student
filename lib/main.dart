@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       //todo this should take us to the login page
-      home: const WelcomeScreen(),
+      home: WelcomeScreen(),
     );
   }
 }

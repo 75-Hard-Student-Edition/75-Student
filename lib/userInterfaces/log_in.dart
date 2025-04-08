@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/sign_up.dart';
 import 'package:student_75/userInterfaces/home.dart';
 
 class LogInScreen extends StatelessWidget {
-  const LogInScreen({super.key});
+  final AccountManager accountManager;
+  const LogInScreen({super.key, required this.accountManager});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class LogInScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                      MaterialPageRoute(builder: (context) => WelcomeScreen()),
                     );
                   },
                 ),
@@ -49,10 +51,7 @@ class LogInScreen extends StatelessWidget {
                   child: Text(
                     'Log In',
                     style: TextStyle(
-                      fontFamily: 'KdamThmorPro',
-                      fontSize: 24, 
-                      color: Color(0xFF00B3A1)
-                    ),
+                        fontFamily: 'KdamThmorPro', fontSize: 24, color: Color(0xFF00B3A1)),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -68,17 +67,19 @@ class LogInScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account? ",
-                        style: TextStyle(color: Colors.grey)),
+                    const Text("Don't have an account? ", style: TextStyle(color: Colors.grey)),
                     GestureDetector(
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => SignUpScreen(
+                                  accountManager: accountManager,
+                                )),
                       ),
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
-                          color:Color(0xFF38B6A2),
+                          color: Color(0xFF38B6A2),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -89,7 +90,7 @@ class LogInScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 // Log In Button
                 Center(
-                    child: ElevatedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
