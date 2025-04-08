@@ -65,6 +65,7 @@ flutter:
     assets:
         - assets/settings.json
         - assets/images/logo75.png
+        - assets/images/pfp.png
         - assets/videos/vid2.mp4
 
 
