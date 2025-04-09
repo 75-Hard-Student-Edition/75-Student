@@ -5,8 +5,8 @@ import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/userInterfaces/add_task.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/userInterfaces/mindfulness_page.dart';
 import 'package:student_75/userInterfaces/settings_page.dart';
-import 'package:student_75/userInterfaces/difficulty_page.dart';
 import 'package:student_75/userInterfaces/profile.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 
@@ -423,7 +423,12 @@ class BottomNavBar extends StatelessWidget {
               const SizedBox(width: 40),
               IconButton(
                 icon: const Icon(Icons.blur_on, color: Colors.white, size: 25),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MindfulnessScreen()),
+                  );
+                },
               ),
               IconButton(
                 icon: const Icon(Icons.settings, color: Colors.white, size: 25),

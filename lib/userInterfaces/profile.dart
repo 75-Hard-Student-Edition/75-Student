@@ -95,12 +95,12 @@ class ProfileScreen extends StatelessWidget {
                             },
                           ),
                           CupertinoActionSheetAction(
-                            child: const Text("Delete Image"),
                             isDestructiveAction: true,
                             onPressed: () {
                               Navigator.pop(context);
                               // TODO: handle image deletion
                             },
+                            child: const Text("Delete Image"),
                           ),
                         ],
                         cancelButton: CupertinoActionSheetAction(
