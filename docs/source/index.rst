@@ -10,7 +10,15 @@
 The app is designed around habit formation and maintenance.
 
 
+Things to document about:
+- "Architecture"
+- Classes and their methods and how they interact
+- The flow of different pages into each other
+- Concepts involved e.g. what constitutes a task
+- Possibly reference material?
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   Concepts
