@@ -6,9 +6,8 @@
 75-student documentation
 ========================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+75 Student is an app designed to help students be more productive. 
+The app is designed around habit formation and maintenance.
 
 
 .. toctree::
