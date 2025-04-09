@@ -46,22 +46,9 @@ class ProfileScreen extends StatelessWidget {
               // Back Button
               Align(
                 alignment: Alignment.topLeft,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(2, 2),
-                      )
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () => Navigator.pop(context),
                 ),
               ),
               const SizedBox(height: 5),

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/mindfulness_page.dart';
+import 'package:student_75/userInterfaces/notifications.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/userInterfaces/profile.dart';
@@ -26,7 +27,7 @@ class SettingsPage extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back, size: 30),
+                  icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
                   onPressed: () => Navigator.pop(context),
                   color: Colors.black87,
                 ),
@@ -72,12 +73,12 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            _buildSettingItem(Icons.person, "Account"),
-            _buildSettingItem(Icons.notifications, "Notifications"),
-            _buildSettingItem(Icons.remove_red_eye, "Appearance"),
-            _buildSettingItem(Icons.accessibility_new, "Accessibility"),
-            _buildSettingItem(Icons.mail_outline, "Invite Friends"),
-            _buildSettingItem(Icons.lightbulb_outline, "Help"),
+            _buildSettingItem(context, Icons.person, "Account"),
+            _buildSettingItem(context, Icons.notifications, "Notifications"),
+            _buildSettingItem(context, Icons.remove_red_eye, "Appearance"),
+            _buildSettingItem(context, Icons.accessibility_new, "Accessibility"),
+            _buildSettingItem(context, Icons.mail_outline, "Invite Friends"),
+            _buildSettingItem(context, Icons.lightbulb_outline, "Help"),
             const SizedBox(height: 16),
             Center(
               child: TextButton.icon(
@@ -129,7 +130,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingItem(IconData icon, String title) {
+  Widget _buildSettingItem(BuildContext context, IconData icon, String title) {
     return Column(
       children: [
         ListTile(
@@ -155,7 +156,14 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           onTap: () {
-            print('$title tapped');
+            if (title == "Notifications") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NotificationScreen()),
+              );
+            } else {
+              print('$title tapped');
+            }
           },
         ),
         const Padding(
@@ -231,7 +239,12 @@ class CustomBottomNavBar extends StatelessWidget {
         Positioned(
           bottom: 50,
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NotificationScreen()),
+              );
+            },
             backgroundColor: Colors.white,
             elevation: 4,
             shape: const CircleBorder(),

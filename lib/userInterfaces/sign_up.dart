@@ -49,7 +49,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 // Back arrow
                 IconButton(
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B)),
                   iconSize: 28,
                   onPressed: () => Navigator.pushReplacement(
                     context,

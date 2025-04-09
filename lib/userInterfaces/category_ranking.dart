@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/userInterfaces/notifications.dart';
 
 class CategoryRankingScreen extends StatefulWidget {
   final Difficulty difficulty;
@@ -58,33 +59,38 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
-            Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 36.0, left: 16.0, right: 16.0),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, size: 30),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+            Padding(
+              padding: const EdgeInsets.only(top: 36.0, left: 8.0, right: 8.0),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Center(
+                    child: Text(
+                      "Order your categories",
+                      style: TextStyle(
+                        fontFamily: 'kdamThmorPro',
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF17D4BE),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ), 
-          
+            
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Column(
                 children: [
-                  const Text(
-                    "Order your categories",
-                    style: TextStyle(
-                      fontFamily: 'kdamThmorPro',
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF17D4BE),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
                   const SizedBox(height: 5),
                   Text(
                     "In the next 75 days, what are you trying to improve on the most?",
@@ -178,7 +184,7 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ScheduleScreen(difficulty: widget.difficulty, topCategory: topCategory,)),
+                  MaterialPageRoute(builder: (context) => const NotificationScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -296,7 +302,3 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
     );
   }
 }
-
-//todo: change the colors to match formatting of homePage and addTask
-//todo: change the categories to match the categories listed as enum in task_model (import)
-//todo: allow for drag out of the box as well as drag in and keep formatting
