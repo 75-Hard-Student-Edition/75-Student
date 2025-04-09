@@ -23,7 +23,7 @@ class LogInScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 // Back Arrow
                 IconButton(
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back_ios,color: Color(0xFF00A59B)),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,

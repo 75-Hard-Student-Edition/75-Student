@@ -60,17 +60,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: 160),
                 child: Column(children: [
-                            Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B)),
-              ),
-            ),
-          ),
           const SizedBox(height: 20),
           const Text(
             'Notifications',
@@ -523,10 +512,8 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-    padding: const EdgeInsets.only(bottom: 25),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
+    return Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -539,7 +526,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return CupertinoAlertDialog(
-                    title: const Text('Save Settings'),
+                    title: const Text('Save Settings?'),
                     content: const Text('Are you sure you want to save your notification preferences?'),
                     actions: [
                       CupertinoDialogAction(
@@ -580,6 +567,6 @@ class CustomBottomNavBar extends StatelessWidget {
             ),
           ),
         ],
-      ));
+      );
   }
 }
