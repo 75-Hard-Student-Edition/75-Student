@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/userInterfaces/mindfulness_page.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/userInterfaces/profile.dart';
@@ -16,7 +17,7 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFE6F4F3),
-      bottomNavigationBar: const CustomBottomNavBar(difficulty: Difficulty.easy, topCategory: TaskCategory.academic), // Example difficulty
+      bottomNavigationBar: const CustomBottomNavBar(difficulty: Difficulty.easy, topCategory: TaskCategory.academic), 
       body: Padding(
         padding: EdgeInsets.only(top: topPadding + 10, left: 16, right: 16),
         child: Column(
@@ -205,7 +206,7 @@ class CustomBottomNavBar extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(width: 40), // space taken by FAB
+              const SizedBox(width: 40),
               IconButton(
                 icon: const Icon(Icons.add, color: Colors.white, size: 25),
                 onPressed: () {
@@ -217,7 +218,12 @@ class CustomBottomNavBar extends StatelessWidget {
               ),
               IconButton(
                 icon: const Icon(Icons.blur_on, color: Colors.white, size: 25),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MindfulnessScreen()),
+                  );
+                },
               ),
             ],
           ),
