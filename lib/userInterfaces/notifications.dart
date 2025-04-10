@@ -5,7 +5,14 @@ import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/models/task_model.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
+  final Difficulty difficulty;
+  final TaskCategory topCategory;
+
+  const NotificationScreen({
+    super.key,
+    required this.difficulty,
+    required this.topCategory,
+  });
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -54,8 +61,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: const Color(0xFFEAF7F7),
-        bottomNavigationBar: const CustomBottomNavBar(
-            difficulty: Difficulty.easy, topCategory: TaskCategory.academic),
+        bottomNavigationBar: CustomBottomNavBar(difficulty: widget.difficulty, topCategory: widget.topCategory,),
         body: SafeArea(
             child: SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: 160),

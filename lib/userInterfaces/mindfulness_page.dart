@@ -6,9 +6,17 @@ import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/userInterfaces/profile.dart';
+import 'package:student_75/userInterfaces/settings_page.dart';
 
 class MindfulnessScreen extends StatefulWidget {
-  const MindfulnessScreen({super.key});
+  final Difficulty difficulty;
+  final TaskCategory topCategory;
+
+  const MindfulnessScreen({
+    super.key,
+    required this.difficulty,
+    required this.topCategory,
+  });
 
   @override
   State<MindfulnessScreen> createState() => _MindfulnessScreenState();
@@ -79,7 +87,7 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
 
     return Scaffold(
       backgroundColor: const Color(0xFFEAF7F7),
-      bottomNavigationBar: const CustomBottomNavBar(difficulty: Difficulty.easy, topCategory: TaskCategory.academic), 
+      bottomNavigationBar: CustomBottomNavBar(difficulty: widget.difficulty, topCategory: widget.topCategory,), 
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(top: 40),
@@ -87,7 +95,13 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-            // static rn
+            Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
             
             const Padding(
               padding: EdgeInsets.only(top: 0),
@@ -354,7 +368,17 @@ class CustomBottomNavBar extends StatelessWidget {
               ),
               IconButton(
                 icon: const Icon(Icons.settings, color: Colors.white, size: 25),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SettingsPage(
+                        difficulty: difficulty,
+                        topCategory: topCategory,
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),

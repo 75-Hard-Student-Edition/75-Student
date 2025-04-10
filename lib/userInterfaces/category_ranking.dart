@@ -184,7 +184,12 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const NotificationScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => NotificationScreen(
+                      difficulty: widget.difficulty,
+                      topCategory: topCategory,
+                    ),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(

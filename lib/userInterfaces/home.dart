@@ -242,7 +242,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     Color taskColor = _getTaskColor(task.category);
 
     return Positioned(
-      top: hourHeight * task.startTime.hour + (task.startTime.minute / 60) * hourHeight,
+      top: task.startTime.hour * hourHeight + task.startTime.minute * hourHeight / 60,
+      height: hourHeight * task.endTime.difference(task.startTime).inMinutes / 60,
       left: screenWidth * 0.15,
       child: GestureDetector(
         // change start time
@@ -372,7 +373,12 @@ class BottomNavBar extends StatelessWidget {
                               borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                             ),
                             child: SingleChildScrollView(
-                              child: ProfileScreen(difficulty: difficulty, topCategory: topCategory),
+                              child: Builder(
+                                builder: (context) {
+                                  print("Opening Profile with: difficulty = $difficulty, topCategory = $topCategory");
+                                  return ProfileScreen(difficulty: difficulty, topCategory: topCategory);
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -426,7 +432,12 @@ class BottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MindfulnessScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => MindfulnessScreen(
+                        difficulty: difficulty,
+                        topCategory: topCategory,
+                      ),
+                    ),
                   );
                 },
               ),
@@ -435,7 +446,12 @@ class BottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SettingsPage()),
+                    MaterialPageRoute(
+                      builder: (context) => SettingsPage(
+                        difficulty: difficulty,
+                        topCategory: topCategory,
+                      ),
+                    ),
                   );
                 },
               ),

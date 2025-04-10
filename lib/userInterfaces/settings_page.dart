@@ -9,7 +9,14 @@ import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/userInterfaces/profile.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  final Difficulty difficulty;
+  final TaskCategory topCategory;
+  
+  const SettingsPage({
+    super.key,
+    required this.difficulty,
+    required this.topCategory,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFE6F4F3),
-      bottomNavigationBar: const CustomBottomNavBar(difficulty: Difficulty.easy, topCategory: TaskCategory.academic), 
+      bottomNavigationBar: CustomBottomNavBar(difficulty: difficulty, topCategory: topCategory),
       body: Padding(
         padding: EdgeInsets.only(top: topPadding + 10, left: 16, right: 16),
         child: Column(
@@ -73,12 +80,12 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            _buildSettingItem(context, Icons.person, "Account"),
-            _buildSettingItem(context, Icons.notifications, "Notifications"),
-            _buildSettingItem(context, Icons.remove_red_eye, "Appearance"),
-            _buildSettingItem(context, Icons.accessibility_new, "Accessibility"),
-            _buildSettingItem(context, Icons.mail_outline, "Invite Friends"),
-            _buildSettingItem(context, Icons.lightbulb_outline, "Help"),
+            _buildSettingItem(context, Icons.person, "Account", difficulty, topCategory),
+            _buildSettingItem(context, Icons.notifications, "Notifications", difficulty, topCategory),
+            _buildSettingItem(context, Icons.remove_red_eye, "Appearance", difficulty, topCategory),
+            _buildSettingItem(context, Icons.accessibility_new, "Accessibility", difficulty, topCategory),
+            _buildSettingItem(context, Icons.mail_outline, "Invite Friends", difficulty, topCategory),
+            _buildSettingItem(context, Icons.lightbulb_outline, "Help", difficulty, topCategory),
             const SizedBox(height: 16),
             Center(
               child: TextButton.icon(
@@ -130,7 +137,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingItem(BuildContext context, IconData icon, String title) {
+  Widget _buildSettingItem(BuildContext context, IconData icon, String title, Difficulty difficulty, TaskCategory topCategory) {
     return Column(
       children: [
         ListTile(
@@ -159,7 +166,12 @@ class SettingsPage extends StatelessWidget {
             if (title == "Notifications") {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NotificationScreen()),
+                MaterialPageRoute(
+                  builder: (context) => NotificationScreen(
+                    difficulty: difficulty,
+                    topCategory: topCategory,
+                  ),
+                ),
               );
             } else {
               print('$title tapped');
@@ -229,7 +241,12 @@ class CustomBottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MindfulnessScreen()),
+                                        MaterialPageRoute(
+                      builder: (context) => MindfulnessScreen(
+                        difficulty: difficulty,
+                        topCategory: topCategory,
+                      ),
+                    ),
                   );
                 },
               ),
@@ -242,7 +259,9 @@ class CustomBottomNavBar extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NotificationScreen()),
+                  MaterialPageRoute(
+                  builder: (context) => NotificationScreen(difficulty: difficulty, topCategory: topCategory,),
+                ),
               );
             },
             backgroundColor: Colors.white,
