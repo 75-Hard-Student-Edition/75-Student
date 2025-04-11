@@ -45,7 +45,7 @@ class AccountManager implements IAccountManager {
         TaskCategory.social
       ],
       sleepDuration: const Duration(hours: 8),
-      bedtimes: {},
+      bedtime: const TimeOfDay(hour: 22, minute: 0),
       bedtimeNotifyBefore: const Duration(minutes: 30),
       mindfulnessDuration: const Duration(minutes: 10),
     );
@@ -90,7 +90,7 @@ class AccountManager implements IAccountManager {
       difficulty: Difficulty.easy,
       categoryOrder: [],
       sleepDuration: const Duration(hours: 8),
-      bedtimes: {},
+      bedtime: const TimeOfDay(hour: 22, minute: 0),
       bedtimeNotifyBefore: const Duration(minutes: 30),
       mindfulnessDuration: const Duration(minutes: 10),
     );
@@ -147,12 +147,9 @@ class AccountManager implements IAccountManager {
   @override
   TimeOfDay getBedtime() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
-    if (userAccount!.bedtimes == null) {
+    if (userAccount!.bedtime == null) {
       throw NoUserSignedInException('No bedtimes set for user');
     }
-    final int dayIndex = DateTime.now().weekday;
-    final String day =
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][dayIndex];
-    return userAccount!.bedtimes![day]!;
+    return userAccount!.bedtime!;
   }
 }
