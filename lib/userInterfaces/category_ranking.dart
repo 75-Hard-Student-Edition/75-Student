@@ -4,16 +4,16 @@ import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/models/difficulty_enum.dart';
-import 'package:student_75/userInterfaces/notifications.dart';
 
 class CategoryRankingScreen extends StatefulWidget {
   final AccountManager accountManager;
   final UserAccountModel signUpFlowState;
-  const CategoryRankingScreen(
-      {super.key, required this.accountManager, required this.signUpFlowState});
   final Difficulty difficulty;
-  const CategoryRankingScreen({super.key, required this.difficulty});
-
+  const CategoryRankingScreen(
+      {super.key,
+      required this.accountManager,
+      required this.signUpFlowState,
+      required this.difficulty});
   @override
   _CategoryRankingScreenState createState() => _CategoryRankingScreenState();
 }
@@ -53,7 +53,6 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
               ),
             ),
 
-
             Padding(
               padding: const EdgeInsets.only(top: 36.0, left: 8.0, right: 8.0),
               child: Stack(
@@ -81,7 +80,7 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                 ],
               ),
             ),
-            
+
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Column(
@@ -180,11 +179,13 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                 //   for (int i = 0; i < rankedCategories.length; i++)
                 //     rankedCategories[i]: 3.0 - (i * 0.5)
                 // };
-              Map<TaskCategory, double> categoryRanks = {
-                for (int i = 0; i < rankedCategories.length; i++) rankedCategories[i]: 3.0 - (i * 0.5)
-              };
+                Map<TaskCategory, double> categoryRanks = {
+                  for (int i = 0; i < rankedCategories.length; i++)
+                    rankedCategories[i]: 3.0 - (i * 0.5)
+                };
 
-              TaskCategory topCategory = rankedCategories.isNotEmpty ? rankedCategories[0] : TaskCategory.academic;
+                TaskCategory topCategory =
+                    rankedCategories.isNotEmpty ? rankedCategories[0] : TaskCategory.academic;
 
                 // categoryRanks.forEach((category, rank) {
                 //   debugPrint("$category value: $rank");
@@ -193,13 +194,8 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ScheduleScreen(
-                            accountManager: super.widget.accountManager,
-                          )),
-                  MaterialPageRoute(
-                    builder: (context) => NotificationScreen(
-                      difficulty: widget.difficulty,
-                      topCategory: topCategory,
+                    builder: (context) => ScheduleScreen(
+                      accountManager: super.widget.accountManager,
                     ),
                   ),
                 );

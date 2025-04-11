@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/mindfulness_page.dart';
@@ -9,23 +10,23 @@ import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/userInterfaces/profile.dart';
 
 class SettingsPage extends StatelessWidget {
-  final Difficulty difficulty;
-  final TaskCategory topCategory;
-  
+  final AccountManager accountManager;
+
   const SettingsPage({
     super.key,
-    required this.difficulty,
-    required this.topCategory,
+    required this.accountManager,
   });
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double topPadding = MediaQuery.of(context).padding.top;
+    Difficulty difficulty = accountManager.getDifficulty();
+    TaskCategory topCategory = accountManager.getCategoryOrder().first;
 
     return Scaffold(
       backgroundColor: const Color(0xFFE6F4F3),
-      bottomNavigationBar: CustomBottomNavBar(difficulty: difficulty, topCategory: topCategory),
+      bottomNavigationBar: CustomBottomNavBar(accountManager: accountManager),
       body: Padding(
         padding: EdgeInsets.only(top: topPadding + 10, left: 16, right: 16),
         child: Column(
@@ -65,10 +66,7 @@ class SettingsPage extends StatelessWidget {
                 color: const Color(0xFFEBEFF0),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 4,
-                      offset: Offset(2, 2))
+                  BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(2, 2))
                 ],
               ),
               child: const TextField(
@@ -81,10 +79,13 @@ class SettingsPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             _buildSettingItem(context, Icons.person, "Account", difficulty, topCategory),
-            _buildSettingItem(context, Icons.notifications, "Notifications", difficulty, topCategory),
+            _buildSettingItem(
+                context, Icons.notifications, "Notifications", difficulty, topCategory),
             _buildSettingItem(context, Icons.remove_red_eye, "Appearance", difficulty, topCategory),
-            _buildSettingItem(context, Icons.accessibility_new, "Accessibility", difficulty, topCategory),
-            _buildSettingItem(context, Icons.mail_outline, "Invite Friends", difficulty, topCategory),
+            _buildSettingItem(
+                context, Icons.accessibility_new, "Accessibility", difficulty, topCategory),
+            _buildSettingItem(
+                context, Icons.mail_outline, "Invite Friends", difficulty, topCategory),
             _buildSettingItem(context, Icons.lightbulb_outline, "Help", difficulty, topCategory),
             const SizedBox(height: 16),
             Center(
@@ -110,7 +111,7 @@ class SettingsPage extends StatelessWidget {
                               Navigator.pop(context);
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                                MaterialPageRoute(builder: (context) => WelcomeScreen()),
                               );
                             },
                           ),
@@ -137,7 +138,8 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingItem(BuildContext context, IconData icon, String title, Difficulty difficulty, TaskCategory topCategory) {
+  Widget _buildSettingItem(BuildContext context, IconData icon, String title, Difficulty difficulty,
+      TaskCategory topCategory) {
     return Column(
       children: [
         ListTile(
@@ -168,8 +170,7 @@ class SettingsPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => NotificationScreen(
-                    difficulty: difficulty,
-                    topCategory: topCategory,
+                    accountManager: accountManager,
                   ),
                 ),
               );
@@ -188,12 +189,10 @@ class SettingsPage extends StatelessWidget {
 }
 
 class CustomBottomNavBar extends StatelessWidget {
-  final Difficulty difficulty;
-  final TaskCategory topCategory;
+  final AccountManager accountManager;
   const CustomBottomNavBar({
     super.key,
-    required this.difficulty,
-    required this.topCategory,
+    required this.accountManager,
   });
 
   @override
@@ -213,7 +212,10 @@ class CustomBottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ScheduleScreen(difficulty: difficulty, topCategory: topCategory)),
+                    MaterialPageRoute(
+                        builder: (context) => ScheduleScreen(
+                              accountManager: accountManager,
+                            )),
                   );
                 },
               ),
@@ -222,7 +224,10 @@ class CustomBottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProfileScreen(difficulty: difficulty, topCategory: topCategory)),
+                    MaterialPageRoute(
+                        builder: (context) => ProfileScreen(
+                              accountManager: accountManager,
+                            )),
                   );
                 },
               ),
@@ -232,7 +237,10 @@ class CustomBottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ScheduleScreen(difficulty: difficulty, topCategory: topCategory)),
+                    MaterialPageRoute(
+                        builder: (context) => ScheduleScreen(
+                              accountManager: accountManager,
+                            )),
                   );
                 },
               ),
@@ -241,10 +249,9 @@ class CustomBottomNavBar extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                                        MaterialPageRoute(
+                    MaterialPageRoute(
                       builder: (context) => MindfulnessScreen(
-                        difficulty: difficulty,
-                        topCategory: topCategory,
+                        accountManager: accountManager,
                       ),
                     ),
                   );
@@ -259,8 +266,10 @@ class CustomBottomNavBar extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                  MaterialPageRoute(
-                  builder: (context) => NotificationScreen(difficulty: difficulty, topCategory: topCategory,),
+                MaterialPageRoute(
+                  builder: (context) => NotificationScreen(
+                    accountManager: accountManager,
+                  ),
                 ),
               );
             },

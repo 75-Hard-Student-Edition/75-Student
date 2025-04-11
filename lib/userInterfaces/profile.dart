@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'dart:ui';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/mindfulness_page.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final Difficulty difficulty;
-  final TaskCategory topCategory;
-  
+  final AccountManager accountManager;
+
   const ProfileScreen({
     super.key,
-    required this.difficulty,
-    required this.topCategory,
+    required this.accountManager,
   });
 
   Color _getTaskColor(TaskCategory category) {
@@ -157,10 +156,10 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      topCategory.name.toUpperCase(),
+                      accountManager.getCategoryOrder().first.name.toUpperCase(),
                       style: TextStyle(
                         fontSize: 16,
-                        color: _getTaskColor(topCategory),
+                        color: _getTaskColor(accountManager.getCategoryOrder().first),
                         fontWeight: FontWeight.bold,
                         fontFamily: 'kdamThmorPro',
                       ),
@@ -193,18 +192,17 @@ class ProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
-                        color: difficulty == Difficulty.easy
+                        color: accountManager.getDifficulty() == Difficulty.easy
                             ? Colors.green
-                            : difficulty == Difficulty.medium
+                            : accountManager.getDifficulty() == Difficulty.medium
                                 ? Colors.orange
                                 : Colors.redAccent,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        difficulty.name.toUpperCase(),
+                        accountManager.getDifficulty().name.toUpperCase(),
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
@@ -216,14 +214,13 @@ class ProfileScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MindfulnessScreen(
-                        difficulty: difficulty,
-                        topCategory: topCategory,
-                      ),
-                    ),
-                  );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MindfulnessScreen(
+                              accountManager: accountManager,
+                            ),
+                          ),
+                        );
                       },
                       child: Center(
                         child: SizedBox(
@@ -263,9 +260,7 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       const Text("Badges",
                           style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.grey,
-                              fontFamily: 'kdamThmorPro')),
+                              fontSize: 22, color: Colors.grey, fontFamily: 'kdamThmorPro')),
                       const SizedBox(height: 16),
                       Wrap(
                         alignment: WrapAlignment.center,
@@ -279,11 +274,9 @@ class ProfileScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage(
-                                    'assets/images/badge_${index + 1}.jpg'),
+                                image: AssetImage('assets/images/badge_${index + 1}.jpg'),
                               ),
-                              border:
-                                  Border.all(color: Colors.amber, width: 2.5),
+                              border: Border.all(color: Colors.amber, width: 2.5),
                             ),
                           );
                         }),

@@ -8,17 +8,13 @@ import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/userInterfaces/mindfulness_page.dart';
 import 'package:student_75/userInterfaces/settings_page.dart';
 import 'package:student_75/userInterfaces/profile.dart';
-import 'package:student_75/models/difficulty_enum.dart';
-
 
 class ScheduleScreen extends StatefulWidget {
-  final TaskCategory topCategory;
-  final Difficulty difficulty;
-  
+  final AccountManager accountManager;
+
   const ScheduleScreen({
     super.key,
-    required this.difficulty,
-    required this.topCategory,
+    required this.accountManager,
   });
 
   @override
@@ -76,8 +72,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     if (newTask != null && newTask is TaskModel) {
       setState(() {
-        scheduleManager.addTask(newTask); 
-        _fetchSchedule(); 
+        scheduleManager.addTask(newTask);
+        _fetchSchedule();
       });
     }
   }
@@ -92,9 +88,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
         scheduleManager: scheduleManager,
-        refreshSchedule: _fetchSchedule, 
-        difficulty: widget.difficulty,
-        topCategory: widget.topCategory,
+        refreshSchedule: _fetchSchedule,
+        accountManager: widget.accountManager,
       ),
       body: Column(
         children: [
@@ -324,15 +319,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 class BottomNavBar extends StatelessWidget {
   final ScheduleManager scheduleManager;
   final Function refreshSchedule;
-  final Difficulty difficulty;
-  final TaskCategory topCategory;
+  final AccountManager accountManager;
 
   const BottomNavBar({
     super.key,
     required this.scheduleManager,
     required this.refreshSchedule,
-    required this.difficulty,
-    required this.topCategory,
+    required this.accountManager,
   });
 
   @override
@@ -372,8 +365,11 @@ class BottomNavBar extends StatelessWidget {
                             child: SingleChildScrollView(
                               child: Builder(
                                 builder: (context) {
-                                  print("Opening Profile with: difficulty = $difficulty, topCategory = $topCategory");
-                                  return ProfileScreen(difficulty: difficulty, topCategory: topCategory);
+                                  print(
+                                      "Opening Profile with: difficulty = ${accountManager.getDifficulty()}, topCategory = ${accountManager.getCategoryOrder().first}");
+                                  return ProfileScreen(
+                                    accountManager: accountManager,
+                                  );
                                 },
                               ),
                             ),
@@ -430,10 +426,7 @@ class BottomNavBar extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MindfulnessScreen(
-                        difficulty: difficulty,
-                        topCategory: topCategory,
-                      ),
+                      builder: (context) => MindfulnessScreen(accountManager: accountManager),
                     ),
                   );
                 },
@@ -445,8 +438,7 @@ class BottomNavBar extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => SettingsPage(
-                        difficulty: difficulty,
-                        topCategory: topCategory,
+                        accountManager: accountManager,
                       ),
                     ),
                   );
