@@ -14,10 +14,17 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   String notificationType = 'Before Task';
   String? selectedBeforeTime;
+  //! Need to make this fetch from accountManager
   TimeOfDay selectedWindDownTime = const TimeOfDay(hour: 21, minute: 0);
-  int mindfulnessDuration = 30; //! Need to make this fetch from accountManager
+  late int mindfulnessDuration;
   bool allowSnooze = false;
   bool notificationsEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    mindfulnessDuration = widget.accountManager.getMindfulnessDuration().inMinutes;
+  }
 
   final Map<String, Duration> beforeTaskOptionsMap = {
     '5 minutes': const Duration(minutes: 5),
