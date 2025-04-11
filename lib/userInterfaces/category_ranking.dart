@@ -175,22 +175,6 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
 
                 debugPrint("Saved rankedCategories: $rankedCategories");
 
-                // Map<TaskCategory, double> categoryRanks = {
-                //   for (int i = 0; i < rankedCategories.length; i++)
-                //     rankedCategories[i]: 3.0 - (i * 0.5)
-                // };
-                Map<TaskCategory, double> categoryRanks = {
-                  for (int i = 0; i < rankedCategories.length; i++)
-                    rankedCategories[i]: 3.0 - (i * 0.5)
-                };
-
-                TaskCategory topCategory =
-                    rankedCategories.isNotEmpty ? rankedCategories[0] : TaskCategory.academic;
-
-                // categoryRanks.forEach((category, rank) {
-                //   debugPrint("$category value: $rank");
-                // });
-
                 Navigator.push(
                   context,
                   MaterialPageRoute(
