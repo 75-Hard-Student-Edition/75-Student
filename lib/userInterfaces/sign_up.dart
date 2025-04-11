@@ -336,7 +336,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       difficulty: null,
                                       categoryOrder: null,
                                       sleepDuration: null,
-                                      bedtimes: null,
+                                      bedtime: null,
                                       bedtimeNotifyBefore: null,
                                       mindfulnessDuration: null,
                                     ),

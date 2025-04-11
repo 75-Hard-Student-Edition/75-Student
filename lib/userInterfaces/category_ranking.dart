@@ -167,9 +167,10 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                 super.widget.accountManager.createAccount(
                       super.widget.signUpFlowState.copyWith(
                             categoryOrder: rankedCategories,
-                            bedtimeNotifyBefore: null, //! Needs a page
-                            bedtimes: null, //! Needs a page
-                            sleepDuration: null, //! Needs a page
+                            sleepDuration: const Duration(hours: 8), //! Needs a page
+                            bedtimeNotifyBefore: Duration.zero, //! Needs a page
+                            bedtime: const TimeOfDay(hour: 21, minute: 0), //! Needs a page
+                            mindfulnessDuration: const Duration(minutes: 10), //! Needs a page
                           ),
                     );
 

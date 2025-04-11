@@ -9,7 +9,7 @@ class UserAccountModel {
   final Difficulty? difficulty;
   final List<TaskCategory>? categoryOrder;
   final Duration? sleepDuration;
-  final Map<String, TimeOfDay>? bedtimes;
+  final TimeOfDay? bedtime;
   final Duration? bedtimeNotifyBefore;
   final Duration? mindfulnessDuration;
 
@@ -19,7 +19,7 @@ class UserAccountModel {
     required this.difficulty,
     required this.categoryOrder,
     required this.sleepDuration,
-    required this.bedtimes,
+    required this.bedtime,
     required this.bedtimeNotifyBefore,
     required this.mindfulnessDuration,
   });
@@ -31,7 +31,7 @@ class UserAccountModel {
     Difficulty? difficulty,
     List<TaskCategory>? categoryOrder,
     Duration? sleepDuration,
-    Map<String, TimeOfDay>? bedtimes,
+    TimeOfDay? bedtime,
     Duration? bedtimeNotifyBefore,
     Duration? mindfulnessDuration,
   }) {
@@ -41,7 +41,7 @@ class UserAccountModel {
       difficulty: difficulty ?? this.difficulty,
       categoryOrder: categoryOrder ?? this.categoryOrder,
       sleepDuration: sleepDuration ?? this.sleepDuration,
-      bedtimes: bedtimes ?? this.bedtimes,
+      bedtime: bedtime ?? this.bedtime,
       bedtimeNotifyBefore: bedtimeNotifyBefore ?? this.bedtimeNotifyBefore,
       mindfulnessDuration: mindfulnessDuration ?? this.mindfulnessDuration,
     );
@@ -49,6 +49,6 @@ class UserAccountModel {
 
   @override
   String toString() {
-    return 'UserAccountModel{id: $id, username: $username, difficulty: $difficulty, categoryOrder: $categoryOrder, sleepDuration: $sleepDuration, bedtimes: $bedtimes, bedtimeNotifyBefore: $bedtimeNotifyBefore, mindfulnessDuration: $mindfulnessDuration}';
+    return 'UserAccountModel{id: $id, username: $username, difficulty: $difficulty, categoryOrder: $categoryOrder, sleepDuration: $sleepDuration, bedtime: $bedtime, bedtimeNotifyBefore: $bedtimeNotifyBefore, mindfulnessDuration: $mindfulnessDuration}';
   }
 }

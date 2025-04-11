@@ -340,15 +340,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                               .accountManager.userAccount!
                                                               .copyWith(
                                                             bedtimeNotifyBefore: Duration.zero,
-                                                            bedtimes: {
-                                                              'Mon': selectedWindDownTime,
-                                                              'Tue': selectedWindDownTime,
-                                                              'Wed': selectedWindDownTime,
-                                                              'Thu': selectedWindDownTime,
-                                                              'Fri': selectedWindDownTime,
-                                                              'Sat': selectedWindDownTime,
-                                                              'Sun': selectedWindDownTime,
-                                                            },
+                                                            bedtime: selectedWindDownTime,
                                                           ));
                                                           Navigator.of(context).pop();
                                                         },
