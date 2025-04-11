@@ -14,8 +14,7 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   String notificationType = 'Before Task';
   String? selectedBeforeTime;
-  //! Need to make this fetch from accountManager
-  TimeOfDay selectedWindDownTime = const TimeOfDay(hour: 21, minute: 0);
+  late TimeOfDay selectedWindDownTime;
   late int mindfulnessDuration;
   bool allowSnooze = false;
   bool notificationsEnabled = true;
@@ -23,6 +22,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
+    selectedWindDownTime = widget.accountManager.getBedtime();
     mindfulnessDuration = widget.accountManager.getMindfulnessDuration().inMinutes;
   }
 
@@ -245,12 +245,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   setState(() {
                                     selectedBeforeTime = beforeTaskOptions[index];
                                   });
-                                  widget.accountManager.updateAccount(
-                                    widget.accountManager.userAccount!.copyWith(
-                                      bedtimeNotifyBefore:
-                                          beforeTaskOptionsMap[beforeTaskOptions[index]]!,
-                                    ),
-                                  );
+                                  //! This is meant to be taskNotifyBefore time - rearranging of how it works needed
+                                  // widget.accountManager.updateAccount(
+                                  //   widget.accountManager.userAccount!.copyWith(
+                                  //     bedtimeNotifyBefore:
+                                  //         beforeTaskOptionsMap[beforeTaskOptions[index]]!,
+                                  //   ),
+                                  // );
                                 },
                                 children: beforeTaskOptions
                                     .map((option) => Center(
