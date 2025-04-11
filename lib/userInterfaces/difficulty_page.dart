@@ -40,7 +40,7 @@ class _DifficultyPageState extends State<DifficultyPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: IconButton(
-                icon: const Icon(Icons.arrow_back, size: 30),
+                icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -89,6 +89,7 @@ class _DifficultyPageState extends State<DifficultyPage> {
             context,
             MaterialPageRoute(
               builder: (context) => CategoryRankingScreen(
+                difficulty: difficulty,
                 accountManager: super.widget.accountManager,
                 signUpFlowState: super.widget.signUpFlowState.copyWith(
                       difficulty: selectedDifficulty,

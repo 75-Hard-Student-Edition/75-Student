@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/models/task_model.dart';
+import 'package:student_75/userInterfaces/mindfulness_page.dart';
+import 'package:student_75/userInterfaces/notifications.dart';
+import 'package:student_75/userInterfaces/start_up.dart';
+import 'package:student_75/userInterfaces/home.dart';
+import 'package:student_75/userInterfaces/profile.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  final Difficulty difficulty;
+  final TaskCategory topCategory;
+  
+  const SettingsPage({
+    super.key,
+    required this.difficulty,
+    required this.topCategory,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -9,8 +24,8 @@ class SettingsPage extends StatelessWidget {
     double topPadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      backgroundColor: const Color(0xE0E6F4F3),
-      bottomNavigationBar: CustomBottomNavBar(),
+      backgroundColor: const Color(0xFFE6F4F3),
+      bottomNavigationBar: CustomBottomNavBar(difficulty: difficulty, topCategory: topCategory),
       body: Padding(
         padding: EdgeInsets.only(top: topPadding + 10, left: 16, right: 16),
         child: Column(
@@ -19,17 +34,26 @@ class SettingsPage extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                  icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
                   onPressed: () => Navigator.pop(context),
                   color: Colors.black87,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  "Settings",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.teal[700],
+              ],
+            ),
+            const SizedBox(height: 10),
+            const Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "Settings",
+                      style: TextStyle(
+                        fontFamily: 'kdamThmorPro',
+                        fontSize: 45,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF00B3A1),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -38,7 +62,7 @@ class SettingsPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFFEBEFF0),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: const [
                   BoxShadow(
@@ -49,26 +73,61 @@ class SettingsPage extends StatelessWidget {
               ),
               child: const TextField(
                 decoration: InputDecoration(
-                  hintText: "search...",
+                  hintText: "Search...",
+                  hintStyle: TextStyle(color: Color(0xFFAFA9A9)),
                   border: InputBorder.none,
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            _buildSettingItem(Icons.person, "Account"),
-            _buildSettingItem(Icons.notifications, "Notifications"),
-            _buildSettingItem(Icons.remove_red_eye, "Appearance"),
-            _buildSettingItem(Icons.accessibility_new, "Accessibility"),
-            _buildSettingItem(Icons.mail_outline, "Invite Friends"),
-            _buildSettingItem(Icons.lightbulb_outline, "Help"),
+            _buildSettingItem(context, Icons.person, "Account", difficulty, topCategory),
+            _buildSettingItem(context, Icons.notifications, "Notifications", difficulty, topCategory),
+            _buildSettingItem(context, Icons.remove_red_eye, "Appearance", difficulty, topCategory),
+            _buildSettingItem(context, Icons.accessibility_new, "Accessibility", difficulty, topCategory),
+            _buildSettingItem(context, Icons.mail_outline, "Invite Friends", difficulty, topCategory),
+            _buildSettingItem(context, Icons.lightbulb_outline, "Help", difficulty, topCategory),
             const SizedBox(height: 16),
             Center(
               child: TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CupertinoAlertDialog(
+                        title: const Text("Log Out"),
+                        content: const Text("Are you sure you want to log out?"),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text("Cancel"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            child: const Text("Yes"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 icon: const Icon(Icons.block, color: Colors.red),
                 label: const Text(
                   "Log Out",
-                  style: TextStyle(color: Colors.red, fontSize: 16),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'kdamThmorPro',
+                  ),
                 ),
               ),
             )
@@ -78,53 +137,144 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingItem(IconData icon, String title) {
+  Widget _buildSettingItem(BuildContext context, IconData icon, String title, Difficulty difficulty, TaskCategory topCategory) {
     return Column(
       children: [
         ListTile(
-          leading: Icon(icon, color: Colors.black54),
+          leading: Icon(
+            icon,
+            size: 30,
+            color: Colors.white,
+            shadows: const [
+              Shadow(
+                offset: Offset(0, 4),
+                blurRadius: 8,
+                color: Color(0x3D000000),
+              ),
+            ],
+          ),
           title: Text(
             title,
             style: const TextStyle(
-              fontSize: 18,
-              color: Colors.black87,
-              fontWeight: FontWeight.w500,
+              fontFamily: 'kdamThmorPro',
+              fontSize: 35,
+              color: Color(0xFF787878),
+              fontWeight: FontWeight.w400,
             ),
           ),
-          trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            print('$title tapped');
+            if (title == "Notifications") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationScreen(
+                    difficulty: difficulty,
+                    topCategory: topCategory,
+                  ),
+                ),
+              );
+            } else {
+              print('$title tapped');
+            }
           },
         ),
-        const Divider(thickness: 1, height: 0),
+        const Padding(
+          padding: EdgeInsets.only(top: 5),
+          child: Divider(thickness: 1, height: 0),
+        ),
       ],
     );
   }
 }
 
 class CustomBottomNavBar extends StatelessWidget {
-  const CustomBottomNavBar({super.key});
+  final Difficulty difficulty;
+  final TaskCategory topCategory;
+  const CustomBottomNavBar({
+    super.key,
+    required this.difficulty,
+    required this.topCategory,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.teal,
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 6,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-              icon: const Icon(Icons.home, color: Colors.white), onPressed: () {}),
-          IconButton(
-              icon: const Icon(Icons.person, color: Colors.white), onPressed: () {}),
-          const SizedBox(width: 40), // Space for center button
-          IconButton(
-              icon: const Icon(Icons.add, color: Colors.white), onPressed: () {}),
-          IconButton(
-              icon: const Icon(Icons.blur_on, color: Colors.white), onPressed: () {}),
-        ],
-      ),
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        BottomAppBar(
+          color: const Color(0xFF00B3A1),
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 6,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.home, color: Colors.white, size: 25),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScheduleScreen(difficulty: difficulty, topCategory: topCategory)),
+                  );
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.person, color: Colors.white, size: 25),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfileScreen(difficulty: difficulty, topCategory: topCategory)),
+                  );
+                },
+              ),
+              const SizedBox(width: 40),
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.white, size: 25),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScheduleScreen(difficulty: difficulty, topCategory: topCategory)),
+                  );
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.blur_on, color: Colors.white, size: 25),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                                        MaterialPageRoute(
+                      builder: (context) => MindfulnessScreen(
+                        difficulty: difficulty,
+                        topCategory: topCategory,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 50,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                  MaterialPageRoute(
+                  builder: (context) => NotificationScreen(difficulty: difficulty, topCategory: topCategory,),
+                ),
+              );
+            },
+            backgroundColor: Colors.white,
+            elevation: 4,
+            shape: const CircleBorder(),
+            child: const Icon(
+              Icons.settings,
+              color: Color(0xFF00B3A1),
+              size: 40,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:student_75/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 
+
+
 Future<void> main() async {
   // Ensure that the Flutter binding is initialized before calling any plugins
   WidgetsFlutterBinding.ensureInitialized();
