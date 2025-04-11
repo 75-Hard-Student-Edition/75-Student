@@ -4,7 +4,7 @@ import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/mindfulness_page.dart';
-import 'package:student_75/userInterfaces/notifications.dart';
+import 'package:student_75/userInterfaces/notifications_page.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/userInterfaces/profile.dart';
