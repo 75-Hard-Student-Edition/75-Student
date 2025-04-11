@@ -15,9 +15,18 @@ class _NotificationScreenState extends State<NotificationScreen> {
   String notificationType = 'Before Task';
   String? selectedBeforeTime;
   TimeOfDay selectedWindDownTime = const TimeOfDay(hour: 21, minute: 0);
-  int mindfulnessDuration = 30;
+  int mindfulnessDuration = 30; //! Need to make this fetch from accountManager
   bool allowSnooze = false;
   bool notificationsEnabled = true;
+
+  final Map<String, Duration> beforeTaskOptionsMap = {
+    '5 minutes': const Duration(minutes: 5),
+    '10 minutes': const Duration(minutes: 10),
+    '15 minutes': const Duration(minutes: 15),
+    '30 minutes': const Duration(minutes: 30),
+    '45 minutes': const Duration(minutes: 45),
+    '1 hour': const Duration(hours: 1),
+  };
 
   final List<String> beforeTaskOptions = [
     '5 minutes',
@@ -229,6 +238,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   setState(() {
                                     selectedBeforeTime = beforeTaskOptions[index];
                                   });
+                                  widget.accountManager.updateAccount(
+                                    widget.accountManager.userAccount!.copyWith(
+                                      bedtimeNotifyBefore:
+                                          beforeTaskOptionsMap[beforeTaskOptions[index]]!,
+                                    ),
+                                  );
                                 },
                                 children: beforeTaskOptions
                                     .map((option) => Center(
@@ -314,6 +329,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                             selectedWindDownTime = tempSelectedTime;
                                                             allowSnooze = tempSnooze;
                                                           });
+                                                          widget.accountManager.updateAccount(widget
+                                                              .accountManager.userAccount!
+                                                              .copyWith(
+                                                            bedtimeNotifyBefore: Duration.zero,
+                                                            bedtimes: {
+                                                              'Mon': selectedWindDownTime,
+                                                              'Tue': selectedWindDownTime,
+                                                              'Wed': selectedWindDownTime,
+                                                              'Thu': selectedWindDownTime,
+                                                              'Fri': selectedWindDownTime,
+                                                              'Sat': selectedWindDownTime,
+                                                              'Sun': selectedWindDownTime,
+                                                            },
+                                                          ));
                                                           Navigator.of(context).pop();
                                                         },
                                                       ),
@@ -388,7 +417,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   style: TextStyle(fontSize: 16, fontFamily: 'KdamThmorPro'),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(right: 4),
+                                  padding: const EdgeInsets.only(right: 4),
                                   child: CupertinoButton(
                                     padding: EdgeInsets.zero,
                                     child: Text(
@@ -429,6 +458,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                         setState(() {
                                                           mindfulnessDuration = tempDuration;
                                                         });
+                                                        widget.accountManager.updateAccount(
+                                                          widget.accountManager.userAccount!
+                                                              .copyWith(
+                                                            mindfulnessDuration: Duration(
+                                                                minutes: mindfulnessDuration),
+                                                          ),
+                                                        );
                                                         Navigator.of(context).pop();
                                                       },
                                                     ),

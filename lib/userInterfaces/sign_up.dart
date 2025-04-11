@@ -331,13 +331,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           MaterialPageRoute(
                               builder: (context) => DifficultyPage(
                                     signUpFlowState: UserAccountModel(
-                                        id: 0,
-                                        username: "testUser",
-                                        difficulty: null,
-                                        categoryOrder: null,
-                                        sleepDuration: null,
-                                        bedtimes: null,
-                                        bedtimeNotifyBefore: null),
+                                      id: 0,
+                                      username: "testUser",
+                                      difficulty: null,
+                                      categoryOrder: null,
+                                      sleepDuration: null,
+                                      bedtimes: null,
+                                      bedtimeNotifyBefore: null,
+                                      mindfulnessDuration: null,
+                                    ),
                                     accountManager: super.widget.accountManager,
                                   )),
                         );

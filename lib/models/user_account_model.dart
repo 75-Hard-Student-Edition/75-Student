@@ -11,6 +11,7 @@ class UserAccountModel {
   final Duration? sleepDuration;
   final Map<String, TimeOfDay>? bedtimes;
   final Duration? bedtimeNotifyBefore;
+  final Duration? mindfulnessDuration;
 
   UserAccountModel({
     required this.id,
@@ -20,6 +21,7 @@ class UserAccountModel {
     required this.sleepDuration,
     required this.bedtimes,
     required this.bedtimeNotifyBefore,
+    required this.mindfulnessDuration,
   });
 
   UserAccountModel copyWith({
@@ -31,6 +33,7 @@ class UserAccountModel {
     Duration? sleepDuration,
     Map<String, TimeOfDay>? bedtimes,
     Duration? bedtimeNotifyBefore,
+    Duration? mindfulnessDuration,
   }) {
     return UserAccountModel(
       id: id ?? this.id,
@@ -40,11 +43,12 @@ class UserAccountModel {
       sleepDuration: sleepDuration ?? this.sleepDuration,
       bedtimes: bedtimes ?? this.bedtimes,
       bedtimeNotifyBefore: bedtimeNotifyBefore ?? this.bedtimeNotifyBefore,
+      mindfulnessDuration: mindfulnessDuration ?? this.mindfulnessDuration,
     );
   }
 
   @override
   String toString() {
-    return 'UserAccountModel{id: $id, username: $username, difficulty: $difficulty, categoryOrder: $categoryOrder, sleepDuration: $sleepDuration, bedtimes: $bedtimes, bedtimeNotifyBefore: $bedtimeNotifyBefore}';
+    return 'UserAccountModel{id: $id, username: $username, difficulty: $difficulty, categoryOrder: $categoryOrder, sleepDuration: $sleepDuration, bedtimes: $bedtimes, bedtimeNotifyBefore: $bedtimeNotifyBefore, mindfulnessDuration: $mindfulnessDuration}';
   }
 }

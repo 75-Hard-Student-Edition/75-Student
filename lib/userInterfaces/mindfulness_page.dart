@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
-import 'package:student_75/models/difficulty_enum.dart';
-import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/userInterfaces/profile.dart';
 import 'package:student_75/userInterfaces/settings_page.dart';
@@ -24,8 +22,22 @@ class MindfulnessScreen extends StatefulWidget {
 class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
-  Duration _duration = const Duration(minutes: 30);
+  late Duration _duration;
   Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _duration = widget.accountManager.getMindfulnessDuration();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    ); // don't start immediately
+
+    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
 
   String get _formattedTime {
     final hours = _duration.inHours;
@@ -61,19 +73,6 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
   }
 
   @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    ); // don't start immediately
-
-    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -90,7 +89,7 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
         ),
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.only(top: 40),
+            padding: const EdgeInsets.only(top: 40),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,

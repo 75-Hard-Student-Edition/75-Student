@@ -47,6 +47,7 @@ class AccountManager implements IAccountManager {
       sleepDuration: const Duration(hours: 8),
       bedtimes: {},
       bedtimeNotifyBefore: const Duration(minutes: 30),
+      mindfulnessDuration: const Duration(minutes: 10),
     );
     userAccount = fetchFromDb;
   }
@@ -69,7 +70,8 @@ class AccountManager implements IAccountManager {
   @override
   void updateAccount(UserAccountModel newAccount) {
     // Use the copyWith method to update the account details
-    //todo update account details in database
+    userAccount = newAccount;
+    saveUserDetails(userAccount!);
   }
 
   //* AccountManager -> Database methods
@@ -90,6 +92,7 @@ class AccountManager implements IAccountManager {
       sleepDuration: const Duration(hours: 8),
       bedtimes: {},
       bedtimeNotifyBefore: const Duration(minutes: 30),
+      mindfulnessDuration: const Duration(minutes: 10),
     );
   }
 
@@ -110,6 +113,15 @@ class AccountManager implements IAccountManager {
       throw NoUserSignedInException('No category order set for user');
     }
     return userAccount!.categoryOrder!;
+  }
+
+  @override
+  Duration getMindfulnessDuration() {
+    if (userAccount == null) throw NoUserSignedInException('No user signed in');
+    if (userAccount!.mindfulnessDuration == null) {
+      throw NoUserSignedInException('No mindfulness duration set for user');
+    }
+    return userAccount!.mindfulnessDuration!;
   }
 
   //* PointsManager -> AccountManager methods

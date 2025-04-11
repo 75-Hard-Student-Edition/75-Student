@@ -24,6 +24,7 @@ abstract class IAccountManager {
   // AccountManager -> PointsManager methods
   Difficulty getDifficulty();
   List<TaskCategory> getCategoryOrder();
+  Duration getMindfulnessDuration();
 
   // PointsManager -> AccountManager methods
   void resetStreak();
