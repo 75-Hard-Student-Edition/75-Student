@@ -6,10 +6,11 @@ import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final ScheduleManager scheduleManager;
-  const AddTaskScreen({super.key, required this.scheduleManager});
+  final TaskModel? initialTask;
+  const AddTaskScreen({super.key, required this.scheduleManager, this.initialTask});
 
   @override
-  _AddTaskScreenState createState() => _AddTaskScreenState(scheduleManager);
+  _AddTaskScreenState createState() => _AddTaskScreenState(scheduleManager, initialTask: initialTask);
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
@@ -26,7 +27,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Color _selectedCategoryBorderColor = const Color(0xFF56C1B7);
   final Color _textColor = const Color(0xFFFFFFFF);
 
-  _AddTaskScreenState(this.scheduleManager);
+  final TaskModel? initialTask;
+  _AddTaskScreenState(this.scheduleManager, {this.initialTask});
   TaskCategory? _selectedCategory;
   String? _selectedRepeatOption;
   final bool _isMovable = false;
@@ -39,6 +41,51 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   void saveTask(TaskModel task) {
     taskList.add(task);
     print("Task Saved: ${task.name}");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (initialTask != null) {
+      _taskName = initialTask!.name;
+      _notes = initialTask!.description;
+      _selectedDate = initialTask!.startTime;
+      _selectedTime = DateFormat('HH:mm').format(initialTask!.startTime);
+      _selectedDuration = initialTask!.duration.inMinutes;
+      _endTime = DateFormat('HH:mm').format(initialTask!.startTime.add(initialTask!.duration));
+      _selectedCategory = initialTask!.category;
+      
+      // Update colors to match selected category
+      switch (_selectedCategory!) {
+        case TaskCategory.academic:
+          _selectedCategoryColor = lightenColor(const Color(0xFF00BCD4), 0.4);
+          _selectedCategoryBorderColor = darkenColor(const Color(0xFF00BCD4), 0.2);
+          break;
+        case TaskCategory.social:
+          _selectedCategoryColor = lightenColor(const Color(0xFF8AD483), 0.4);
+          _selectedCategoryBorderColor = darkenColor(const Color(0xFF8AD483), 0.2);
+          break;
+        case TaskCategory.health:
+          _selectedCategoryColor = lightenColor(const Color(0xFFF67373), 0.4);
+          _selectedCategoryBorderColor = darkenColor(const Color(0xFFF67373), 0.2);
+          break;
+        case TaskCategory.chore:
+          _selectedCategoryColor = lightenColor(const Color(0xFFE997CD), 0.4);
+          _selectedCategoryBorderColor = darkenColor(const Color(0xFFE997CD), 0.2);
+          break;
+        case TaskCategory.hobby:
+          _selectedCategoryColor = lightenColor(const Color(0xFF946AAE), 0.4);
+          _selectedCategoryBorderColor = darkenColor(const Color(0xFF946AAE), 0.2);
+          break;
+        case TaskCategory.employment:
+          _selectedCategoryColor = lightenColor(const Color(0xFFEDBF45), 0.4);
+          _selectedCategoryBorderColor = darkenColor(const Color(0xFFEDBF45), 0.2);
+          break;
+      }
+      
+      _location = initialTask!.location?.name ?? '';
+      _period = initialTask!.period;
+    }
   }
 
   @override
@@ -1062,9 +1109,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               print("Notes: ${newTask.description}");
 
             
-              scheduleManager.addTask(newTask);
-
-              Navigator.pop(context, newTask);
+              if (initialTask != null) {
+                TaskModel updatedTask = TaskModel(
+                  id: initialTask!.id,
+                  name: newTask.name,
+                  description: newTask.description,
+                  isMovable: newTask.isMovable,
+                  isComplete: newTask.isComplete,
+                  category: newTask.category,
+                  priority: newTask.priority,
+                  startTime: newTask.startTime,
+                  duration: newTask.duration,
+                  period: newTask.period,
+                  location: newTask.location,
+                );
+                scheduleManager.editTask(updatedTask);
+                Navigator.pop(context, updatedTask);
+              } else {
+                scheduleManager.addTask(newTask);
+                Navigator.pop(context, newTask);
+              }
             },
             child: const Text(
               "SAVE",

@@ -8,6 +8,7 @@ import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/userInterfaces/mindfulness_page.dart';
 import 'package:student_75/userInterfaces/settings_page.dart';
 import 'package:student_75/userInterfaces/profile.dart';
+import 'package:student_75/userInterfaces/task_details.dart';
 
 class ScheduleScreen extends StatefulWidget {
   final AccountManager accountManager;
@@ -273,7 +274,61 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               }
             : null,
 
-        child: Container(
+        child: GestureDetector(
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: TaskDetails(
+                    task: task,
+                    onEdit: () async {
+                      Navigator.pop(context); // Close modal before editing
+                      
+                      final editedTask = await showModalBottomSheet<TaskModel>(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) {
+                          return Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 50),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.95,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                ),
+                                child: AddTaskScreen(
+                                  scheduleManager: scheduleManager,
+                                  initialTask: task,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                      
+                      if (editedTask != null) {
+                        scheduleManager.editTask(editedTask);
+                        _fetchSchedule();
+                      }
+                    },
+                    onComplete: () {
+                      scheduleManager.completeTask(task.id);
+                      _fetchSchedule();
+                      Navigator.pop(context); // Close modal after completion
+                    },
+                  ),
+                );
+              },
+            );
+          },
+          child: Container(
           width: screenWidth * 0.75,
           height: hourHeight * task.endTime.difference(task.startTime).inHours,
           decoration: BoxDecoration(
@@ -312,7 +367,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 
