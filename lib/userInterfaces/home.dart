@@ -285,6 +285,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   padding: const EdgeInsets.only(bottom: 20),
                   child: TaskDetails(
                     task: task,
+                    scheduleManager: scheduleManager,
                     onEdit: () async {
                       Navigator.pop(context); // Close modal before editing
                       
@@ -322,6 +323,41 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       scheduleManager.completeTask(task.id);
                       _fetchSchedule();
                       Navigator.pop(context); // Close modal after completion
+                    },
+                  onDelete: () {
+                      scheduleManager.deleteTask(task.id);
+                      _fetchSchedule();
+                    },
+                  onCopy: () async {
+                      Navigator.pop(context); // Close modal before copying
+                      final copiedTask = await showModalBottomSheet<TaskModel>(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) {
+                          return Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 50),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.95,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                ),
+                                child: AddTaskScreen(
+                                  scheduleManager: scheduleManager,
+                                  initialTask: task,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                      if (copiedTask != null) {
+                        scheduleManager.addTask(copiedTask);
+                        _fetchSchedule();
+                      }
                     },
                   ),
                 );

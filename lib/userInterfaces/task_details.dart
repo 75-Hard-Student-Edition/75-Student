@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/userInterfaces/add_task.dart';
+import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
 class TaskDetails extends StatelessWidget {
   final TaskModel task;
   final VoidCallback onEdit;
   final VoidCallback onComplete;
+  final VoidCallback onDelete;
+  final VoidCallback onCopy;
+  final ScheduleManager scheduleManager;
 
   const TaskDetails({
     super.key,
     required this.task,
     required this.onEdit,
     required this.onComplete,
+    required this.onDelete,
+    required this.onCopy,
+    required this.scheduleManager,
   });
 
   @override
@@ -150,8 +159,37 @@ class TaskDetails extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _actionButton(Icons.delete, "Delete", taskColor),
-                      _actionButton(Icons.copy, "Copy", taskColor),
+                      GestureDetector(
+                        onTap: () {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (_) => CupertinoAlertDialog(
+                              title: const Text("Are you sure you want to delete?"),
+                              actions: [
+                                CupertinoDialogAction(
+                                  isDestructiveAction: true,
+                                  child: const Text("Yes"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // close dialog
+                                    Navigator.of(context).pop(); // close modal
+                                    onDelete(); // properly call deletion
+                                  },
+                                ),
+                                CupertinoDialogAction(
+                                  isDefaultAction: true,
+                                  child: const Text("No"),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: _actionButton(Icons.delete, "Delete", taskColor),
+                      ),
+                    GestureDetector(
+                      onTap: onCopy,
+                      child: _actionButton(Icons.copy, "Copy", taskColor),
+                    ),
                       GestureDetector(
                         onTap: onComplete,
                         child: _actionButton(Icons.check_circle,
