@@ -20,7 +20,7 @@ class TaskDetails extends StatelessWidget {
     Color taskColor = _getTaskColor(task.category);
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.55,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -96,11 +96,11 @@ class TaskDetails extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 3),
 
             // Container for Action Buttons
             Container(
-              margin: const EdgeInsets.only(top: 16),
+              margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
                 color: const Color(0x8CFFFBFB),
@@ -108,24 +108,44 @@ class TaskDetails extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  const Divider(),
+                  const Divider(
+                    color: Color(0xFFCCC4C4),
+                    thickness: 1,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildSection("  📍 Location", task.location?.name ?? " "),
+                    child: _buildSection("    📍 Location", task.location?.name ?? ""),
                   ),
-                  const Divider(),
+                  const Divider(
+                    color: Color(0xFFCCC4C4),
+                    thickness: 1,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildSection("  📝 Notes", task.description),
+                    child: _buildSection("    Notes", task.description),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 16),
 
-                  const Divider(),
+                  const Divider(
+                    color: Color(0xFFCCC4C4),
+                    thickness: 1,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildSection("  🔗 Links", task.links ?? " "),
+                    child: _buildSection("    Links", task.links ?? ""),
                   ),
-                  const Divider(),
+                  const Divider(
+                    color: Color(0xFFCCC4C4),
+                    thickness: 1,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -164,17 +184,19 @@ class TaskDetails extends StatelessWidget {
   }
 
   Widget _buildSection(String title, String content) {
-  
+    final bool isEmpty = content.trim().isEmpty;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
           textAlign: TextAlign.left,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'KdamThmorPro',),
+          style: const TextStyle(fontFamily: 'KdamThmorPro',color: Color(0xFFCCC4C4)),
         ),
         const SizedBox(height: 5),
-        Text(content, style: const TextStyle(color: Colors.black54)),
+        if (!isEmpty)
+          Text(content, style: const TextStyle(color: Colors.black54)),
         const SizedBox(height: 10),
       ],
     );
