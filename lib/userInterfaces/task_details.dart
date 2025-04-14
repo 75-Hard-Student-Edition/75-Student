@@ -24,49 +24,72 @@ class TaskDetails extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: taskColor, width: 2),
+          color: const Color.fromARGB(255, 229, 242, 241),
+          border: Border.all(color: Color(0xFF00B3A1), width: 2),
           borderRadius: BorderRadius.circular(12),
           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Task Title & Category
+            // New Top Row Layout
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(_getCategoryIcon(task.category),
-                    color: taskColor, size: 40),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      task.name,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: taskColor),
-                    ),
-                    _buildBadge(
-                        task.category.toString().split('.').last, taskColor),
-                  ],
+                Container(
+                  width: 85,
+                  height: 85,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
+                  ),
+                  child: Center(
+                    child: Icon(_getCategoryIcon(task.category),
+                        color: taskColor, size: 40),
+                  ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-
-            // Date & Time
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("📅 ${DateFormat('dd/MM/yyyy').format(task.startTime)}",
-                    style:
-                        const TextStyle(fontSize: 14, color: Colors.black54)),
-                Text(
-                    "⏰ ${DateFormat('HH:mm').format(task.startTime)} - ${DateFormat('HH:mm').format(task.endTime)}",
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold)),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            DateFormat('dd/MM/yyyy').format(task.startTime),
+                            style: const TextStyle(
+                              fontFamily: 'KdamThmorPro',
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Text(
+                            "${DateFormat('HH:mm').format(task.startTime)} - ${DateFormat('HH:mm').format(task.endTime)}",
+                            style: const TextStyle(
+                              fontFamily: 'KdamThmorPro',
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        task.name,
+                        style: TextStyle(
+                          fontFamily: 'KdamThmorPro',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: taskColor,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      _buildBadge(task.category.toString().split('.').last, taskColor),
+                    ],
+                  ),
+                )
               ],
             ),
             const SizedBox(height: 10),
@@ -84,37 +107,46 @@ class TaskDetails extends StatelessWidget {
               _buildSection("🔔 Notify",
                   "Remind ${task.notifyBefore.inMinutes} minutes before"),
 
-            const SizedBox(height: 15),
+            const SizedBox(height: 16),
 
-            // Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _actionButton(Icons.visibility_off, "Hide", taskColor),
-                _actionButton(Icons.copy, "Copy", taskColor),
-                GestureDetector(
-                  onTap: onComplete,
-                  child: _actionButton(Icons.check_circle,
-                      task.isComplete ? "Undo" : "Complete", taskColor),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 10),
-
-            // Edit Task Button
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: taskColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                ),
-                onPressed: onEdit,
-                child: const Text("Edit Task",
-                    style: TextStyle(color: Colors.white)),
+            // Container for Action Buttons
+            Container(
+              margin: const EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(156, 255, 251, 251),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _actionButton(Icons.delete, "Delete", taskColor),
+                      _actionButton(Icons.copy, "Copy", taskColor),
+                      GestureDetector(
+                        onTap: onComplete,
+                        child: _actionButton(Icons.check_circle,
+                            task.isComplete ? "Undo" : "Complete", taskColor),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: taskColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                      ),
+                      onPressed: onEdit,
+                      child: const Text("Edit Task",
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -137,13 +169,27 @@ class TaskDetails extends StatelessWidget {
 
   Widget _buildBadge(String text, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-          color: color.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(6)),
-      child: Text(text.toUpperCase(),
-          style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w500, color: color)),
+        color: color.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.4),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Text(
+        text.toUpperCase(),
+        style: const TextStyle(
+          fontFamily: 'KdamThmorPro',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 
