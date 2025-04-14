@@ -89,7 +89,7 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(top: 40),
+            padding: const EdgeInsets.only(top: 5),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,8 +114,6 @@ class _MindfulnessScreenState extends State<MindfulnessScreen> with SingleTicker
                     ),
                   ),
                 ),
-
-                const SizedBox(height: 30),
 
                 // will change
                 Center(
