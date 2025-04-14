@@ -56,21 +56,25 @@ class TaskDetails extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            DateFormat('dd/MM/yyyy').format(task.startTime),
-                            style: const TextStyle(
-                              fontFamily: 'KdamThmorPro',
-                              fontSize: 14,
-                              color: Colors.black,
+                          Expanded(
+                            child: Text(
+                              DateFormat('dd/MM/yyyy').format(task.startTime),
+                              style: const TextStyle(
+                                fontFamily: 'KdamThmorPro',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                          const SizedBox(width: 16),
-                          Text(
-                            "${DateFormat('HH:mm').format(task.startTime)} - ${DateFormat('HH:mm').format(task.endTime)}",
-                            style: const TextStyle(
-                              fontFamily: 'KdamThmorPro',
-                              fontSize: 14,
-                              color: Colors.black,
+                          Expanded(
+                            child: Text(
+                              "${DateFormat('HH:mm').format(task.startTime)} - ${DateFormat('HH:mm').format(task.endTime)}",
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                fontFamily: 'KdamThmorPro',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ],
@@ -80,12 +84,12 @@ class TaskDetails extends StatelessWidget {
                         task.name,
                         style: TextStyle(
                           fontFamily: 'KdamThmorPro',
-                          fontSize: 20,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold,
                           color: taskColor,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       _buildBadge(task.category.toString().split('.').last, taskColor),
                     ],
                   ),
@@ -94,31 +98,35 @@ class TaskDetails extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // Description
-            if (task.description.isNotEmpty)
-              _buildSection("📝 Notes", task.description),
-
-            // Location if available
-            if (task.location != null)
-              _buildSection("📍 Location", task.location!.name),
-
-            // Notifs
-            if (task.notifyBefore.inMinutes > 0)
-              _buildSection("🔔 Notify",
-                  "Remind ${task.notifyBefore.inMinutes} minutes before"),
-
-            const SizedBox(height: 16),
-
             // Container for Action Buttons
             Container(
               margin: const EdgeInsets.only(top: 16),
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: Color.fromARGB(156, 255, 251, 251),
+                color: const Color(0x8CFFFBFB),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 children: [
+                  const Divider(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: _buildSection("  📍 Location", task.location?.name ?? " "),
+                  ),
+                  const Divider(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: _buildSection("  📝 Notes", task.description),
+                  ),
+                  const SizedBox(height: 10),
+
+                  const Divider(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: _buildSection("  🔗 Links", task.links ?? " "),
+                  ),
+                  const Divider(),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -143,7 +151,7 @@ class TaskDetails extends StatelessWidget {
                       ),
                       onPressed: onEdit,
                       child: const Text("Edit Task",
-                          style: TextStyle(color: Colors.white)),
+                          style: TextStyle(color: Colors.white, fontFamily: 'KdamThmorPro',)),
                     ),
                   ),
                 ],
@@ -156,10 +164,15 @@ class TaskDetails extends StatelessWidget {
   }
 
   Widget _buildSection(String title, String content) {
+  
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text(
+          title,
+          textAlign: TextAlign.left,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'KdamThmorPro',),
+        ),
         const SizedBox(height: 5),
         Text(content, style: const TextStyle(color: Colors.black54)),
         const SizedBox(height: 10),
@@ -198,7 +211,7 @@ class TaskDetails extends StatelessWidget {
       children: [
         Icon(icon, color: color, size: 30),
         const SizedBox(height: 5),
-        Text(label, style: TextStyle(color: color, fontSize: 12)),
+        Text(label, style: TextStyle(color: color, fontSize: 12, fontFamily: 'KdamThmorPro')),
       ],
     );
   }

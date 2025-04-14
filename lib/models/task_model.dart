@@ -36,6 +36,7 @@ class TaskModel {
   final Duration? period;
 
   final Duration notifyBefore;
+  final String? links;
 
   TaskModel({
     required this.id,
@@ -50,6 +51,7 @@ class TaskModel {
     required this.duration,
     this.period,
     this.notifyBefore = Duration.zero,
+    this.links,
   }) {
     // Calculate end time and next scheduled time
     endTime = startTime.add(duration);
@@ -87,6 +89,7 @@ class TaskModel {
     DateTime? nextScheduled,
     Duration? period,
     Duration? notifyBefore,
+    String? links,
   }) {
     return TaskModel(
       id: id,
@@ -101,10 +104,11 @@ class TaskModel {
       duration: duration ?? this.duration,
       period: period ?? this.period,
       notifyBefore: notifyBefore ?? this.notifyBefore,
+      links: links ?? this.links,
     );
   }
 
   @override
-  toString() =>
-      "TaskModel(id: $id, name: $name, description: $description, isMovable: $isMovable, isComplete: $isComplete, category: $category, priority: $priority, location: $location, startTime: $startTime, duration: $duration, endTime: $endTime, nextScheduled: $nextScheduled, period: $period, notifyBefore: $notifyBefore)";
+  String toString() =>
+      "TaskModel(id: $id, name: $name, description: $description, isMovable: $isMovable, isComplete: $isComplete, category: $category, priority: $priority, location: $location, startTime: $startTime, duration: $duration, endTime: $endTime, nextScheduled: $nextScheduled, period: $period, notifyBefore: $notifyBefore, links: $links)";
 }
