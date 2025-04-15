@@ -28,7 +28,7 @@ class SettingsPage extends StatelessWidget {
       backgroundColor: const Color(0xFFE6F4F3),
       bottomNavigationBar: CustomBottomNavBar(accountManager: accountManager),
       body: Padding(
-        padding: EdgeInsets.only(top: topPadding + 10, left: 16, right: 16),
+        padding: EdgeInsets.only(top: topPadding + 2, left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

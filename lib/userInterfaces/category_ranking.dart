@@ -4,9 +4,11 @@ import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/userInterfaces/home.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/userInterfaces/notifications_page.dart';
 
 class CategoryRankingScreen extends StatefulWidget {
-  final AccountManager accountManager;
+    final AccountManager accountManager;
+
   final UserAccountModel signUpFlowState;
   final Difficulty difficulty;
   const CategoryRankingScreen(
@@ -40,21 +42,8 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 36.0, left: 16.0, right: 16.0),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back, size: 30),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ),
-
             Padding(
-              padding: const EdgeInsets.only(top: 36.0, left: 8.0, right: 8.0),
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: Stack(
                 children: [
                   Align(
@@ -179,9 +168,9 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ScheduleScreen(
-                      accountManager: super.widget.accountManager,
-                    ),
+                    builder: (context) =>  NotificationScreen(
+                    accountManager: widget.accountManager,
+                  ),
                   ),
                 );
               },

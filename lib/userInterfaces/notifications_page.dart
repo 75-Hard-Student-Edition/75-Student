@@ -73,17 +73,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
         bottomNavigationBar: CustomBottomNavBar(accountManager: widget.accountManager),
         body: SafeArea(
             child: SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 160),
                 child: Column(children: [
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Notifications',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF00A59B),
-                      fontFamily: 'KdamThmorPro',
-                    ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      const Center(
+                      child: Text(
+                        'Notifications',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF00A59B),
+                          fontFamily: 'KdamThmorPro',
+                        ),
+                      ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -522,9 +533,11 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
+    return Padding(
+      padding: EdgeInsets.only(bottom: 30),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF00A59B),
@@ -577,7 +590,8 @@ class CustomBottomNavBar extends StatelessWidget {
             },
           ),
         ),
-      ],
+        ],
+      ),
     );
   }
 }
