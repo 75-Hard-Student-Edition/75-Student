@@ -28,6 +28,24 @@ class UserAccountModel {
     required this.mindfulnessDuration,
     required this.taskNotifyBefore,
   }) {
+    // Run input checks to validate the data
+    _runInputChecks();
+  }
+
+  void _runInputChecks() {
+    if (sleepDuration != null && sleepDuration!.inSeconds < 0) {
+      throw ArgumentError('Sleep duration must be greater than or equal to 0');
+    }
+    if (bedtime != null &&
+        (bedtime!.hour < 0 || bedtime!.hour > 23 || bedtime!.minute < 0 || bedtime!.minute > 59)) {
+      throw ArgumentError('Bedtime must be a valid TimeOfDay');
+    }
+    if (bedtimeNotifyBefore != null && bedtimeNotifyBefore!.inSeconds < 0) {
+      throw ArgumentError('Bedtime notify before must be greater than or equal to 0');
+    }
+    if (mindfulnessDuration != null && mindfulnessDuration!.inSeconds < 0) {
+      throw ArgumentError('Mindfulness duration must be greater than or equal to 0');
+    }
     if (taskNotifyBefore != null && taskNotifyBefore!.inSeconds < 0) {
       throw ArgumentError('Notify before must be greater than or equal to 0');
     }
