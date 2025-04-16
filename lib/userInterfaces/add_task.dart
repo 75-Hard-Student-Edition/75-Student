@@ -1094,7 +1094,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 //location: _location.isNotEmpty ? Location(name: _location) : null,
                 startTime: startTime,
                 duration: Duration(minutes: _selectedDuration),
-                //notifyBefore: _notifyBefore,
                 period: _period, 
               );
 

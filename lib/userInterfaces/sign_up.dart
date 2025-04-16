@@ -339,6 +339,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       bedtime: null,
                                       bedtimeNotifyBefore: null,
                                       mindfulnessDuration: null,
+                                      taskNotifyBefore: null,
                                     ),
                                     accountManager: super.widget.accountManager,
                                   )),

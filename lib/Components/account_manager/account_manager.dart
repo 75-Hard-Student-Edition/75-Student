@@ -32,7 +32,7 @@ class AccountManager implements IAccountManager {
   @override
   void login(String username, String password) {
     //todo fetch account details from database
-    UserAccountModel fetchFromDb = UserAccountModel(
+    UserAccountModel tempTestAccount = UserAccountModel(
       id: 0,
       username: username,
       difficulty: Difficulty.easy,
@@ -48,8 +48,9 @@ class AccountManager implements IAccountManager {
       bedtime: const TimeOfDay(hour: 22, minute: 0),
       bedtimeNotifyBefore: const Duration(minutes: 30),
       mindfulnessDuration: const Duration(minutes: 10),
+      taskNotifyBefore: const Duration(minutes: 30),
     );
-    userAccount = fetchFromDb;
+    userAccount = tempTestAccount;
   }
 
   @override
@@ -93,6 +94,7 @@ class AccountManager implements IAccountManager {
       bedtime: const TimeOfDay(hour: 22, minute: 0),
       bedtimeNotifyBefore: const Duration(minutes: 30),
       mindfulnessDuration: const Duration(minutes: 10),
+      taskNotifyBefore: const Duration(minutes: 30),
     );
   }
 

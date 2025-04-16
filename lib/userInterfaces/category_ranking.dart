@@ -7,7 +7,7 @@ import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/userInterfaces/notifications_page.dart';
 
 class CategoryRankingScreen extends StatefulWidget {
-    final AccountManager accountManager;
+  final AccountManager accountManager;
 
   final UserAccountModel signUpFlowState;
   final Difficulty difficulty;
@@ -160,6 +160,7 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                             bedtimeNotifyBefore: Duration.zero, //! Needs a page
                             bedtime: const TimeOfDay(hour: 21, minute: 0), //! Needs a page
                             mindfulnessDuration: const Duration(minutes: 10), //! Needs a page
+                            taskNotifyBefore: const Duration(minutes: 30), //! Needs a page
                           ),
                     );
 
@@ -168,9 +169,9 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>  NotificationScreen(
-                    accountManager: widget.accountManager,
-                  ),
+                    builder: (context) => NotificationScreen(
+                      accountManager: widget.accountManager,
+                    ),
                   ),
                 );
               },
