@@ -5,13 +5,17 @@ import 'package:student_75/models/task_model.dart';
 class UserAccountModel {
   final int id;
   final String username;
+
   final int streak = 0;
   final Difficulty? difficulty;
   final List<TaskCategory>? categoryOrder;
+
   final Duration? sleepDuration;
   final TimeOfDay? bedtime;
   final Duration? bedtimeNotifyBefore;
+
   final Duration? mindfulnessDuration;
+  final Duration? taskNotifyBefore;
 
   UserAccountModel({
     required this.id,
@@ -22,7 +26,12 @@ class UserAccountModel {
     required this.bedtime,
     required this.bedtimeNotifyBefore,
     required this.mindfulnessDuration,
-  });
+    required this.taskNotifyBefore,
+  }) {
+    if (taskNotifyBefore != null && taskNotifyBefore!.inSeconds < 0) {
+      throw ArgumentError('Notify before must be greater than or equal to 0');
+    }
+  }
 
   UserAccountModel copyWith({
     int? id,
@@ -34,6 +43,7 @@ class UserAccountModel {
     TimeOfDay? bedtime,
     Duration? bedtimeNotifyBefore,
     Duration? mindfulnessDuration,
+    Duration? taskNotifyBefore,
   }) {
     return UserAccountModel(
       id: id ?? this.id,
@@ -44,11 +54,12 @@ class UserAccountModel {
       bedtime: bedtime ?? this.bedtime,
       bedtimeNotifyBefore: bedtimeNotifyBefore ?? this.bedtimeNotifyBefore,
       mindfulnessDuration: mindfulnessDuration ?? this.mindfulnessDuration,
+      taskNotifyBefore: taskNotifyBefore ?? this.taskNotifyBefore,
     );
   }
 
   @override
   String toString() {
-    return 'UserAccountModel{id: $id, username: $username, difficulty: $difficulty, categoryOrder: $categoryOrder, sleepDuration: $sleepDuration, bedtime: $bedtime, bedtimeNotifyBefore: $bedtimeNotifyBefore, mindfulnessDuration: $mindfulnessDuration}';
+    return 'UserAccountModel{id: $id, username: $username, difficulty: $difficulty, categoryOrder: $categoryOrder, sleepDuration: $sleepDuration, bedtime: $bedtime, bedtimeNotifyBefore: $bedtimeNotifyBefore, taskNotifyBefore: $taskNotifyBefore, mindfulnessDuration: $mindfulnessDuration}';
   }
 }

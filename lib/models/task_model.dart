@@ -35,7 +35,6 @@ class TaskModel {
   late final DateTime nextScheduled;
   final Duration? period;
 
-  final Duration notifyBefore;
   final String? links;
 
   TaskModel({
@@ -50,7 +49,6 @@ class TaskModel {
     required this.startTime,
     required this.duration,
     this.period,
-    this.notifyBefore = Duration.zero,
     this.links,
   }) {
     // Calculate end time and next scheduled time
@@ -70,9 +68,6 @@ class TaskModel {
     if (period != null && period!.inSeconds <= 0) {
       throw ArgumentError('Period must be greater than 0');
     }
-    if (notifyBefore.inSeconds < 0) {
-      throw ArgumentError('Notify before must be greater than or equal to 0');
-    }
   }
 
   TaskModel copyWith({
@@ -88,7 +83,6 @@ class TaskModel {
     DateTime? endTime,
     DateTime? nextScheduled,
     Duration? period,
-    Duration? notifyBefore,
     String? links,
   }) {
     return TaskModel(
@@ -103,12 +97,11 @@ class TaskModel {
       startTime: startTime ?? this.startTime,
       duration: duration ?? this.duration,
       period: period ?? this.period,
-      notifyBefore: notifyBefore ?? this.notifyBefore,
       links: links ?? this.links,
     );
   }
 
   @override
   String toString() =>
-      "TaskModel(id: $id, name: $name, description: $description, isMovable: $isMovable, isComplete: $isComplete, category: $category, priority: $priority, location: $location, startTime: $startTime, duration: $duration, endTime: $endTime, nextScheduled: $nextScheduled, period: $period, notifyBefore: $notifyBefore, links: $links)";
+      "TaskModel(id: $id, name: $name, description: $description, isMovable: $isMovable, isComplete: $isComplete, category: $category, priority: $priority, location: $location, startTime: $startTime, duration: $duration, endTime: $endTime, nextScheduled: $nextScheduled, period: $period, links: $links)";
 }
