@@ -3,8 +3,8 @@ import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/sign_up.dart';
 import 'package:student_75/userInterfaces/home.dart';
-import 'package:student_75/models/difficulty_enum.dart';
-import 'package:student_75/models/task_model.dart';
+//import 'package:student_75/models/difficulty_enum.dart';
+//import 'package:student_75/models/task_model.dart';
 
 class LogInScreen extends StatelessWidget {
   final AccountManager accountManager;
@@ -87,6 +87,27 @@ class LogInScreen extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 30),
+                // Log in with demo user button
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      /* Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DemoScreen(accountManager: accountManager),
+                        ),
+                      ); */
+                    },
+                    child: const Text(
+                      "Log in with demo user",
+                      style: TextStyle(
+                        color: Color(0xFF7B7B7B),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
 
                 const SizedBox(height: 40),

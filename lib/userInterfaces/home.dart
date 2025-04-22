@@ -10,7 +10,7 @@ import 'package:student_75/userInterfaces/mindfulness_page.dart';
 import 'package:student_75/userInterfaces/settings_page.dart';
 import 'package:student_75/userInterfaces/profile.dart';
 import 'package:student_75/userInterfaces/task_details.dart';
-import 'package:student_75/models/location_model.dart';
+//import 'package:student_75/models/location_model.dart';
 
 class ScheduleScreen extends StatefulWidget {
   final AccountManager accountManager;
