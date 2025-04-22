@@ -65,8 +65,8 @@ class ScheduleGenerator {
       if (lowerPriority == null) {
         // Same priority
         // USER selects which task to delete
-        TaskModel taskToDelete = (await _scheduleManager.userBinarySelect(currentTask.id.toString(),
-                nextTask.id.toString(), "Which task would you like to delete?"))
+        bool? userChoice = await _scheduleManager.userBinarySelect(currentTask, nextTask, "Which task would you like to delete?");
+        TaskModel taskToDelete = (userChoice == true)
             ? currentTask
             : nextTask;
         _scheduleManager.deleteTask(taskToDelete.id);
@@ -90,8 +90,8 @@ class ScheduleGenerator {
     if (lowerPriority == null) {
       // Same priority
       // USER selects which task to edit
-      TaskModel taskToEdit = (await _scheduleManager.userBinarySelect(currentTask.id.toString(),
-              nextTask.id.toString(), "Which task would you like to edit?"))
+      bool? userChoice = await _scheduleManager.userBinarySelect(currentTask, nextTask, "Which task would you like to edit?");
+      TaskModel taskToEdit = (userChoice == true)
           ? currentTask
           : nextTask;
       moveOrPostponeTask(schedule, taskToEdit);
@@ -133,8 +133,8 @@ class ScheduleGenerator {
     // USER selects to move or postpone task
     if (checkMovePossible(schedule, task)) {
       // Move is possible
-      if (await _scheduleManager.userBinarySelect(
-          "Move", "Postpone", "Would you like to move or postpone the task?")) {
+      bool? userChoice = await _scheduleManager.userBinarySelect(task, task, "Would you like to move or postpone the task?");
+      if (userChoice == true) {
         // Move task
         // _scheduleManager.moveTask(task); // todo implement this
       } else {

@@ -586,7 +586,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     builder: (context) => ScheduleScreen(
                           accountManager: accountManager,
                         )),
-              );
+              ); 
             },
           ),
         ),
@@ -595,3 +595,4 @@ class CustomBottomNavBar extends StatelessWidget {
     );
   }
 }
+  

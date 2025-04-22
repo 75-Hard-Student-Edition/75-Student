@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/models/location_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   String _selectedTime = "00:00";
   String _endTime = "00:00";
   int _selectedDuration = 0;
-  String _location = "";
+  Location? _location;
   String _notes = "";
   DateTime _selectedDate = DateTime.now();
   String _links = "";
@@ -54,7 +55,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       _selectedDuration = initialTask!.duration.inMinutes;
       _endTime = DateFormat('HH:mm').format(initialTask!.startTime.add(initialTask!.duration));
       _selectedCategory = initialTask!.category;
-      
       // Update colors to match selected category
       switch (_selectedCategory!) {
         case TaskCategory.academic:
@@ -82,8 +82,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           _selectedCategoryBorderColor = darkenColor(const Color(0xFFEDBF45), 0.2);
           break;
       }
-      
-      _location = initialTask!.location?.name ?? '';
+      _location = initialTask!.location;
       _period = initialTask!.period;
     }
   }
@@ -864,7 +863,19 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           child: GestureDetector(
             onTap: () => _showCupertinoInputDialog("Location", (value) {
               setState(() {
-                _location = value;
+                // Parse comma-separated input for name, latitude, longitude
+                List<String> parts = value.split(',');
+                if (parts.length == 3) {
+                  _location = Location(
+                    name: parts[0].trim(),
+                    latitude: double.tryParse(parts[1].trim()) ?? 0.0,
+                    longitude: double.tryParse(parts[2].trim()) ?? 0.0,
+                  );
+                } else {
+                  _location = value.trim().isNotEmpty
+                      ? Location(name: value.trim(), latitude: 0.0, longitude: 0.0)
+                      : null;
+                }
               });
             }),
             child: Column(
@@ -888,8 +899,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                _location.isNotEmpty
-                    ? Text(_location, style: const TextStyle(fontSize: 14))
+                (_location != null && _location!.name.isNotEmpty)
+                    ? Text(_location!.name, style: const TextStyle(fontSize: 14))
                     : Container(
                         height: 40,
                         decoration: BoxDecoration(
@@ -1091,7 +1102,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 isComplete: _isComplete,
                 category: _selectedCategory!,
                 priority: TaskPriority.medium,
-                //location: _location.isNotEmpty ? Location(name: _location) : null,
+                location: _location,
                 startTime: startTime,
                 duration: Duration(minutes: _selectedDuration),
                 //notifyBefore: _notifyBefore,

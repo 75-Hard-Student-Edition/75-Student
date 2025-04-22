@@ -32,15 +32,21 @@ class ScheduleManager implements IScheduleManager {
   late PointsManager pointsManager;
   late AccountManager accountManager;
   late NotificationManager notificationManager;
-  late Future<bool> Function(String, String, String) userBinarySelectCallback;
+  late Future<bool?> Function(TaskModel, TaskModel, String)
+      userBinarySelectCallback;
   late void Function(String) displayErrorCallback;
 
-  ScheduleManager({required this.displayErrorCallback, required this.accountManager}) {
+  ScheduleManager({
+    required this.displayErrorCallback,
+    required this.accountManager,
+    required this.userBinarySelectCallback,
+  }) {
     //this.userBinarySelectCallback, this.displayErrorCallback) {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog(initialTasks: []);
-    pointsManager = PointsManager(initialSchedule: todaysSchedule, accountManager: accountManager);
+    pointsManager = PointsManager(
+        initialSchedule: todaysSchedule, accountManager: accountManager);
     notificationManager = NotificationManager(notifications: []);
 
     print("ScheduleManager initialised with the following account data:");
@@ -52,11 +58,13 @@ class ScheduleManager implements IScheduleManager {
   Schedule get schedule => todaysSchedule;
 
   @override
-  List<TaskModel> getBacklogSuggestions() => backlog.peak(AppSettings.backlogPeakDepth);
+  List<TaskModel> getBacklogSuggestions() =>
+      backlog.peak(AppSettings.backlogPeakDepth);
 
   @override
-  Future<bool> userBinarySelect(String choice1, String choice2, String message) =>
-      userBinarySelectCallback(choice1, choice2, message);
+  Future<bool?> userBinarySelect(
+          TaskModel task1, TaskModel task2, String message) =>
+      userBinarySelectCallback(task1, task2, message);
   @override
   void displayError(String message) {
     displayErrorCallback(message);
@@ -164,9 +172,17 @@ class ScheduleManager implements IScheduleManager {
 
     //* 2. Generate new schedule
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule =
+        await scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
+    todaysSchedule = sanitisedSchedule;
+  }
+
+  Future<void> generateSanitisedSchedule() async {
+    ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
+    final Schedule sanitisedSchedule =
+        await scheduleGenerator.generateSanitisedSchedule();
     todaysSchedule = sanitisedSchedule;
   }
 }
