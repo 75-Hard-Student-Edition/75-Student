@@ -88,27 +88,6 @@ class LogInScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
-                // Log in with demo user button
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      /* Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DemoScreen(accountManager: accountManager),
-                        ),
-                      ); */
-                    },
-                    child: const Text(
-                      "Log in with demo user",
-                      style: TextStyle(
-                        color: Color(0xFF7B7B7B),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
 
                 const SizedBox(height: 40),
                 // Log In Button
@@ -146,6 +125,29 @@ class LogInScreen extends StatelessWidget {
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                // Log in with demo user button
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      /* Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DemoScreen(accountManager: accountManager),
+                        ),
+                      ); */
+                    },
+                    child: const Text(
+                      "Log in with demo user",
+                      style: TextStyle(
+                        color: Color(0xFFAFA9A9),
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Color(0xFFAFA9A9),
                       ),
                     ),
                   ),
