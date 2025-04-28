@@ -69,7 +69,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     setState(() {
       displaySchedule = scheduleManager.schedule;
     });
-    print("Fetched schedule from backend: ${displaySchedule.length} tasks loaded.");
+    print(
+        "Fetched schedule from backend: ${displaySchedule.length} tasks loaded.");
   }
 
   void _addTestTasks() {
@@ -81,7 +82,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.chore,
       priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 3, 30),
+      startTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 3, 30),
       duration: const Duration(minutes: 30),
       notifyBefore: const Duration(minutes: 10),
     ));
@@ -94,7 +96,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.health,
       priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 30),
+      startTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 30),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 10),
     ));
@@ -107,7 +110,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.chore,
       priority: TaskPriority.medium,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0),
+      startTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 0),
     ));
@@ -120,7 +124,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.academic,
       priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
+      startTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 5),
     ));
@@ -133,7 +138,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.social,
       priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 1, 0),
+      startTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 1, 0),
       duration: const Duration(hours: 2),
       notifyBefore: const Duration(minutes: 15),
     ));
@@ -146,7 +152,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.academic,
       priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
+      startTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 15),
     ));
@@ -159,13 +166,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.employment,
       priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 18, 0),
+      startTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 18, 0),
       duration: const Duration(hours: 4),
       notifyBefore: const Duration(minutes: 15),
     ));
   }
 
-  Future<TaskModel?> _userBinarySelect(TaskModel task1, TaskModel task2, String message) async {
+  Future<TaskModel?> _userBinarySelect(
+      TaskModel task1, TaskModel task2, String message) async {
     print("Showing conflict dialog: ${task1.name} vs ${task2.name}");
     return await showCupertinoDialog<TaskModel>(
       context: context,
@@ -250,7 +259,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             children: [
               Text(
                 day,
-                style: TextStyle(fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold),
               ),
               Text(
                 month.toUpperCase(),
@@ -269,10 +279,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.local_fire_department, color: Colors.orange, size: screenWidth * 0.06),
+                Icon(Icons.local_fire_department,
+                    color: Colors.orange, size: screenWidth * 0.06),
                 Text(
                   "25", // Streak number
-                  style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: screenWidth * 0.05,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -309,7 +322,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         child: Text(
                           hourText,
                           textAlign: TextAlign.left,
-                          style: TextStyle(color: Colors.black54, fontSize: screenWidth * 0.03),
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: screenWidth * 0.03),
                         ),
                       ),
                     ),
@@ -318,7 +333,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               );
             }),
           ),
-          for (var task in scheduleManager.schedule.tasks) _buildDraggableTimeBlock(context, task),
+          for (var task in scheduleManager.schedule.tasks)
+            _buildDraggableTimeBlock(context, task),
         ],
       ),
     );
@@ -334,8 +350,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                  colors: [Colors.red, Colors.orange, Colors.green]), //need to assign to categories
+              gradient: const LinearGradient(colors: [
+                Colors.red,
+                Colors.orange,
+                Colors.green
+              ]), //need to assign to categories
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -365,25 +384,37 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     Color taskColor = _getTaskColor(task.category);
 
     return Positioned(
-      top: task.startTime.hour * hourHeight + task.startTime.minute * hourHeight / 60,
-      height: hourHeight * task.endTime.difference(task.startTime).inMinutes / 60,
+      top: task.startTime.hour * hourHeight +
+          task.startTime.minute * hourHeight / 60,
+      height:
+          hourHeight * task.endTime.difference(task.startTime).inMinutes / 60,
       left: screenWidth * 0.15,
       child: GestureDetector(
         // change start time
         onVerticalDragUpdate: task.isMovable
             ? (details) async {
-                DateTime newStart = task.startTime
-                    .add(Duration(minutes: (details.primaryDelta! / hourHeight * 60).round()));
+                DateTime newStart = task.startTime.add(Duration(
+                    minutes:
+                        (details.primaryDelta! / hourHeight * 60).round()));
 
                 TaskModel updatedTask = task.copyWith(startTime: newStart);
-                try {
+
+                // First manually check for overlap
+                bool hasConflict = scheduleManager.schedule.tasks.any(
+                    (currentTask) =>
+                        currentTask.id != updatedTask.id &&
+                        currentTask.startTime.isBefore(updatedTask.endTime) &&
+                        currentTask.endTime.isAfter(updatedTask.startTime));
+
+                if (!hasConflict) {
                   scheduleManager.editTask(updatedTask);
                   setState(() {});
-                } on TaskOverlapException catch (e) {
-                  debugPrint("Task overlap detected: ${e.message}");
-                  TaskModel overlappingTask = scheduleManager.schedule.tasks.firstWhere(
+                } else {
+                  // Handle conflict manually
+                  TaskModel overlappingTask =
+                      scheduleManager.schedule.tasks.firstWhere(
                     (currentTask) =>
-                        currentTask.id != task.id &&
+                        currentTask.id != updatedTask.id &&
                         currentTask.startTime.isBefore(updatedTask.endTime) &&
                         currentTask.endTime.isAfter(updatedTask.startTime),
                   );
@@ -392,36 +423,18 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     overlappingTask,
                     "Tasks overlapping. Please select which task to keep",
                   );
-                  if (selectedTask == task) {
-                    scheduleManager.editTask(task.copyWith(startTime: newStart));
-                    // Move the overlapping task to the next available slot in the schedule
-                    DateTime? otherNewStart =
-                        scheduleManager.findAvailableTimeSlot(overlappingTask);
-                    if (otherNewStart != null) {
-                      scheduleManager.editTask(overlappingTask.copyWith(
-                        startTime: otherNewStart,
-                      ));
-                    } else {
-                      // No available slot found, postpone the task
-                      scheduleManager.postPoneTask(overlappingTask.id);
-                    }
-                    setState(() {});
+                  if (selectedTask == null) {
+                    scheduleManager.editTask(updatedTask);
+                  } else if (selectedTask == task) {
+                    scheduleManager.deleteTask(overlappingTask.id);
+                    scheduleManager
+                        .editTask(task.copyWith(startTime: newStart));
                   } else {
-                    scheduleManager.editTask(overlappingTask.copyWith(
-                      endTime: newStart,
-                    ));
-                    // Move the selected task to the next available slot in the schedule
-                    DateTime? otherNewStart = scheduleManager.findAvailableTimeSlot(task);
-                    if (otherNewStart != null) {
-                      scheduleManager.editTask(task.copyWith(
-                        startTime: otherNewStart,
-                      ));
-                    } else {
-                      // No available slot found, postpone the task
-                      scheduleManager.postPoneTask(task.id);
-                    }
-                    setState(() {});
+                    scheduleManager.deleteTask(task.id);
+                    scheduleManager
+                        .editTask(overlappingTask.copyWith(endTime: newStart));
                   }
+                  _fetchSchedule();
                 }
               }
             : null,
@@ -430,12 +443,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         onPanUpdate: task.isMovable
             ? (details) {
                 setState(() {
-                  Duration newDuration = task.endTime.difference(task.startTime) +
-                      Duration(minutes: (details.primaryDelta! / hourHeight * 60).round());
+                  Duration newDuration =
+                      task.endTime.difference(task.startTime) +
+                          Duration(
+                              minutes: (details.primaryDelta! / hourHeight * 60)
+                                  .round());
 
                   if (newDuration.inMinutes > 10) {
                     // no 0-minute tasks
-                    TaskModel updatedTask = task.copyWith(endTime: task.startTime.add(newDuration));
+                    TaskModel updatedTask =
+                        task.copyWith(endTime: task.startTime.add(newDuration));
                     scheduleManager.editTask(updatedTask);
                     print(
                         "Resized Task: '${task.name}' - New Duration: ${newDuration.inMinutes} minutes");
@@ -472,7 +489,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 width: MediaQuery.of(context).size.width * 0.95,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30)),
                                 ),
                                 child: AddTaskScreen(
                                   scheduleManager: scheduleManager,
@@ -513,7 +531,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 width: MediaQuery.of(context).size.width * 0.95,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30)),
                                 ),
                                 child: AddTaskScreen(
                                   scheduleManager: scheduleManager,
@@ -536,7 +555,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           },
           child: Container(
             width: screenWidth * 0.75,
-            height: hourHeight * task.endTime.difference(task.startTime).inHours,
+            height:
+                hourHeight * task.endTime.difference(task.startTime).inHours,
             decoration: BoxDecoration(
               color: taskColor.withOpacity(0.3),
               border: Border.all(
@@ -635,7 +655,8 @@ class BottomNavBar extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 1,
                             decoration: const BoxDecoration(
                               color: Color(0x00FFFFFF),
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(30)),
                             ),
                             child: SingleChildScrollView(
                               child: Builder(
@@ -667,7 +688,8 @@ class BottomNavBar extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     barrierColor: Colors.black.withOpacity(0.5),
                     shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
                     ),
                     builder: (context) {
                       return Align(
@@ -678,10 +700,12 @@ class BottomNavBar extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.95,
                             decoration: const BoxDecoration(
                               color: Color(0x00FFFFFF),
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(30)),
                             ),
                             child: SingleChildScrollView(
-                              child: AddTaskScreen(scheduleManager: scheduleManager),
+                              child: AddTaskScreen(
+                                  scheduleManager: scheduleManager),
                             ),
                           ),
                         ),
@@ -701,7 +725,8 @@ class BottomNavBar extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MindfulnessScreen(accountManager: accountManager),
+                      builder: (context) =>
+                          MindfulnessScreen(accountManager: accountManager),
                     ),
                   );
                 },
@@ -748,7 +773,8 @@ class BottomNavBar extends StatelessWidget {
 // Display popup error message with the two provided choices
 // Return bool: true if choice1 is selected, false if choice2 is selected
 
-Future<bool> popupTwoChoices(String choice1, String choice2, String message) async {
+Future<bool> popupTwoChoices(
+    String choice1, String choice2, String message) async {
   return true;
 }
 
