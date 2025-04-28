@@ -220,7 +220,18 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           _buildProgressBar(context),
           Expanded(
             child: SingleChildScrollView(
-              child: _buildSchedule(context),
+              child: FutureBuilder<Widget>(
+                future: _buildSchedule(context),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    return snapshot.data!;
+                  }
+                },
+              ),
             ),
           ),
         ],
@@ -274,7 +285,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   /// Schedule Grid (each line represents a time slot)
-  Widget _buildSchedule(BuildContext context) {
+  Future<Widget> _buildSchedule(BuildContext context) async {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return SizedBox(
@@ -309,7 +320,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               );
             }),
           ),
-          for (var task in scheduleManager.schedule.tasks) _buildDraggableTimeBlock(context, task),
+          for (var task in scheduleManager.schedule.tasks)
+            await _buildDraggableTimeBlock(context, task),
         ],
       ),
     );
@@ -347,7 +359,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   // Draggable & Resizable
-  Widget _buildDraggableTimeBlock(BuildContext context, TaskModel task) {
+  Future<Widget> _buildDraggableTimeBlock(BuildContext context, TaskModel task) async {
     print("Rendering Task: ${task.name} at ${task.startTime}");
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -362,7 +374,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       child: GestureDetector(
         // change start time
         onVerticalDragUpdate: task.isMovable
-            ? (details) {
+            ? (details) async {
                 setState(() {
                   DateTime newStart = task.startTime
                       .add(Duration(minutes: (details.primaryDelta! / hourHeight * 60).round()));
@@ -374,11 +386,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       scheduleManager.editTask(updatedTask);
                     } on TaskOverlapException catch (e) {
                       print("Task overlap detected: ${e.message}");
-                      //! Handle overlap case using binary select dialog
                     }
                     print("Moved Task: '${task.name}' to ${DateFormat('HH:mm').format(newStart)}");
                   }
                 });
+
+                TaskModel? selectedTask = await _userBinarySelect(
+                  task,
+                  task.copyWith(startTime: task.startTime),
+                  "Tasks overlapping. Please select which task to keep",
+                );
               }
             : null,
 
