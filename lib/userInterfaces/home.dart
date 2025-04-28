@@ -39,9 +39,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       userBinarySelectCallback: _userBinarySelect,
     );
 
-    Future.microtask(() async {
-      await scheduleManager.generateSanitisedSchedule();
-    });
+    // Future.microtask(() async {
+    //   await scheduleManager.generateSanitisedSchedule();
+    // });
 
     _addTestTasks();
     _fetchSchedule();
@@ -374,7 +374,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       scheduleManager.editTask(updatedTask);
                     } on TaskOverlapException catch (e) {
                       print("Task overlap detected: ${e.message}");
-                      // Handle overlap case using binary select dialog
+                      //! Handle overlap case using binary select dialog
                     }
                     print("Moved Task: '${task.name}' to ${DateFormat('HH:mm').format(newStart)}");
                   }

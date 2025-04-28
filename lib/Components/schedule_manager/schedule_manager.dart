@@ -98,14 +98,10 @@ class ScheduleManager implements IScheduleManager {
     // pointsManager.updatePoints(task);
     //todo Update database
     // databaseService.addTaskRecord(task);
-    print("Task added to schedule: $task");
-    print("Schedule after addition: $todaysSchedule");
   }
 
   @override
   void deleteTask(int taskId) {
-    print("Deleting task with id $taskId");
-    print("Schedule before deletion: $todaysSchedule");
     // Remove task from schedule
     try {
       todaysSchedule.remove(taskId);
@@ -125,8 +121,6 @@ class ScheduleManager implements IScheduleManager {
 
   @override
   void editTask(TaskModel task) {
-    print("Editing task with id ${task.id}");
-    print("Schedule before editing: $todaysSchedule");
     // Works by deleting and re-adding the task, assuming that the task ID is not changed
     deleteTask(task.id);
     addTask(task);
