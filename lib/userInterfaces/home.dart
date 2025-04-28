@@ -173,11 +173,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     ));
   }
 
-  /// Presents a modal dialog with two choices to the user and returns their selection as a bool.
-  /// Returns true for first task, false for second task, and null for cancel (i.e., allow overlap).
   Future<bool?> _userBinarySelect(
       TaskModel task1, TaskModel task2, String message) async {
-    print("🧠 Showing conflict dialog: ${task1.name} vs ${task2.name}");
+    print("Showing conflict dialog: ${task1.name} vs ${task2.name}");
     return await showCupertinoDialog<bool>(
       context: context,
       barrierDismissible: false,
