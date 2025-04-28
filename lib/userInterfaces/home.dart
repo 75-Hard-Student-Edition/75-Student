@@ -392,11 +392,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     overlappingTask,
                     "Tasks overlapping. Please select which task to keep",
                   );
+
                   if (selectedTask == task) {
                     scheduleManager.editTask(task.copyWith(startTime: newStart));
                     // Move the overlapping task to the next available slot in the schedule
                     DateTime? otherNewStart =
                         scheduleManager.findAvailableTimeSlot(overlappingTask);
+                    print("Other task now starts at: $otherNewStart");
                     if (otherNewStart != null) {
                       scheduleManager.editTask(overlappingTask.copyWith(
                         startTime: otherNewStart,
@@ -412,6 +414,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     ));
                     // Move the selected task to the next available slot in the schedule
                     DateTime? otherNewStart = scheduleManager.findAvailableTimeSlot(task);
+                    print("Other task now starts at: $otherNewStart");
                     if (otherNewStart != null) {
                       scheduleManager.editTask(task.copyWith(
                         startTime: otherNewStart,
