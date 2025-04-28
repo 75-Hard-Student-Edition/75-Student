@@ -34,14 +34,12 @@ class Schedule {
     if (i != 0) {
       TaskModel prevTask = tasks[i - 1];
       if (prevTask.endTime.isAfter(task.startTime)) {
-        remove(task.id);
         throw TaskOverlapException("Task overlaps with previous task");
       }
     }
     if (i == tasks.length - 1) return;
     TaskModel nextTask = tasks[i + 1];
     if (task.endTime.isAfter(nextTask.startTime)) {
-      remove(task.id);
       throw TaskOverlapException("Task overlaps with next task");
     }
   }
