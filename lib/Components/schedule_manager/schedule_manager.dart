@@ -32,8 +32,7 @@ class ScheduleManager implements IScheduleManager {
   late PointsManager pointsManager;
   late AccountManager accountManager;
   late NotificationManager notificationManager;
-  late Future<TaskModel?> Function(TaskModel, TaskModel, String)
-      userBinarySelectCallback;
+  late Future<TaskModel?> Function(TaskModel, TaskModel, String) userBinarySelectCallback;
   late void Function(String) displayErrorCallback;
 
   ScheduleManager({
@@ -45,8 +44,7 @@ class ScheduleManager implements IScheduleManager {
     //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
     backlog = Backlog(initialTasks: []);
-    pointsManager = PointsManager(
-        initialSchedule: todaysSchedule, accountManager: accountManager);
+    pointsManager = PointsManager(initialSchedule: todaysSchedule, accountManager: accountManager);
     notificationManager = NotificationManager(notifications: []);
 
     print("ScheduleManager initialised with the following account data:");
@@ -58,12 +56,10 @@ class ScheduleManager implements IScheduleManager {
   Schedule get schedule => todaysSchedule;
 
   @override
-  List<TaskModel> getBacklogSuggestions() =>
-      backlog.peak(AppSettings.backlogPeakDepth);
+  List<TaskModel> getBacklogSuggestions() => backlog.peak(AppSettings.backlogPeakDepth);
 
   @override
-  Future<TaskModel?> userBinarySelect(
-          TaskModel task1, TaskModel task2, String message) async =>
+  Future<TaskModel?> userBinarySelect(TaskModel task1, TaskModel task2, String message) async =>
       await userBinarySelectCallback(task1, task2, message);
   @override
   void displayError(String message) {
@@ -72,7 +68,7 @@ class ScheduleManager implements IScheduleManager {
 
   //* == GUI -> ScheduleManager methods ==
   @override
-  Future<void> addTask(TaskModel task) async {
+  void addTask(TaskModel task) {
     // Add task to schedule
     // todaysSchedule.add(task);
     try {
@@ -186,8 +182,7 @@ class ScheduleManager implements IScheduleManager {
 
     //* 2. Generate new schedule
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule =
-        await scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
     todaysSchedule = sanitisedSchedule;
@@ -195,8 +190,7 @@ class ScheduleManager implements IScheduleManager {
 
   Future<void> generateSanitisedSchedule() async {
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule =
-        await scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
     todaysSchedule = sanitisedSchedule;
   }
 }
