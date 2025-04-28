@@ -1,3 +1,4 @@
+import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager_interface.dart';
@@ -8,8 +9,7 @@ class ScheduleGenerator {
   ScheduleGenerator(this._scheduleManager);
 
   Future<Schedule> generateSanitisedSchedule() async {
-    Schedule schedule =
-        Schedule(tasks: []); // databaseService.getSchedule(); or smtn
+    Schedule schedule = Schedule(tasks: []); // databaseService.getSchedule(); or smtn
     if (schedule.isEmpty || schedule.length == 1) return schedule;
 
     schedule.sort();
@@ -55,14 +55,12 @@ class ScheduleGenerator {
   Future<Schedule> handleOverlap(
       Schedule schedule, TaskModel currentTask, TaskModel nextTask) async {
     Schedule sanitisedSchedule = schedule;
-    List<TaskModel> movableTasks =
-        [currentTask, nextTask].where((task) => task.isMovable).toList();
-    TaskModel? lowerPriority =
-        currentTask.priority.index > nextTask.priority.index
-            ? nextTask
-            : currentTask.priority.index < nextTask.priority.index
-                ? currentTask
-                : null; // Null if equal priority
+    List<TaskModel> movableTasks = [currentTask, nextTask].where((task) => task.isMovable).toList();
+    TaskModel? lowerPriority = currentTask.priority.index > nextTask.priority.index
+        ? nextTask
+        : currentTask.priority.index < nextTask.priority.index
+            ? currentTask
+            : null; // Null if equal priority
 
     if (movableTasks.isEmpty) {
       if (lowerPriority == null) {
@@ -103,9 +101,10 @@ class ScheduleGenerator {
     return sanitisedSchedule;
   }
 
-  static bool checkMovePossible(Schedule schedule, TaskModel task) {
-    // Check if task can be moved to a different time
-    // return true if possible, false otherwise
+  /// Method to check if a task can be moved to a different time
+  /// Returns a datetime if possible, or null if not possible
+  static DateTime? checkMovePossible(
+      Schedule schedule, TaskModel task, AccountManager accountManager) {
     Duration taskDuration = task.endTime.difference(task.startTime);
 
     for (int i = 0; i < schedule.length - 1; i++) {
@@ -115,22 +114,37 @@ class ScheduleGenerator {
       if (currentTask.id == task.id || nextTask.id == task.id) continue;
 
       Duration gap = nextTask.startTime.difference(currentTask.endTime);
-      if (gap >= taskDuration) return true;
+      if (gap >= taskDuration) return currentTask.endTime;
     }
 
     // Handle edge cases of moving task to start or end of day
-    Duration timeFromWakeup = task.startTime
-        .difference(/* some way to fetch wakeup time */ DateTime.now());
-    if (timeFromWakeup >= taskDuration) return true;
+    DateTime wakeupTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      accountManager.userAccount!.bedtime!.hour,
+      accountManager.userAccount!.bedtime!.minute,
+    ).add(accountManager.userAccount!.sleepDuration!);
 
-    Duration timeToBedtime = schedule.last.endTime
-        .difference(/* some way to fetch bedtime */ DateTime.now());
-    return timeToBedtime >= taskDuration;
+    Duration timeFromWakeup = task.startTime.difference(wakeupTime);
+    if (timeFromWakeup >= taskDuration) return wakeupTime;
+
+    DateTime bedtime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      accountManager.userAccount!.bedtime!.hour,
+      accountManager.userAccount!.bedtime!.minute,
+    );
+    Duration timeToBedtime = schedule.last.endTime.difference(bedtime);
+    if (timeToBedtime >= taskDuration) return bedtime.subtract(taskDuration);
+
+    return null; // No available time slot found
   }
 
   Future<void> moveOrPostponeTask(Schedule schedule, TaskModel task) async {
     // USER selects to move or postpone task
-    if (checkMovePossible(schedule, task)) {
+    if (checkMovePossible(schedule, task, _scheduleManager.accManager) != null) {
       // Move is possible
       //sorry
       TaskModel? userChoice = await _scheduleManager.userBinarySelect(

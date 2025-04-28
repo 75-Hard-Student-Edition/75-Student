@@ -66,6 +66,9 @@ class ScheduleManager implements IScheduleManager {
     displayErrorCallback(message);
   }
 
+  @override
+  AccountManager get accManager => accountManager;
+
   //* == GUI -> ScheduleManager methods ==
   @override
   void addTask(TaskModel task) {
@@ -157,26 +160,8 @@ class ScheduleManager implements IScheduleManager {
   }
 
   @override
-  DateTime findAvailableTimeSlot(TaskModel task) {
-    // Find available time slot for task in schedule
-    DateTime startTime = DateTime.now();
-    DateTime endTime = startTime.add(task.duration);
-    while (true) {
-      bool isAvailable = true;
-      for (final scheduledTask in todaysSchedule.tasks) {
-        if (scheduledTask.startTime.isBefore(endTime) && scheduledTask.endTime.isAfter(startTime)) {
-          isAvailable = false;
-          break;
-        }
-      }
-      if (isAvailable) {
-        return startTime;
-      } else {
-        startTime = endTime;
-        endTime = startTime.add(task.duration);
-      }
-    }
-  }
+  DateTime? findAvailableTimeSlot(TaskModel task) =>
+      ScheduleGenerator.checkMovePossible(todaysSchedule, task, accountManager);
 
   //* == Internal methods ==
   Future<void> endOfDayProcess() async {
