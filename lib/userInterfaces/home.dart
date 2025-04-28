@@ -375,27 +375,31 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         // change start time
         onVerticalDragUpdate: task.isMovable
             ? (details) async {
-                setState(() {
-                  DateTime newStart = task.startTime
-                      .add(Duration(minutes: (details.primaryDelta! / hourHeight * 60).round()));
+                DateTime newStart = task.startTime
+                    .add(Duration(minutes: (details.primaryDelta! / hourHeight * 60).round()));
 
-                  // Ensure new start time is valid
-                  if (newStart.isBefore(task.endTime)) {
-                    TaskModel updatedTask = task.copyWith(startTime: newStart);
-                    try {
-                      scheduleManager.editTask(updatedTask);
-                    } on TaskOverlapException catch (e) {
-                      print("Task overlap detected: ${e.message}");
+                // Ensure new start time is valid
+                if (newStart.isBefore(task.endTime)) {
+                  TaskModel updatedTask = task.copyWith(startTime: newStart);
+                  try {
+                    scheduleManager.editTask(updatedTask);
+                  } on TaskOverlapException catch (e) {
+                    debugPrint("Task overlap detected: ${e.message}");
+                    TaskModel overlappingTask = scheduleManager.schedule.tasks
+                        .firstWhere((currentTask) => currentTask.startTime == newStart);
+                    TaskModel? selectedTask = await _userBinarySelect(
+                      task,
+                      overlappingTask,
+                      "Tasks overlapping. Please select which task to keep",
+                    );
+                    if (selectedTask != null) {
+                      // setState(() {
+                      scheduleManager.editTask(selectedTask);
+                      // });
                     }
-                    print("Moved Task: '${task.name}' to ${DateFormat('HH:mm').format(newStart)}");
                   }
-                });
-
-                TaskModel? selectedTask = await _userBinarySelect(
-                  task,
-                  task.copyWith(startTime: task.startTime),
-                  "Tasks overlapping. Please select which task to keep",
-                );
+                  _fetchSchedule();
+                }
               }
             : null,
 
