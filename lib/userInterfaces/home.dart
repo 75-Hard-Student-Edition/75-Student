@@ -415,8 +415,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     overlappingTask,
                     "Tasks overlapping. Please select which task to keep",
                   );
-                  if (selectedTask != null) {
-                    scheduleManager.editTask(selectedTask);
+                  if (selectedTask == task) {
+                    scheduleManager.editTask(task.copyWith(startTime: newStart));
+                    // Move the overlapping task to the next available slot in the schedule
+                    setState(() {});
+                  } else {
+                    scheduleManager.editTask(overlappingTask.copyWith(
+                      endTime: newStart,
+                    ));
+                    // Move the selected task to the next available slot in the schedule
                     setState(() {});
                   }
                 }

@@ -15,4 +15,5 @@ abstract class IScheduleManager {
   void postPoneTask(int taskId);
   void completeTask(int taskId);
   void scheduleBacklogSuggestion(int taskId);
+  DateTime findAvailableTimeSlot(TaskModel task);
 }
