@@ -392,38 +392,32 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       left: screenWidth * 0.15,
       child: GestureDetector(
         // change start time
-        onVerticalDragEnd: task.isMovable
+        onVerticalDragUpdate: task.isMovable
             ? (details) async {
-                double hourHeight = 50;
-                double pixelsMoved = details.primaryVelocity != null ? details.primaryVelocity! * 0.01 : 0;
-                int minutesChange = (pixelsMoved / hourHeight * 60).round();
+                DateTime newStart = task.startTime.add(Duration(
+                    minutes:
+                        (details.primaryDelta! / hourHeight * 60).round()));
 
-                if (minutesChange.abs() > 1) {
-                  DateTime newStart = task.startTime.add(Duration(minutes: minutesChange));
-                  TaskModel updatedTask = task.copyWith(startTime: newStart);
-
-                  try {
-                    scheduleManager.editTask(updatedTask);
+                TaskModel updatedTask = task.copyWith(startTime: newStart);
+                try {
+                  scheduleManager.editTask(updatedTask);
+                  setState(() {});
+                } on TaskOverlapException catch (e) {
+                  debugPrint("Task overlap detected: ${e.message}");
+                  TaskModel overlappingTask = scheduleManager.schedule.tasks.firstWhere(
+                    (currentTask) => 
+                        currentTask.id != task.id && 
+                        currentTask.startTime.isBefore(updatedTask.endTime) &&
+                        currentTask.endTime.isAfter(updatedTask.startTime),
+                  );
+                  TaskModel? selectedTask = await _userBinarySelect(
+                    task,
+                    overlappingTask,
+                    "Tasks overlapping. Please select which task to keep",
+                  );
+                  if (selectedTask != null) {
+                    scheduleManager.editTask(selectedTask);
                     setState(() {});
-                  } on TaskOverlapException catch (e) {
-                    debugPrint("Task overlap detected: ${e.message}");
-                    TaskModel overlappingTask = scheduleManager.schedule.tasks.firstWhere(
-                      (currentTask) =>
-                          currentTask.id != task.id &&
-                          currentTask.startTime.isBefore(updatedTask.endTime) &&
-                          currentTask.endTime.isAfter(updatedTask.startTime),
-                    );
-                    TaskModel? selectedTask = await _userBinarySelect(
-                      task,
-                      overlappingTask,
-                      "Tasks overlapping. Please select which task to keep",
-                    );
-                    if (selectedTask != null) {
-                      TaskModel toDelete = selectedTask.id == task.id ? overlappingTask : task;
-                      scheduleManager.deleteTask(toDelete.id);
-                      scheduleManager.editTask(selectedTask);
-                      setState(() {});
-                    }
                   }
                 }
               }
