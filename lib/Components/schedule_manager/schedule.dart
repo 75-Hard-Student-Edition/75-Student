@@ -28,7 +28,8 @@ class Schedule {
     tasks.add(task);
     sort();
     int i = getTaskIndexFromId(task.id);
-    if (i == 0 || i == tasks.length - 1) return;
+    // if (i == 0 || i == tasks.length - 1) return;
+    if (tasks.length == 1) return;
 
     TaskModel prevTask = tasks[i - 1];
     if (prevTask.endTime.isAfter(task.startTime)) {

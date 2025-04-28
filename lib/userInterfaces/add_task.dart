@@ -8,10 +8,12 @@ import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 class AddTaskScreen extends StatefulWidget {
   final ScheduleManager scheduleManager;
   final TaskModel? initialTask;
-  const AddTaskScreen({super.key, required this.scheduleManager, this.initialTask});
+  const AddTaskScreen(
+      {super.key, required this.scheduleManager, this.initialTask});
 
   @override
-  _AddTaskScreenState createState() => _AddTaskScreenState(scheduleManager, initialTask: initialTask);
+  _AddTaskScreenState createState() =>
+      _AddTaskScreenState(scheduleManager, initialTask: initialTask);
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
@@ -32,9 +34,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   _AddTaskScreenState(this.scheduleManager, {this.initialTask});
   TaskCategory? _selectedCategory;
   String? _selectedRepeatOption;
-  final bool _isMovable = false;
+  final bool _isMovable = true;
   final bool _isComplete = false;
-  Duration? _period; 
+  Duration? _period;
   //Location? _taskLocation;
 
   List<TaskModel> taskList = [];
@@ -53,33 +55,40 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       _selectedDate = initialTask!.startTime;
       _selectedTime = DateFormat('HH:mm').format(initialTask!.startTime);
       _selectedDuration = initialTask!.duration.inMinutes;
-      _endTime = DateFormat('HH:mm').format(initialTask!.startTime.add(initialTask!.duration));
+      _endTime = DateFormat('HH:mm')
+          .format(initialTask!.startTime.add(initialTask!.duration));
       _selectedCategory = initialTask!.category;
       // Update colors to match selected category
       switch (_selectedCategory!) {
         case TaskCategory.academic:
           _selectedCategoryColor = lightenColor(const Color(0xFF00BCD4), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFF00BCD4), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFF00BCD4), 0.2);
           break;
         case TaskCategory.social:
           _selectedCategoryColor = lightenColor(const Color(0xFF8AD483), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFF8AD483), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFF8AD483), 0.2);
           break;
         case TaskCategory.health:
           _selectedCategoryColor = lightenColor(const Color(0xFFF67373), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFFF67373), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFFF67373), 0.2);
           break;
         case TaskCategory.chore:
           _selectedCategoryColor = lightenColor(const Color(0xFFE997CD), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFFE997CD), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFFE997CD), 0.2);
           break;
         case TaskCategory.hobby:
           _selectedCategoryColor = lightenColor(const Color(0xFF946AAE), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFF946AAE), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFF946AAE), 0.2);
           break;
         case TaskCategory.employment:
           _selectedCategoryColor = lightenColor(const Color(0xFFEDBF45), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFFEDBF45), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFFEDBF45), 0.2);
           break;
       }
       _location = initialTask!.location;
@@ -91,16 +100,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
 
-      return SafeArea(
-    child: Container(
-      height: screenHeight * 0.8,  
-      decoration: BoxDecoration(
-        color: _selectedCategoryColor,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: _selectedCategoryBorderColor, width: 5),
-      ),
-      padding: const EdgeInsets.all(5),
-      child: SingleChildScrollView(
+    return SafeArea(
+      child: Container(
+        height: screenHeight * 0.8,
+        decoration: BoxDecoration(
+          color: _selectedCategoryColor,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: _selectedCategoryBorderColor, width: 5),
+        ),
+        padding: const EdgeInsets.all(5),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -702,7 +711,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   _buildCategoryChip(
                       "Chore", const Color(0xFFE997CD), TaskCategory.chore),
                   const SizedBox(width: 8),
-                  _buildCategoryChip("Hobby", const Color(0xFF946AAE), TaskCategory.hobby),
+                  _buildCategoryChip(
+                      "Hobby", const Color(0xFF946AAE), TaskCategory.hobby),
                   const SizedBox(width: 8),
                   _buildCategoryChip("Employment", const Color(0xFFEDBF45),
                       TaskCategory.employment),
@@ -873,7 +883,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   );
                 } else {
                   _location = value.trim().isNotEmpty
-                      ? Location(name: value.trim(), latitude: 0.0, longitude: 0.0)
+                      ? Location(
+                          name: value.trim(), latitude: 0.0, longitude: 0.0)
                       : null;
                 }
               });
@@ -900,7 +911,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
                 const SizedBox(height: 8),
                 (_location != null && _location!.name.isNotEmpty)
-                    ? Text(_location!.name, style: const TextStyle(fontSize: 14))
+                    ? Text(_location!.name,
+                        style: const TextStyle(fontSize: 14))
                     : Container(
                         height: 40,
                         decoration: BoxDecoration(
@@ -1106,7 +1118,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 startTime: startTime,
                 duration: Duration(minutes: _selectedDuration),
                 //notifyBefore: _notifyBefore,
-                period: _period, 
+                period: _period,
               );
 
               print("Saving Task:");
@@ -1119,7 +1131,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               print("Location: ${newTask.location?.name ?? 'No location'}");
               print("Notes: ${newTask.description}");
 
-            
               if (initialTask != null) {
                 TaskModel updatedTask = TaskModel(
                   id: initialTask!.id,
@@ -1137,7 +1148,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 scheduleManager.editTask(updatedTask);
                 Navigator.pop(context, updatedTask);
               } else {
-                scheduleManager.addTask(newTask);
+                try {
+                  scheduleManager.addTask(newTask);
+                } on TaskOverlapException catch (e) {
+                  //! widad tell them off
+                  print("Tasks Overlapping caught!");
+                }
                 Navigator.pop(context, newTask);
               }
             },

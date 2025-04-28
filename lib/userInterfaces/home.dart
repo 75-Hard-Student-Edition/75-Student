@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:student_75/models/task_model.dart'; 
+import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/userInterfaces/add_task.dart';
@@ -38,8 +38,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       },
       userBinarySelectCallback: _userBinarySelect,
     );
-    displaySchedule = scheduleManager.schedule;
     _addTestTasks();
+    _fetchSchedule();
 
     Future.microtask(() async {
       await scheduleManager.generateSanitisedSchedule();
@@ -173,10 +173,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     ));
   }
 
-  Future<bool?> _userBinarySelect(
+  Future<TaskModel?> _userBinarySelect(
       TaskModel task1, TaskModel task2, String message) async {
     print("Showing conflict dialog: ${task1.name} vs ${task2.name}");
-    return await showCupertinoDialog<bool>(
+    return await showCupertinoDialog<TaskModel>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
@@ -185,14 +185,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           content: Text(message),
           actions: [
             CupertinoDialogAction(
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () => Navigator.of(context).pop(task1),
               child: Text(
                 task1.name,
                 style: TextStyle(color: _getTaskColor(task1.category)),
               ),
             ),
             CupertinoDialogAction(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () => Navigator.of(context).pop(task2),
               child: Text(
                 task2.name,
                 style: TextStyle(color: _getTaskColor(task2.category)),

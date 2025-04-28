@@ -8,7 +8,8 @@ class ScheduleGenerator {
   ScheduleGenerator(this._scheduleManager);
 
   Future<Schedule> generateSanitisedSchedule() async {
-    Schedule schedule = Schedule(tasks: []); // databaseService.getSchedule(); or smtn
+    Schedule schedule =
+        Schedule(tasks: []); // databaseService.getSchedule(); or smtn
     if (schedule.isEmpty || schedule.length == 1) return schedule;
 
     schedule.sort();
@@ -54,23 +55,23 @@ class ScheduleGenerator {
   Future<Schedule> handleOverlap(
       Schedule schedule, TaskModel currentTask, TaskModel nextTask) async {
     Schedule sanitisedSchedule = schedule;
-    List<TaskModel> movableTasks = [currentTask, nextTask].where((task) => task.isMovable).toList();
-    TaskModel? lowerPriority = currentTask.priority.index > nextTask.priority.index
-        ? nextTask
-        : currentTask.priority.index < nextTask.priority.index
-            ? currentTask
-            : null; // Null if equal priority
+    List<TaskModel> movableTasks =
+        [currentTask, nextTask].where((task) => task.isMovable).toList();
+    TaskModel? lowerPriority =
+        currentTask.priority.index > nextTask.priority.index
+            ? nextTask
+            : currentTask.priority.index < nextTask.priority.index
+                ? currentTask
+                : null; // Null if equal priority
 
     if (movableTasks.isEmpty) {
       if (lowerPriority == null) {
         // Same priority
         // USER selects which task to delete
-        bool? userChoice = await _scheduleManager.userBinarySelect(currentTask, nextTask, "Which task would you like to delete?");
-        TaskModel taskToDelete = (userChoice == true)
-            ? currentTask
-            : nextTask;
-        _scheduleManager.deleteTask(taskToDelete.id);
-        sanitisedSchedule.remove(taskToDelete.id);
+        TaskModel? userChoice = await _scheduleManager.userBinarySelect(
+            currentTask, nextTask, "Which task would you like to delete?");
+        _scheduleManager.deleteTask(userChoice!.id);
+        sanitisedSchedule.remove(userChoice.id);
       } else {
         // Different priority
         // Delete lower priority task
@@ -90,11 +91,9 @@ class ScheduleGenerator {
     if (lowerPriority == null) {
       // Same priority
       // USER selects which task to edit
-      bool? userChoice = await _scheduleManager.userBinarySelect(currentTask, nextTask, "Which task would you like to edit?");
-      TaskModel taskToEdit = (userChoice == true)
-          ? currentTask
-          : nextTask;
-      moveOrPostponeTask(schedule, taskToEdit);
+      TaskModel? userChoice = await _scheduleManager.userBinarySelect(
+          currentTask, nextTask, "Which task would you like to edit?");
+      moveOrPostponeTask(schedule, userChoice!);
     } else {
       // Different priority
       // Edit lower priority task
@@ -120,12 +119,12 @@ class ScheduleGenerator {
     }
 
     // Handle edge cases of moving task to start or end of day
-    Duration timeFromWakeup =
-        task.startTime.difference(/* some way to fetch wakeup time */ DateTime.now());
+    Duration timeFromWakeup = task.startTime
+        .difference(/* some way to fetch wakeup time */ DateTime.now());
     if (timeFromWakeup >= taskDuration) return true;
 
-    Duration timeToBedtime =
-        schedule.last.endTime.difference(/* some way to fetch bedtime */ DateTime.now());
+    Duration timeToBedtime = schedule.last.endTime
+        .difference(/* some way to fetch bedtime */ DateTime.now());
     return timeToBedtime >= taskDuration;
   }
 
@@ -133,8 +132,26 @@ class ScheduleGenerator {
     // USER selects to move or postpone task
     if (checkMovePossible(schedule, task)) {
       // Move is possible
-      bool? userChoice = await _scheduleManager.userBinarySelect(task, task, "Would you like to move or postpone the task?");
-      if (userChoice == true) {
+      //sorry
+      TaskModel? userChoice = await _scheduleManager.userBinarySelect(
+          TaskModel(
+              id: -1,
+              name: "Move",
+              isMovable: false,
+              category: TaskCategory.health,
+              priority: TaskPriority.medium,
+              startTime: DateTime.now(),
+              duration: Duration.zero),
+          TaskModel(
+              id: -1,
+              name: "Postpone",
+              isMovable: false,
+              category: TaskCategory.health,
+              priority: TaskPriority.medium,
+              startTime: DateTime.now(),
+              duration: Duration.zero),
+          "Would you like to move or postpone the task?");
+      if (userChoice!.name == "Move") {
         // Move task
         // _scheduleManager.moveTask(task); // todo implement this
       } else {

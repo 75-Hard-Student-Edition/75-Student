@@ -32,7 +32,7 @@ class ScheduleManager implements IScheduleManager {
   late PointsManager pointsManager;
   late AccountManager accountManager;
   late NotificationManager notificationManager;
-  late Future<bool?> Function(TaskModel, TaskModel, String)
+  late Future<TaskModel?> Function(TaskModel, TaskModel, String)
       userBinarySelectCallback;
   late void Function(String) displayErrorCallback;
 
@@ -62,9 +62,9 @@ class ScheduleManager implements IScheduleManager {
       backlog.peak(AppSettings.backlogPeakDepth);
 
   @override
-  Future<bool?> userBinarySelect(
-          TaskModel task1, TaskModel task2, String message) =>
-      userBinarySelectCallback(task1, task2, message);
+  Future<TaskModel?> userBinarySelect(
+          TaskModel task1, TaskModel task2, String message) async =>
+      await userBinarySelectCallback(task1, task2, message);
   @override
   void displayError(String message) {
     displayErrorCallback(message);
@@ -72,12 +72,26 @@ class ScheduleManager implements IScheduleManager {
 
   //* == GUI -> ScheduleManager methods ==
   @override
-  void addTask(TaskModel task) {
+  Future<void> addTask(TaskModel task) async {
     // Add task to schedule
+    // todaysSchedule.add(task);
     try {
       todaysSchedule.add(task);
     } on TaskOverlapException catch (e) {
-      displayError(e.toString());
+      throw TaskOverlapException("Tasks overlapping");
+      // print("TaskOverlapException caught");
+      // // displayError(e.toString());
+      // TaskModel overlappingTask = schedule.tasks
+      //     .firstWhere((currentTask) => currentTask.startTime == task.startTime);
+      // TaskModel? selectedTask = await userBinarySelect(task, overlappingTask,
+      //     "Tasks overlapping. Please select which task to keep");
+      // if (selectedTask == task) {
+      //   schedule.tasks.add(task);
+      //   postPoneTask(task.id);
+      // } else {
+      //   postPoneTask(overlappingTask.id);
+      //   addTask(task);
+      // }
     } catch (e) {
       // Handle other exceptions
       displayError("Uncaught Exception on addTask: ${e.toString()}");
