@@ -123,10 +123,23 @@ class ScheduleManager implements IScheduleManager {
   }
 
   @override
-  void editTask(TaskModel task) {
-    // Works by deleting and re-adding the task, assuming that the task ID is not changed
-    deleteTask(task.id);
-    addTask(task);
+  void editTask(TaskModel updatedTask) {
+    try {
+      // Check for overlap *excluding* itself
+      for (var otherTask in todaysSchedule.tasks) {
+        if (otherTask.id != updatedTask.id &&
+            otherTask.startTime.isBefore(updatedTask.endTime) &&
+            otherTask.endTime.isAfter(updatedTask.startTime)) {
+          throw TaskOverlapException('Tasks overlapping');
+        }
+      }
+      deleteTask(updatedTask.id);
+      addTask(updatedTask);
+    } on TaskOverlapException {
+      rethrow;
+    } catch (e) {
+      displayError("Uncaught Exception on editTask: ${e.toString()}");
+    }
   }
 
   @override
