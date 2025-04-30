@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
@@ -26,7 +27,8 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   late final ScheduleManager scheduleManager;
-  late Schedule displaySchedule; // Stores tasks
+  late Schedule displaySchedule; 
+  late PointsManager pointsManager;
 
   @override
   void initState() {
@@ -38,10 +40,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       },
       userBinarySelectCallback: _userBinarySelect,
     );
+    pointsManager = PointsManager(
+      initialSchedule: scheduleManager.schedule,
+      accountManager: widget.accountManager,
+    );
 
-    // Future.microtask(() async {
-    //   await scheduleManager.generateSanitisedSchedule();
-    // });
+    /* Future.microtask(() async {
+      await scheduleManager.generateSanitisedSchedule();
+     }); */
 
     _addTestTasks();
     _fetchSchedule();
@@ -74,7 +80,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   void _addTestTasks() {
-    scheduleManager.addTask(TaskModel(
+    final task1 = TaskModel(
       id: 11,
       name: "Morning Prayer",
       description: "Go back to sleep after",
@@ -86,9 +92,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 3, 30),
       duration: const Duration(minutes: 30),
       notifyBefore: const Duration(minutes: 10),
-    ));
+    );
+    scheduleManager.addTask(task1);
+    pointsManager.addTask(task1);
 
-    scheduleManager.addTask(TaskModel(
+    final task2 = TaskModel(
       id: 12,
       name: "Morning Run",
       description: "Down the Lido",
@@ -100,9 +108,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 30),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 10),
-    ));
+    );
+    scheduleManager.addTask(task2);
+    pointsManager.addTask(task2);
 
-    scheduleManager.addTask(TaskModel(
+    final task3 = TaskModel(
       id: 13,
       name: "Shower",
       description: "",
@@ -114,9 +124,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 0),
-    ));
+    );
+    scheduleManager.addTask(task3);
+    pointsManager.addTask(task3);
 
-    scheduleManager.addTask(TaskModel(
+    final task4 = TaskModel(
       id: 14,
       name: "SETaP Demo",
       description: "Video recording on iPhone",
@@ -128,9 +140,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 5),
-    ));
+    );
+    scheduleManager.addTask(task4);
+    pointsManager.addTask(task4);
 
-    scheduleManager.addTask(TaskModel(
+    final task5 = TaskModel(
       id: 15,
       name: "Study Session",
       description: "Catch up on missed lectures with Harry",
@@ -142,9 +156,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 1, 0),
       duration: const Duration(hours: 2),
       notifyBefore: const Duration(minutes: 15),
-    ));
+    );
+    scheduleManager.addTask(task5);
+    pointsManager.addTask(task5);
 
-    scheduleManager.addTask(TaskModel(
+    final task6 = TaskModel(
       id: 16,
       name: "Operating Systems",
       description: "",
@@ -156,9 +172,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 15),
-    ));
+    );
+    scheduleManager.addTask(task6);
+    pointsManager.addTask(task6);
 
-    scheduleManager.addTask(TaskModel(
+    final task7 = TaskModel(
       id: 17,
       name: "Shift @ Gym",
       description: "",
@@ -170,7 +188,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 18, 0),
       duration: const Duration(hours: 4),
       notifyBefore: const Duration(minutes: 15),
-    ));
+    );
+    scheduleManager.addTask(task7);
+    pointsManager.addTask(task7);
   }
 
   Future<TaskModel?> _userBinarySelect(
@@ -235,7 +255,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         children: [
           SizedBox(height: topPadding + 10),
           _buildHeader(context, currentDay, currentMonth),
-          _buildProgressBar(context),
+          _buildProgressBar(context, pointsManager),
           Expanded(
             child: SingleChildScrollView(
               child: _buildSchedule(context),
@@ -340,7 +360,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     );
   }
 
-  Widget _buildProgressBar(BuildContext context) {
+  Widget _buildProgressBar(BuildContext context, PointsManager pointsManager) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
