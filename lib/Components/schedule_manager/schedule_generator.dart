@@ -113,8 +113,8 @@ class ScheduleGenerator {
 
       if (currentTask.id == task.id || nextTask.id == task.id) continue;
 
-      Duration gap = nextTask.startTime.difference(currentTask.endTime);
-      if (gap >= taskDuration) return currentTask.endTime;
+      Duration gap = nextTask.startTime.difference(currentTask.endTime) - const Duration(hours: 1);
+      if (gap >= taskDuration) return currentTask.endTime.add(const Duration(minutes: 30));
     }
 
     // Handle edge cases of moving task to start or end of day
