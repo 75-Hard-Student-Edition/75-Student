@@ -362,6 +362,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Widget _buildProgressBar(BuildContext context, PointsManager pointsManager) {
     double screenWidth = MediaQuery.of(context).size.width;
+    double progress = pointsManager.maxPoints == 0
+        ? 0
+        : pointsManager.currentPoints / pointsManager.maxPoints;
+    progress = progress.clamp(0.0, 1.0);
+
+    print("ProgressBar Debug -> currentPoints: ${pointsManager.currentPoints}, maxPoints: ${pointsManager.maxPoints}, progress: $progress");
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
       child: Stack(
@@ -374,18 +381,20 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 Colors.red,
                 Colors.orange,
                 Colors.green
-              ]), //need to assign to categories
+              ]),
               borderRadius: BorderRadius.circular(4),
             ),
           ),
           Positioned(
-            left: screenWidth * 0.4,
-            child: Container(
-              height: 16,
-              width: 8,
-              decoration: BoxDecoration(
+            left: (screenWidth * 0.8 - 12) * progress,
+            top: -2, 
+            bottom: -2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Container(
+                height: 16,
+                width: 12,
                 color: Colors.black,
-                borderRadius: BorderRadius.circular(4),
               ),
             ),
           ),
@@ -528,8 +537,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       }
                     },
                     onComplete: () {
-                      scheduleManager.completeTask(task.id);
-                      _fetchSchedule();
+                      setState(() {
+                        scheduleManager.completeTask(task.id);
+                        pointsManager.completeTask(task);
+                        _fetchSchedule(); 
+                      });
                       Navigator.pop(context);
                     },
                     onDelete: () {
@@ -605,8 +617,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       (task.duration.inMinutes < 30 ? 7 : 10),
                   child: GestureDetector(
                     onTap: () {
-                      scheduleManager.completeTask(task.id);
-                      _fetchSchedule();
+                      setState(() {
+                        if (task.isComplete) {
+                          scheduleManager.completeTask(task.id);
+                          pointsManager.uncompleteTask(task);
+                        } else {
+                          scheduleManager.completeTask(task.id);
+                          pointsManager.completeTask(task);
+                        }
+                        _fetchSchedule();
+                      });
                     },
                     child: Container(
                       width: task.duration.inMinutes < 30 ? 14 : 20,
