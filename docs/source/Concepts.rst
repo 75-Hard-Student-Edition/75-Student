@@ -48,6 +48,14 @@ Every user account has an associated difficulty setting.
 The difficulty setting determines what proportion of the day's available points need to be attained in order for the streak to be maintained.
 The default proportions for each difficulty are stored in ``assets/settings.json``. 
 
+********
+Category
+********
+Tasks are categorised according into 6 predefined categories.
+These are 
+The categories are ranked by the user
+Points are awarded based on this ranking (Expand these)
+
 ******
 Points
 ******
