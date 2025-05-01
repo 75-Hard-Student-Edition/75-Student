@@ -7,6 +7,7 @@ abstract class IAccountManager {
   // AccountManager -> GUI methods
   int getStreak();
   String getUsername();
+  Duration getMindfulnessDuration();
 
   // GUI -> AccountManager methods
   void createAccount(UserAccountModel userAccount);
@@ -24,7 +25,6 @@ abstract class IAccountManager {
   // AccountManager -> PointsManager methods
   Difficulty getDifficulty();
   List<TaskCategory> getCategoryOrder();
-  Duration getMindfulnessDuration();
 
   // PointsManager -> AccountManager methods
   void resetStreak();
