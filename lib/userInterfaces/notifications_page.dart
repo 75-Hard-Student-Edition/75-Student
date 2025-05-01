@@ -277,31 +277,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           ],
 
                           const SizedBox(height: 30),
-                          const Divider(),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.access_alarm, size: 20, color: Color(0xFF6E6E6E)),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Set Reminders',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Color(0xFF6E6E6E),
-                                      fontFamily: 'KdamThmorPro'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-
+                        
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child:
                                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                              const Text('WIND DOWN',
+                              const Text('BED TIME',
                                   style: TextStyle(fontFamily: 'KdamThmorPro', fontSize: 16)),
                               Padding(
                                 padding: const EdgeInsets.only(right: 4),
@@ -423,9 +404,36 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'MINDFULNESS',
-                                  style: TextStyle(fontSize: 16, fontFamily: 'KdamThmorPro'),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'MINDFULNESS',
+                                      style: TextStyle(fontSize: 16, fontFamily: 'KdamThmorPro'),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.info_outline, size: 16),
+                                      onPressed: () {
+                                        showCupertinoDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return CupertinoAlertDialog(
+                                              title: const Text('Mindulness'),
+                                              content: const Text(
+                                                  'Take some time away from your screens.'),
+                                              actions: <Widget>[
+                                                CupertinoDialogAction(
+                                                  child: const Text('OK'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 4),
@@ -515,11 +523,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               ],
                             ),
                           ),
-                        ],
+                      ])))],
                       ),
                     ),
                   ),
-                ]))));
+    );
   }
 }
 
