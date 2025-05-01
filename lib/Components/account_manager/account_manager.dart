@@ -59,7 +59,8 @@ class AccountManager implements IAccountManager {
   void createAccount(UserAccountModel account) {
     //todo save account details to database
     //! temporary stub login because database is not implemented yet
-    userAccount = account; // Once db is implemented, login() should be called after this method
+    userAccount =
+        account; // Once db is implemented, login() should be called after this method
   }
 
   @override
@@ -134,7 +135,8 @@ class AccountManager implements IAccountManager {
   @override
   void incrementStreak() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
-    userAccount = userAccount!.copyWith(streak: userAccount!.streak + 1);
+    int newStreak = getStreak() + 1;
+    userAccount = userAccount!.copyWith(streak: newStreak);
   }
 
   //* AccountManager -> ScheduleManager methods
