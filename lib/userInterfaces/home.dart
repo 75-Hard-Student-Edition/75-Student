@@ -30,6 +30,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   late Schedule displaySchedule; 
   late PointsManager pointsManager;
 
+  // Streak popup trigger and count
+  bool hasTriggeredStreakPopup = false;
+  int streakCount = 25; //!replace with streak from backend
+
   @override
   void initState() {
     super.initState();
@@ -302,7 +306,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 Icon(Icons.local_fire_department,
                     color: Colors.orange, size: screenWidth * 0.06),
                 Text(
-                  "25", // Streak number
+                  "$streakCount", 
                   style: TextStyle(
                       fontSize: screenWidth * 0.05,
                       fontWeight: FontWeight.bold),
@@ -367,6 +371,38 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         : pointsManager.currentPoints / pointsManager.maxPoints;
     progress = progress.clamp(0.0, 1.0);
 
+    // Calculate pointsToPass ratio (as a fraction of maxPoints)
+    double pointsToPassRatio = pointsManager.maxPoints == 0
+        ? 1.0
+        : pointsManager.pointsToPass / pointsManager.maxPoints;
+
+    // Show streak popup if not already triggered, and progress passes threshold
+    if (!hasTriggeredStreakPopup && progress >= pointsToPassRatio) {
+      setState(() {
+        hasTriggeredStreakPopup = true;
+        streakCount++;
+      });
+      Future.delayed(Duration.zero, () {
+        showCupertinoDialog(
+          context: context,
+          builder: (_) => CupertinoAlertDialog(
+            title: const Text(
+              'Streak!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: Text('You have gained a streak.\n🔥 Streak count: $streakCount'),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text("OK"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      });
+    }
+
     print("ProgressBar Debug -> currentPoints: ${pointsManager.currentPoints}, maxPoints: ${pointsManager.maxPoints}, progress: $progress");
 
     return Padding(
@@ -383,6 +419,18 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 Colors.green
               ]),
               borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          // pointsToPass 
+          Positioned(
+            left: (screenWidth * 0.8 - 2) *
+                (pointsManager.pointsToPass /
+                    (pointsManager.maxPoints == 0 ? 1 : pointsManager.maxPoints)),
+            top: 0,
+            bottom: 0,
+            child: Container(
+              width: 2,
+              color: const Color(0xFFFFFFFF),
             ),
           ),
           Positioned(
