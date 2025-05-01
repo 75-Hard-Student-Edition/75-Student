@@ -249,6 +249,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         scheduleManager: scheduleManager,
         refreshSchedule: _fetchSchedule,
         accountManager: widget.accountManager,
+        pointsManager: pointsManager, // ← add this line
       ),
       body: Column(
         children: [
@@ -697,12 +698,14 @@ class BottomNavBar extends StatelessWidget {
   final ScheduleManager scheduleManager;
   final Function refreshSchedule;
   final AccountManager accountManager;
+  final PointsManager pointsManager;
 
   const BottomNavBar({
     super.key,
     required this.scheduleManager,
     required this.refreshSchedule,
     required this.accountManager,
+    required this.pointsManager,
   });
 
   @override
@@ -793,6 +796,7 @@ class BottomNavBar extends StatelessWidget {
                     },
                   );
                   if (newTask != null) {
+                    pointsManager.addTask(newTask);
                     refreshSchedule();
                   }
                   print("After add: ${scheduleManager.schedule.toString()}");
