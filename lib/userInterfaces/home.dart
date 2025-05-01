@@ -32,7 +32,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   // Streak popup trigger and count
   bool hasTriggeredStreakPopup = false;
-  int streakCount = 25; //!replace with streak from backend
+  int streakCount = 74; //!replace with streak from backend
+
+  // For dragging time blocks
+  DateTime? _tentativeStart;
+  int? _draggingTaskId;
 
   @override
   void initState() {
@@ -457,66 +461,83 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     double screenWidth = MediaQuery.of(context).size.width;
     double hourHeight = 50;
-
     Color taskColor = _getTaskColor(task.category);
 
+    // Calculate top position depending on drag state
+    final DateTime topTime = (_draggingTaskId == task.id && _tentativeStart != null)
+        ? _tentativeStart!
+        : task.startTime;
+    final double top = topTime.hour * hourHeight +
+        topTime.minute * hourHeight / 60;
+
+    // Calculate block height
+    final Duration blockDuration = task.endTime.difference(task.startTime);
+    final double blockHeight = hourHeight * blockDuration.inMinutes / 60;
+
     return Positioned(
-      top: task.startTime.hour * hourHeight +
-          task.startTime.minute * hourHeight / 60,
-      height:
-          hourHeight * task.endTime.difference(task.startTime).inMinutes / 60,
+      top: top,
+      height: blockHeight,
       left: screenWidth * 0.15,
       child: GestureDetector(
-        // change start time
         onVerticalDragUpdate: task.isMovable
+            ? (details) {
+                setState(() {
+                  _tentativeStart = (_tentativeStart ?? task.startTime)
+                      .add(Duration(
+                          minutes: (details.primaryDelta! / hourHeight * 60).round()));
+                  _draggingTaskId = task.id;
+                });
+              }
+            : null,
+        onVerticalDragEnd: task.isMovable
             ? (details) async {
-                DateTime newStart = task.startTime.add(Duration(
-                    minutes:
-                        (details.primaryDelta! / hourHeight * 60).round()));
+                if (_tentativeStart == null) return;
 
-                TaskModel updatedTask = task.copyWith(startTime: newStart);
-
-                // First manually check for overlap
+                TaskModel updatedTask = task.copyWith(startTime: _tentativeStart!);
                 bool hasConflict = scheduleManager.schedule.tasks.any(
-                    (currentTask) =>
-                        currentTask.id != updatedTask.id &&
-                        currentTask.startTime.isBefore(updatedTask.endTime) &&
-                        currentTask.endTime.isAfter(updatedTask.startTime));
+                  (currentTask) =>
+                      currentTask.id != updatedTask.id &&
+                      currentTask.startTime.isBefore(updatedTask.endTime) &&
+                      currentTask.endTime.isAfter(updatedTask.startTime),
+                );
 
                 if (!hasConflict) {
                   scheduleManager.editTask(updatedTask);
                   setState(() {});
                 } else {
-                  // Handle conflict manually
-                  TaskModel overlappingTask =
-                      scheduleManager.schedule.tasks.firstWhere(
+                  TaskModel overlappingTask = scheduleManager.schedule.tasks.firstWhere(
                     (currentTask) =>
                         currentTask.id != updatedTask.id &&
                         currentTask.startTime.isBefore(updatedTask.endTime) &&
                         currentTask.endTime.isAfter(updatedTask.startTime),
                   );
+
                   TaskModel? selectedTask = await _userBinarySelect(
                     task,
                     overlappingTask,
                     "Tasks overlapping. Please select which task to keep",
                   );
+
                   if (selectedTask == null) {
                     scheduleManager.editTask(updatedTask);
                   } else if (selectedTask == task) {
                     scheduleManager.deleteTask(overlappingTask.id);
-                    scheduleManager
-                        .editTask(task.copyWith(startTime: newStart));
+                    scheduleManager.editTask(updatedTask);
                   } else {
                     scheduleManager.deleteTask(task.id);
-                    scheduleManager
-                        .editTask(overlappingTask.copyWith(endTime: newStart));
+                    scheduleManager.editTask(
+                        overlappingTask.copyWith(endTime: _tentativeStart!));
                   }
                   _fetchSchedule();
                 }
+
+                setState(() {
+                  _tentativeStart = null;
+                  _draggingTaskId = null;
+                });
               }
             : null,
-
-        // Change task duration
+        // Change task duration (optional: keep as before)
         onPanUpdate: task.isMovable
             ? (details) {
                 setState(() {
@@ -537,7 +558,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 });
               }
             : null,
-
         child: GestureDetector(
           onTap: () {
             showModalBottomSheet(
@@ -639,64 +659,66 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               },
             );
           },
-          child: Container(
-            width: screenWidth * 0.75,
-            height:
-                hourHeight * task.endTime.difference(task.startTime).inHours,
-            decoration: BoxDecoration(
-              color: taskColor.withOpacity(0.3),
-              border: Border.all(
-                color: taskColor,
-                width: task.duration.inMinutes < 30 ? 1.5 : 2,
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Stack(
-              children: [
-                Center(
-                  child: Text(
-                    task.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: task.duration.inMinutes < 30 ? 12 : 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+          child: Opacity(
+            opacity: (_draggingTaskId == task.id && _tentativeStart != null) ? 0.7 : 1.0,
+            child: Container(
+              width: screenWidth * 0.75,
+              height: hourHeight * task.endTime.difference(task.startTime).inHours,
+              decoration: BoxDecoration(
+                color: taskColor.withOpacity(0.3),
+                border: Border.all(
+                  color: taskColor,
+                  width: task.duration.inMinutes < 30 ? 1.5 : 2,
                 ),
-                // Toggle circle
-                Positioned(
-                  left: 8,
-                  top: (hourHeight * task.duration.inMinutes / 60) / 2 -
-                      (task.duration.inMinutes < 30 ? 7 : 10),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (task.isComplete) {
-                          scheduleManager.uncompleteTask(task.id);
-                          pointsManager.uncompleteTask(task);
-                        } else {
-                          scheduleManager.completeTask(task.id);
-                          pointsManager.completeTask(task);
-                        }
-                        _fetchSchedule();
-                      });
-                    },
-                    child: Container(
-                      width: task.duration.inMinutes < 30 ? 14 : 20,
-                      height: task.duration.inMinutes < 30 ? 14 : 20,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: taskColor,
-                          width: task.duration.inMinutes < 30 ? 1.5 : 2,
-                        ),
-                        color: task.isComplete ? taskColor : Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Stack(
+                children: [
+                  Center(
+                    child: Text(
+                      task.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: task.duration.inMinutes < 30 ? 12 : 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ),
-              ],
+                  // Toggle circle
+                  Positioned(
+                    left: 8,
+                    top: (hourHeight * task.duration.inMinutes / 60) / 2 -
+                        (task.duration.inMinutes < 30 ? 7 : 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (task.isComplete) {
+                            scheduleManager.uncompleteTask(task.id);
+                            pointsManager.uncompleteTask(task);
+                          } else {
+                            scheduleManager.completeTask(task.id);
+                            pointsManager.completeTask(task);
+                          }
+                          _fetchSchedule();
+                        });
+                      },
+                      child: Container(
+                        width: task.duration.inMinutes < 30 ? 14 : 20,
+                        height: task.duration.inMinutes < 30 ? 14 : 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: taskColor,
+                            width: task.duration.inMinutes < 30 ? 1.5 : 2,
+                          ),
+                          color: task.isComplete ? taskColor : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -738,15 +760,18 @@ class BottomNavBar extends StatelessWidget {
                     isDismissible: true,
                     enableDrag: true,
                     backgroundColor: Colors.transparent,
-                    //barrierColor: Colors.black.withOpacity(0.5),
-                    shape: const ContinuousRectangleBorder(),
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    shape: const ContinuousRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
                     builder: (context) {
                       return Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 50),
                           child: Container(
-                            width: MediaQuery.of(context).size.width * 1,
+                            width: MediaQuery.of(context).size.width * 0.95,
                             decoration: const BoxDecoration(
                               color: Color(0x00FFFFFF),
                               borderRadius: BorderRadius.vertical(
