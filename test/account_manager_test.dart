@@ -38,7 +38,7 @@ void main() {
     test('Get Mindfulness Duration', () {
       accountManager.login('testuser', 'password');
       expect(
-          accountManager.getMindfulnessDuration(), const Duration(minutes: 10));
+          accountManager.getMindfulnessDuration(), const Duration(minutes: 30));
     });
 
     test('Reset Streak', () {
