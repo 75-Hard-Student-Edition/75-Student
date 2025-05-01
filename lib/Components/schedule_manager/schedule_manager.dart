@@ -78,27 +78,13 @@ class ScheduleManager implements IScheduleManager {
       todaysSchedule.add(task);
     } on TaskOverlapException catch (e) {
       throw TaskOverlapException("Tasks overlapping");
-      // print("TaskOverlapException caught");
-      // // displayError(e.toString());
-      // TaskModel overlappingTask = schedule.tasks
-      //     .firstWhere((currentTask) => currentTask.startTime == task.startTime);
-      // TaskModel? selectedTask = await userBinarySelect(task, overlappingTask,
-      //     "Tasks overlapping. Please select which task to keep");
-      // if (selectedTask == task) {
-      //   schedule.tasks.add(task);
-      //   postPoneTask(task.id);
-      // } else {
-      //   postPoneTask(overlappingTask.id);
-      //   addTask(task);
-      // }
     } catch (e) {
       // Handle other exceptions
       displayError("Uncaught Exception on addTask: ${e.toString()}");
     }
     // Add notification for task
     notificationManager.addNotification(task);
-    //todo Update points
-    // pointsManager.updatePoints(task);
+    pointsManager.addTask(task);
     //todo Update database
     // databaseService.addTaskRecord(task);
   }
