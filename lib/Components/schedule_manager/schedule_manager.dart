@@ -146,6 +146,7 @@ class ScheduleManager implements IScheduleManager {
     final int taskIndex = todaysSchedule.getTaskIndexFromId(taskId);
     final TaskModel task = todaysSchedule.tasks[taskIndex];
     editTask(task.copyWith(isComplete: true));
+    pointsManager.completeTask(task);
   }
 
   @override
@@ -153,6 +154,7 @@ class ScheduleManager implements IScheduleManager {
     final int taskIndex = todaysSchedule.getTaskIndexFromId(taskId);
     final TaskModel task = todaysSchedule.tasks[taskIndex];
     editTask(task.copyWith(isComplete: false));
+    pointsManager.uncompleteTask(task);
   }
 
   @override
