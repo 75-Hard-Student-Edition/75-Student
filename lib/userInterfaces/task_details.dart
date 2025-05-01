@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/userInterfaces/add_task.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
-class TaskDetails extends StatelessWidget {
+class TaskDetails extends StatefulWidget {
   final TaskModel task;
   final VoidCallback onEdit;
-  final VoidCallback onComplete;
+  final void Function(bool) onComplete;
   final VoidCallback onDelete;
   final VoidCallback onCopy;
   final ScheduleManager scheduleManager;
+  final dynamic pointsManager;
 
   const TaskDetails({
     super.key,
@@ -21,12 +23,27 @@ class TaskDetails extends StatelessWidget {
     required this.onDelete,
     required this.onCopy,
     required this.scheduleManager,
+    required this.pointsManager,
   });
+
+  @override
+  State<TaskDetails> createState() => _TaskDetailsState();
+}
+
+class _TaskDetailsState extends State<TaskDetails> {
+  late bool isComplete;
+  late final PointsManager pointsManager;
+
+  @override
+  void initState() {
+    super.initState();
+    isComplete = widget.task.isComplete;
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    Color taskColor = _getTaskColor(task.category);
+    Color taskColor = _getTaskColor(widget.task.category);
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.55,
@@ -54,7 +71,7 @@ class TaskDetails extends StatelessWidget {
                     boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
                   ),
                   child: Center(
-                    child: Icon(_getCategoryIcon(task.category),
+                    child: Icon(_getCategoryIcon(widget.task.category),
                         color: taskColor, size: 40),
                   ),
                 ),
@@ -67,7 +84,7 @@ class TaskDetails extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              DateFormat('dd/MM/yyyy').format(task.startTime),
+                              DateFormat('dd/MM/yyyy').format(widget.task.startTime),
                               style: const TextStyle(
                                 fontFamily: 'KdamThmorPro',
                                 fontSize: 14,
@@ -77,7 +94,7 @@ class TaskDetails extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              "${DateFormat('HH:mm').format(task.startTime)} - ${DateFormat('HH:mm').format(task.endTime)}",
+                              "${DateFormat('HH:mm').format(widget.task.startTime)} - ${DateFormat('HH:mm').format(widget.task.endTime)}",
                               textAlign: TextAlign.end,
                               style: const TextStyle(
                                 fontFamily: 'KdamThmorPro',
@@ -90,7 +107,7 @@ class TaskDetails extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        task.name,
+                        widget.task.name,
                         style: TextStyle(
                           fontFamily: 'KdamThmorPro',
                           fontSize: 25,
@@ -99,7 +116,7 @@ class TaskDetails extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      _buildBadge(task.category.toString().split('.').last, taskColor),
+                      _buildBadge(widget.task.category.toString().split('.').last, taskColor),
                     ],
                   ),
                 )
@@ -125,7 +142,7 @@ class TaskDetails extends StatelessWidget {
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildSection("    📍 Location", task.location?.name ?? ""),
+                    child: _buildSection("    📍 Location", widget.task.location?.name ?? ""),
                   ),
                   const Divider(
                     color: Color(0xFFCCC4C4),
@@ -135,7 +152,7 @@ class TaskDetails extends StatelessWidget {
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildSection("    Notes", task.description),
+                    child: _buildSection("    Notes", widget.task.description),
                   ),
                   const SizedBox(height: 16),
 
@@ -147,7 +164,7 @@ class TaskDetails extends StatelessWidget {
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildSection("    Links", task.links ?? ""),
+                    child: _buildSection("    Links", widget.task.links ?? ""),
                   ),
                   const Divider(
                     color: Color(0xFFCCC4C4),
@@ -172,7 +189,7 @@ class TaskDetails extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.of(context).pop(); // close dialog
                                     Navigator.of(context).pop(); // close modal
-                                    onDelete(); // properly call deletion
+                                    widget.onDelete(); // properly call deletion
                                   },
                                 ),
                                 CupertinoDialogAction(
@@ -186,14 +203,27 @@ class TaskDetails extends StatelessWidget {
                         },
                         child: _actionButton(Icons.delete, "Delete", taskColor),
                       ),
-                    GestureDetector(
-                      onTap: onCopy,
-                      child: _actionButton(Icons.copy, "Copy", taskColor),
-                    ),
                       GestureDetector(
-                        onTap: onComplete,
+                        onTap: widget.onCopy,
+                        child: _actionButton(Icons.copy, "Copy", taskColor),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (isComplete) {
+                              widget.pointsManager.uncompleteTask(widget.task);
+                              widget.scheduleManager.uncompleteTask(widget.task.id);
+                            } else {
+                              widget.pointsManager.completeTask(widget.task);
+                              widget.scheduleManager.completeTask(widget.task.id);
+                            }
+                            isComplete = !isComplete;
+                            widget.task.isComplete = isComplete;
+                          });
+                          widget.onComplete(widget.task.isComplete);
+                        },
                         child: _actionButton(Icons.check_circle,
-                            task.isComplete ? "Undo" : "Complete", taskColor),
+                            isComplete ? "Undo" : "Complete", taskColor),
                       ),
                     ],
                   ),
@@ -207,7 +237,7 @@ class TaskDetails extends StatelessWidget {
                         padding:
                             const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                       ),
-                      onPressed: onEdit,
+                      onPressed: widget.onEdit,
                       child: const Text("Edit Task",
                           style: TextStyle(color: Colors.white, fontFamily: 'KdamThmorPro',)),
                     ),

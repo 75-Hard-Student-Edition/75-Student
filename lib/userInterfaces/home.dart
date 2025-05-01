@@ -550,8 +550,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   child: TaskDetails(
                     task: task,
                     scheduleManager: scheduleManager,
+                    pointsManager: pointsManager,
                     onEdit: () async {
-                      Navigator.pop(context); // Close modal before editing
+                      Navigator.pop(context); 
 
                       final editedTask = await showModalBottomSheet<TaskModel>(
                         context: context,
@@ -584,13 +585,18 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         _fetchSchedule();
                       }
                     },
-                    onComplete: () {
+                    onComplete: (bool nowComplete) {
                       setState(() {
-                        scheduleManager.completeTask(task.id);
-                        pointsManager.completeTask(task);
-                        _fetchSchedule(); 
+                        task.isComplete = nowComplete;
+                        if (nowComplete) {
+                          scheduleManager.completeTask(task.id);
+                          pointsManager.completeTask(task);
+                        } else {
+                          scheduleManager.uncompleteTask(task.id);
+                          pointsManager.uncompleteTask(task);
+                        }
+                        _fetchSchedule();
                       });
-                      Navigator.pop(context);
                     },
                     onDelete: () {
                       scheduleManager.deleteTask(task.id);
@@ -667,7 +673,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     onTap: () {
                       setState(() {
                         if (task.isComplete) {
-                          scheduleManager.completeTask(task.id);
+                          scheduleManager.uncompleteTask(task.id);
                           pointsManager.uncompleteTask(task);
                         } else {
                           scheduleManager.completeTask(task.id);
