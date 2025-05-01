@@ -93,6 +93,7 @@ class ScheduleManager implements IScheduleManager {
   void deleteTask(int taskId) {
     // Remove task from schedule
     try {
+      pointsManager.removeTask(todaysSchedule.getTaskModelFromId(taskId)!);
       todaysSchedule.remove(taskId);
     } on TaskNotFoundException catch (e) {
       displayError(e.toString());
@@ -103,7 +104,6 @@ class ScheduleManager implements IScheduleManager {
     // Remove notification for task
     notificationManager.removeNotification(taskId);
     //todo Update points
-    // pointsManager.updatePoints(task);
     //todo Update database
     // databaseService.deleteTaskRecord(taskId);
   }
@@ -131,12 +131,13 @@ class ScheduleManager implements IScheduleManager {
   @override
   void postPoneTask(int taskId) {
     // Add task to backlog
-    final TaskModel? task = todaysSchedule.getTaskModelFromId(taskId);
-    if (task == null) {
+    try {
+      final TaskModel? task = todaysSchedule.getTaskModelFromId(taskId);
+      backlog.enqueue(task!);
+    } on TaskNotFoundException catch (e) {
       throw TaskNotFoundException(
-          "Task with id '$taskId' not found in schedule when trying to postpone");
+          "Task with id '$taskId' not found in schedule when trying to postpone: ${e.message}");
     }
-    backlog.enqueue(task);
     // Remove task from schedule
     deleteTask(taskId);
   }
