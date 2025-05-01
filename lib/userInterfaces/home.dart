@@ -556,8 +556,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       setState(() {
                         task.isComplete = nowComplete;
                         nowComplete
-                            ? pointsManager.completeTask(task)
-                            : pointsManager.uncompleteTask(task);
+                            ? scheduleManager.completeTask(task.id)
+                            : scheduleManager.uncompleteTask(task.id);
                         _fetchSchedule();
                       });
                     },
