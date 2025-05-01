@@ -44,7 +44,7 @@ dev_dependencies:
 
 flutter_icons:
   ios: true
-  image_path: "assets/images/logo75.png"
+  image_path: "assets/images/logoApp.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -67,7 +67,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/settings.json
-    - assets/images/logo75.png
+    - assets/images/logoApp.png
+    - assets/images/logo.png
     - assets/images/pfp.png
     - assets/images/badge_1.jpg
     - assets/images/badge_2.jpg

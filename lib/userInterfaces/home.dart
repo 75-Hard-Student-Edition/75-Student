@@ -577,10 +577,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     },
                     onComplete: (bool nowComplete) {
                       setState(() {
-                        task.isComplete = nowComplete;
+                        TaskModel updatedTask = task.copyWith(isComplete: nowComplete);
+                        scheduleManager.editTask(updatedTask);
                         nowComplete
-                            ? scheduleManager.completeTask(task.id)
-                            : scheduleManager.uncompleteTask(task.id);
+                            ? pointsManager.completeTask(updatedTask)
+                            : pointsManager.uncompleteTask(updatedTask);
                         _fetchSchedule();
                       });
                     },
