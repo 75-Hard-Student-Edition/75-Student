@@ -633,13 +633,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        if (task.isComplete) {
-                          scheduleManager.uncompleteTask(task.id);
-                          pointsManager.uncompleteTask(task);
-                        } else {
-                          scheduleManager.completeTask(task.id);
-                          pointsManager.completeTask(task);
-                        }
+                        task.isComplete
+                            ? scheduleManager.completeTask(task.id)
+                            : scheduleManager.uncompleteTask(task.id);
                         _fetchSchedule();
                       });
                     },
