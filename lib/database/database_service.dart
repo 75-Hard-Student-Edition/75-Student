@@ -1,10 +1,16 @@
 import "dart:io";
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:student_75/database/database_service_interface.dart';
 import 'package:student_75/database/task_model_database_extension.dart';
 import 'package:student_75/models/task_model.dart';
 
-class DatabaseService {
+class DatabaseService implements IDatabaseService {
+  // AI generated code turns DatabaseService into a singleton pattern
+  static final DatabaseService _instance = DatabaseService._internal();
+  factory DatabaseService() => _instance;
+  DatabaseService._internal();
+
   // Database is created at runtime so needs to be nullable (i think?)
   Database? _database;
   String? path;
