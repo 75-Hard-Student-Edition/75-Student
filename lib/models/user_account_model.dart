@@ -5,6 +5,8 @@ import 'package:student_75/models/task_model.dart';
 class UserAccountModel {
   final int id;
   final String username;
+  final String? email;
+  final String? phoneNumber;
   final int streak = 0;
   final Difficulty? difficulty;
   final List<TaskCategory>? categoryOrder;
@@ -16,6 +18,8 @@ class UserAccountModel {
   UserAccountModel({
     required this.id,
     required this.username,
+    this.email,
+    this.phoneNumber,
     required this.difficulty,
     required this.categoryOrder,
     required this.sleepDuration,
@@ -27,6 +31,8 @@ class UserAccountModel {
   UserAccountModel copyWith({
     int? id,
     String? username,
+    String? email,
+    String? phoneNumber,
     int? streak,
     Difficulty? difficulty,
     List<TaskCategory>? categoryOrder,
@@ -38,6 +44,8 @@ class UserAccountModel {
     return UserAccountModel(
       id: id ?? this.id,
       username: username ?? this.username,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
       difficulty: difficulty ?? this.difficulty,
       categoryOrder: categoryOrder ?? this.categoryOrder,
       sleepDuration: sleepDuration ?? this.sleepDuration,
