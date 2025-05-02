@@ -39,9 +39,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   int? _draggingTaskId;
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-    scheduleManager = ScheduleManager(
+    scheduleManager = await ScheduleManager(
       accountManager: super.widget.accountManager,
       displayErrorCallback: (String message) {
         print("Error: $message");

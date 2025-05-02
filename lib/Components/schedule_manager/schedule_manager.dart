@@ -2,6 +2,7 @@ import 'package:student_75/Components/account_manager/account_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager_interface.dart';
 import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/app_settings.dart';
+import 'package:student_75/database/database_service.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
 import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
@@ -39,10 +40,13 @@ class ScheduleManager implements IScheduleManager {
     required this.displayErrorCallback,
     required this.accountManager,
     required this.userBinarySelectCallback,
-  }) {
-    //this.userBinarySelectCallback, this.displayErrorCallback) {
-    //todo All this data needs to be fetched by database service in constructor
-    todaysSchedule = Schedule(tasks: []);
+  }) : super() {
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    todaysSchedule = Schedule(
+        tasks: await DatabaseService().fetchTodaysScheduledTasks(accountManager.userAccount!.id));
     backlog = Backlog(initialTasks: []);
     pointsManager = PointsManager(initialSchedule: todaysSchedule, accountManager: accountManager);
     notificationManager = NotificationManager(notifications: []);

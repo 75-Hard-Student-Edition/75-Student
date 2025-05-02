@@ -13,7 +13,7 @@ abstract class IDatabaseService {
 
   // Database -> ScheduleManager methods
   Future<TaskModel?> queryTask(int taskId);
-  Future<List<TaskModel>> fetchTodaysScheduledTasks();
+  Future<List<TaskModel>> fetchTodaysScheduledTasks(int userId);
 
   // AccountManager -> Database methods
   Future<void> addAccountRecord(UserAccountModel account);

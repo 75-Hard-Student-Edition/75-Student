@@ -71,7 +71,7 @@ class DatabaseService implements IDatabaseService {
   }
 
   @override
-  Future<List<TaskModel>> fetchTodaysScheduledTasks() async {
+  Future<List<TaskModel>> fetchTodaysScheduledTasks(int userId) async {
     final db = await database;
     // Because the dates are stored as strings the selection for the current day
     // can't be done in sql
@@ -79,7 +79,10 @@ class DatabaseService implements IDatabaseService {
 
     List<TaskModel> todaysTasks = [];
     for (var map in maps) {
-      if (DateTime.parse(map["start_time"]).day == DateTime.now().day) {
+      if (map["user_id"] == userId &&
+          DateTime.parse(map["start_time"]).day == DateTime.now().day &&
+          DateTime.parse(map["start_time"]).month == DateTime.now().month &&
+          DateTime.parse(map["start_time"]).year == DateTime.now().year) {
         todaysTasks.add(TaskModelDB.fromMap(map));
       }
     }
