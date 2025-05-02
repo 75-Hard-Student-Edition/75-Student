@@ -6,6 +6,7 @@ import 'package:student_75/database/task_model_database_extension.dart';
 import 'package:student_75/database/account_model_database_extension.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/models/user_account_model.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class DatabaseService implements IDatabaseService {
   // AI generated code turns DatabaseService into a singleton pattern
@@ -29,7 +30,8 @@ class DatabaseService implements IDatabaseService {
     // constructed for each platform.
     path = join(await getDatabasesPath(), '75_student_db.db');
     // read sql from file, store as string
-    String createDatabaseSql = await File("create_tables.sql").readAsString();
+    String createDatabaseSql =
+        await rootBundle.loadString('assets/create_tables.sql');
 
     _database = await openDatabase(
         // Set the path to the database.
@@ -43,14 +45,16 @@ class DatabaseService implements IDatabaseService {
   @override
   Future<void> addTaskRecord(TaskModel task, int userId) async {
     final db = await database;
-    await db.insert("task", task.toMap(userId), conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert("task", task.toMap(userId),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // in terms of functionality this is the exact same as insertion
   @override
   Future<void> updateTaskRecord(TaskModel task, int userId) async {
     final db = await database;
-    await db.insert("task", task.toMap(userId), conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert("task", task.toMap(userId),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
@@ -92,13 +96,15 @@ class DatabaseService implements IDatabaseService {
   @override
   Future<void> addAccountRecord(UserAccountModel account) async {
     final db = await database;
-    await db.insert("user", account.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert("user", account.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
   Future<void> updateAccountRecord(UserAccountModel account) async {
     final db = await database;
-    await db.insert("user", account.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert("user", account.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
@@ -108,7 +114,8 @@ class DatabaseService implements IDatabaseService {
   }
 
   @override
-  Future<UserAccountModel?> queryAccount(String username, String password) async {
+  Future<UserAccountModel?> queryAccount(
+      String username, String password) async {
     final db = await database;
     final List<Map<String, dynamic>> maps =
         await db.query("user", where: "username = ?", whereArgs: [username]);

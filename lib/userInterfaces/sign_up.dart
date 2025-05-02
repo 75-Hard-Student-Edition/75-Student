@@ -35,6 +35,180 @@ class _SignUpScreenState extends State<SignUpScreen> {
   ];
   String _selectedInputType = 'Email'; // other variable
 
+  late final Widget _passwordField = Container(
+    decoration: const BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 6,
+          offset: Offset(0, 3),
+        ),
+      ],
+    ),
+    child: TextFormField(
+      controller: _passwordController,
+      obscureText: true,
+      decoration: InputDecoration(
+        hintText: 'Password',
+        filled: true,
+        fillColor: const Color(0xFFEBEFF0),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    ),
+  );
+
+  late final Widget _confirmPasswordField = Container(
+    decoration: const BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 6,
+          offset: Offset(0, 3),
+        ),
+      ],
+    ),
+    child: TextFormField(
+      controller: _confirmPasswordController,
+      obscureText: true,
+      decoration: InputDecoration(
+        hintText: 'Confirm Password',
+        filled: true,
+        fillColor: const Color(0xFFEBEFF0),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      validator: (value) {
+        if (value != _passwordController.text) {
+          return 'Passwords do not match';
+        }
+        return null;
+      },
+    ),
+  );
+
+  late final Widget _usernameField = Container(
+    decoration: const BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 6,
+          offset: Offset(0, 3),
+        ),
+      ],
+    ),
+    child: TextFormField(
+      controller: _usernameController,
+      obscureText: true,
+      decoration: InputDecoration(
+        hintText: 'Password',
+        filled: true,
+        fillColor: const Color(0xFFEBEFF0),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    ),
+  );
+  // Mobile/Email Input field as a late final Widget
+  late final Widget _mobileEmailInputField = Row(
+    children: [
+      GestureDetector(
+        onTap: _showInputTypePicker,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          decoration: BoxDecoration(
+            color: const Color(0xFFEBEFF0),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Text(_selectedInputType),
+              const SizedBox(width: 6),
+              const Icon(CupertinoIcons.chevron_down, size: 16),
+            ],
+          ),
+        ),
+      ),
+      const SizedBox(width: 10),
+      if (_selectedInputType == 'Mobile') ...[
+        GestureDetector(
+          onTap: _showCountryPicker,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEBEFF0),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  '${_countryData.firstWhere((c) => c['code'] == _selectedCountryCode)['flag']} $_selectedCountryCode',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(width: 6),
+                const Icon(CupertinoIcons.chevron_down, size: 16),
+              ],
+            ),
+          ),
+        ),
+      ],
+      const SizedBox(width: 10),
+      Expanded(
+        child: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: TextFormField(
+            controller: _mobileEmailController,
+            decoration: InputDecoration(
+              hintText: _selectedInputType == 'Email' ? 'Email' : 'Mobile',
+              filled: true,
+              fillColor: const Color(0xFFEBEFF0),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+            ),
+            validator: (value) {
+              if (_selectedInputType == 'Email') {
+                if (value == null ||
+                    value.isEmpty ||
+                    !(value.contains('@') && value.contains('.'))) {
+                  return 'Enter a valid email';
+                }
+              } else {
+                if (value == null || value.isEmpty) {
+                  return 'Enter a valid mobile number';
+                }
+              }
+              return null;
+            },
+          ),
+        ),
+      ),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     const Color teal = Color(0xFF00B3A1);
@@ -88,97 +262,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 32),
 
                 // Mobile/Email Input
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: _showInputTypePicker,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 14),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEBEFF0),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Text(_selectedInputType),
-                            const SizedBox(width: 6),
-                            const Icon(CupertinoIcons.chevron_down, size: 16),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    if (_selectedInputType == 'Mobile') ...[
-                      GestureDetector(
-                        onTap: _showCountryPicker,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 14),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEBEFF0),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                '${_countryData.firstWhere((c) => c['code'] == _selectedCountryCode)['flag']} $_selectedCountryCode',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(width: 6),
-                              const Icon(CupertinoIcons.chevron_down, size: 16),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 6,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: TextFormField(
-                          controller: _mobileEmailController,
-                          decoration: InputDecoration(
-                            hintText: _selectedInputType == 'Email'
-                                ? 'Email'
-                                : 'Mobile',
-                            filled: true,
-                            fillColor: const Color(0xFFEBEFF0),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 18),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          validator: (value) {
-                            if (_selectedInputType == 'Email') {
-                              if (value == null ||
-                                  value.isEmpty ||
-                                  !(value.contains('@') &&
-                                      value.contains('.'))) {
-                                return 'Enter a valid email';
-                              }
-                            } else {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter a valid mobile number';
-                              }
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                _mobileEmailInputField,
                 const SizedBox(height: 25),
 
                 // Full Name Input
@@ -218,95 +302,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 25),
 
                 // Username Input
-                Container(
-                  decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 6,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: TextFormField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      hintText: 'Username',
-                      filled: true,
-                      fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 18),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
+                _usernameField,
+
                 const SizedBox(height: 25),
 
                 // Password Input
-                Container(
-                  decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 6,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      filled: true,
-                      fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 18),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
+                _passwordField,
                 const SizedBox(height: 25),
 
                 // Confirm Password Input
-                Container(
-                  decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 6,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Confirm Password',
-                      filled: true,
-                      fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 18),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value != _passwordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
+                _confirmPasswordField,
 
                 const SizedBox(height: 24),
 
@@ -347,8 +352,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           MaterialPageRoute(
                               builder: (context) => DifficultyPage(
                                     signUpFlowState: UserAccountModel(
-                                      id: 0,
-                                      username: "testUser",
+                                      id: DateTime.now().millisecondsSinceEpoch,
+                                      username: _usernameController.text,
+                                      email: _mobileEmailController.text
+                                              .contains('@')
+                                          ? _mobileEmailController.text
+                                          : null,
+                                      phoneNumber: !_mobileEmailController.text
+                                              .contains('@')
+                                          ? _mobileEmailController.text
+                                          : null,
                                       streak: 0,
                                       difficulty: null,
                                       categoryOrder: null,
@@ -357,6 +370,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       bedtimeNotifyBefore: null,
                                       mindfulnessDuration: null,
                                     ),
+                                    password: _passwordController.text,
                                     accountManager: super.widget.accountManager,
                                   )),
                         );

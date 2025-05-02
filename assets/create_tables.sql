@@ -12,15 +12,15 @@ CREATE TABLE "user" (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,                 
     email TEXT UNIQUE,            
-    phone_number TEXT UNIQUE;
+    phone_number TEXT UNIQUE,
     password TEXT NOT NULL,              
     streak INT DEFAULT 0,
     difficulty INTEGER NOT NULL,
     category_order TEXT NOT NULL,
-    sleep_duration_minutes INT NOT NULL     
+    sleep_duration_minutes INT NOT NULL,
     bedtime TEXT NOT NULL,
     notify_time_minutes INT NOT NULL,
-    mindfulness_minutes INT NOT NULL,              
+    mindfulness_minutes INT NOT NULL            
 ) STRICT;
 
 -- Create Task table
@@ -38,4 +38,3 @@ CREATE TABLE "task" (
     repeat_period TEXT, 
     links TEXT
 ) STRICT;
-

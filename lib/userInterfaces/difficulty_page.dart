@@ -7,7 +7,12 @@ import 'package:student_75/models/difficulty_enum.dart';
 class DifficultyPage extends StatefulWidget {
   final AccountManager accountManager;
   final UserAccountModel signUpFlowState;
-  const DifficultyPage({super.key, required this.accountManager, required this.signUpFlowState});
+  final String password;
+  const DifficultyPage(
+      {super.key,
+      required this.accountManager,
+      required this.signUpFlowState,
+      required this.password});
 
   @override
   State<DifficultyPage> createState() => _DifficultyPageState();
@@ -40,7 +45,8 @@ class _DifficultyPageState extends State<DifficultyPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
+                icon: const Icon(Icons.arrow_back_ios,
+                    color: Color(0xFF00A59B), size: 30),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -94,13 +100,15 @@ class _DifficultyPageState extends State<DifficultyPage> {
                 signUpFlowState: super.widget.signUpFlowState.copyWith(
                       difficulty: selectedDifficulty,
                     ),
+                password: super.widget.password,
               ),
             ),
           );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: isSelected ? darkenColor(color, 0.3) : color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 5,
         ),
         child: Text(

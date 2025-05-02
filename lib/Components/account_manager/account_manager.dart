@@ -51,7 +51,7 @@ class AccountManager implements IAccountManager {
   void logout() => userAccount = null;
 
   @override
-  Future<void> createAccount(UserAccountModel account) async {
+  Future<void> createAccount(UserAccountModel account, String password) async {
     await DatabaseService().addAccountRecord(account);
     userAccount = account; // Login the user after creating the account
   }

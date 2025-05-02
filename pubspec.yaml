@@ -78,6 +78,7 @@ flutter:
     - assets/images/badge_4.jpg
     - assets/images/badge_5.jpg
     - assets/images/badge_6.jpg
+    - assets/create_tables.sql
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
