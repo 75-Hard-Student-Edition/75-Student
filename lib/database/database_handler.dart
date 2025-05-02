@@ -59,4 +59,19 @@ class DatabaseService {
     }
     return null;
   }
+
+  Future<List<TaskModel>> fetchTodaysScheduledTasks() async {
+    final db = await database;
+    // Because the dates are stored as strings the selection for the current day
+    // can't be done in sql
+    List<Map<String, dynamic>> maps = await db.query("task");
+
+    List<TaskModel> todaysTasks = [];
+    for (var map in maps) {
+      if (DateTime.parse(map["start_time"]).day == DateTime.now().day) {
+        todaysTasks.add(TaskModelDB.fromMap(map));
+      }
+    }
+    return todaysTasks;
+  }
 }

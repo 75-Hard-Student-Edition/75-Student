@@ -11,7 +11,7 @@ extension TaskModelDB on TaskModel {
       "is_complete": isComplete ? 1 : 0,
       "category": category,
       "priority": TaskPriority.values.indexOf(priority),
-      "start_time": startTime,
+      "start_time": startTime.toIso8601String(),
       "duration_minutes": duration.inMinutes,
       "repeat_period": period?.inDays.toString() ?? "",
       "links": links ?? ""
