@@ -7,45 +7,6 @@ This means that integrity will need to be ensured in the code that
 interfaces with the database, rather than the database itself.
  */
 
--- Create difficulty table (formerly enum)
-CREATE TABLE IF NOT EXISTS "difficulty" (
-    difficulty_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    difficulty_str TEXT
-) STRICT;
-
-INSERT INTO "difficulty" (difficulty_str) VALUES
-('easy'),
-('medium'),
-('hard');
-
--- Create day table (formerly enum)
-CREATE TABLE IF NOT EXISTS "day" (
-    day_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    day_str TEXT
-) STRICT;
-
-INSERT INTO "day" (day_str) VALUES
-('Monday'),
-('Tuesday'),
-('Wednesday'),
-('Thursday'),
-('Friday'),
-('Saturday'),
-('Sunday');
-
--- Create category table (formerly enum)
-CREATE TABLE IF NOT EXISTS "category" (
-    category_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    category_str TEXT
-) STRICT;
-
-INSERT INTO "category" (category_str) VALUES
-('academic'),
-('social'),
-('health'),
-('employment'),
-('chores');
-
 -- Create user table
 CREATE TABLE "user" (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
