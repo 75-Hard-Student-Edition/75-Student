@@ -1,25 +1,7 @@
-WIDAD
-    - SchedulePage and MainPage are the same thing 
-
-AYO
-    - Add your pages to figma
-    - Keep settings page simple
-
-DYLAN
-    - Add your pages to figma
-
-TIRES
-    - Work on the actual project
-
-TOM
-    - Go over tires' implementation 
-
-PRINCE
-    - Add PointsManager add/remove task method?
-
-CHARLIE 
-    - write alert callback methods for ScheduleManager
-    - Write moveTask method
-    - Maybe sort out actually using the schedule class
-        - Fix it up first
+Methods Made Async:
+    AccountManager:
+        - login
+        - createAccount
+        - saveUserDetails
+        - fetchUserDetails (removed)
         

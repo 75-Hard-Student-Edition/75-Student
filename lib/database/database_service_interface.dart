@@ -21,5 +21,5 @@ abstract class IDatabaseService {
   Future<void> removeAccountRecord(int userId);
 
   // Database -> AccountManager methods
-  Future<UserAccountModel?> queryAccount(String username);
+  Future<UserAccountModel?> queryAccount(String username, String password);
 }

@@ -9,17 +9,14 @@ abstract class IAccountManager {
   Duration getMindfulnessDuration();
 
   // GUI -> AccountManager methods
-  void createAccount(UserAccountModel userAccount);
-  void deleteAccount(int userId);
+  Future<void> createAccount(UserAccountModel userAccount);
+  Future<void> deleteAccount(int userId);
   void updateAccount(UserAccountModel userAccount);
-  void login(String username, String password);
+  Future<void> login(String username, String password);
   void logout();
 
   // AccountManager -> Database methods
   void saveUserDetails(UserAccountModel userAccount);
-
-  // Database -> AccountManager methods
-  UserAccountModel fetchUserDetails(int userId);
 
   // AccountManager -> PointsManager methods
   Difficulty getDifficulty();

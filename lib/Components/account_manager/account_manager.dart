@@ -2,6 +2,7 @@ import 'package:student_75/Components/account_manager/account_manager_interface.
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/database/database_service.dart';
 
 class NoUserSignedInException implements Exception {
   final String message;
@@ -29,44 +30,22 @@ class AccountManager implements IAccountManager {
 
   //* GUI -> AccountManager methods
   @override
-  void login(String username, String password) {
-    //todo fetch account details from database
-    UserAccountModel fetchFromDb = UserAccountModel(
-      id: 0,
-      username: username,
-      streak: 0,
-      difficulty: Difficulty.easy,
-      categoryOrder: [
-        TaskCategory.academic,
-        TaskCategory.chore,
-        TaskCategory.employment,
-        TaskCategory.health,
-        TaskCategory.hobby,
-        TaskCategory.social
-      ],
-      sleepDuration: const Duration(hours: 8),
-      bedtime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 22, 0),
-      bedtimeNotifyBefore: const Duration(minutes: 30),
-      mindfulnessDuration: const Duration(minutes: 10),
-    );
-    userAccount = fetchFromDb;
-  }
+  Future<void> login(String username, String password) async =>
+      userAccount = await DatabaseService().queryAccount(username, password);
 
   @override
   void logout() => userAccount = null;
 
   @override
-  void createAccount(UserAccountModel account) {
-    //todo save account details to database
-    //! temporary stub login because database is not implemented yet
-    userAccount =
-        account; // Once db is implemented, login() should be called after this method
+  Future<void> createAccount(UserAccountModel account) async {
+    await DatabaseService().addAccountRecord(account);
+    userAccount = account; // Login the user after creating the account
   }
 
   @override
-  void deleteAccount(int userId) {
-    //todo delete account details from database
+  Future<void> deleteAccount(int userId) async {
+    await DatabaseService().removeAccountRecord(userId);
+    userAccount = null; // Logout the user after deleting the account
   }
 
   @override
@@ -78,27 +57,8 @@ class AccountManager implements IAccountManager {
 
   //* AccountManager -> Database methods
   @override
-  void saveUserDetails(UserAccountModel userAccount) {
-    //todo save account details to database
-  }
-
-  //* Database -> AccountManager methods
-  @override
-  UserAccountModel fetchUserDetails(int userId) {
-    //todo fetch account details from database
-    return UserAccountModel(
-      id: 0,
-      username: 'Stub User',
-      streak: 0,
-      difficulty: Difficulty.easy,
-      categoryOrder: [],
-      sleepDuration: const Duration(hours: 8),
-      bedtime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 22, 0),
-      bedtimeNotifyBefore: const Duration(minutes: 30),
-      mindfulnessDuration: const Duration(minutes: 10),
-    );
-  }
+  Future<void> saveUserDetails(UserAccountModel userAccount) async =>
+      await DatabaseService().updateAccountRecord(userAccount);
 
   //* AccountManager -> PointsManager methods
   @override
@@ -133,6 +93,7 @@ class AccountManager implements IAccountManager {
   void resetStreak() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
     userAccount = userAccount!.copyWith(streak: 0);
+    saveUserDetails(userAccount!);
   }
 
   @override
@@ -140,6 +101,7 @@ class AccountManager implements IAccountManager {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
     int newStreak = getStreak() + 1;
     userAccount = userAccount!.copyWith(streak: newStreak);
+    saveUserDetails(userAccount!);
   }
 
   //* AccountManager -> ScheduleManager methods

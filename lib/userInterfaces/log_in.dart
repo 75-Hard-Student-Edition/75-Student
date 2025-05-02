@@ -25,7 +25,7 @@ class LogInScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 // Back Arrow
                 IconButton(
-                  icon: const Icon(Icons.arrow_back_ios,color: Color(0xFF00A59B)),
+                  icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B)),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -93,9 +93,9 @@ class LogInScreen extends StatelessWidget {
                 // Log In Button
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Log in to the account using the AccountManager
-                      accountManager.login("username",
+                      await accountManager.login("username",
                           "password"); //todo @widad: replace with actual values from the text fields
                       //todo also add error handling like with sign up
 

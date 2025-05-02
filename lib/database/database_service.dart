@@ -27,7 +27,7 @@ class DatabaseService implements IDatabaseService {
     // Note: Using the `join` function from the
     // `path` package is best practice to ensure the path is correctly
     // constructed for each platform.
-    path = join(await getDatabasesPath(), 'test.db');
+    path = join(await getDatabasesPath(), '75_student_db.db');
     // read sql from file, store as string
     String createDatabaseSql = await File("create_tables.sql").readAsString();
 
@@ -43,16 +43,14 @@ class DatabaseService implements IDatabaseService {
   @override
   Future<void> addTaskRecord(TaskModel task, int userId) async {
     final db = await database;
-    await db.insert("task", task.toMap(userId),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert("task", task.toMap(userId), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // in terms of functionality this is the exact same as insertion
   @override
   Future<void> updateTaskRecord(TaskModel task, int userId) async {
     final db = await database;
-    await db.insert("task", task.toMap(userId),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert("task", task.toMap(userId), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
@@ -91,15 +89,13 @@ class DatabaseService implements IDatabaseService {
   @override
   Future<void> addAccountRecord(UserAccountModel account) async {
     final db = await database;
-    await db.insert("user", account.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert("user", account.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
   Future<void> updateAccountRecord(UserAccountModel account) async {
     final db = await database;
-    await db.insert("user", account.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert("user", account.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
@@ -109,11 +105,11 @@ class DatabaseService implements IDatabaseService {
   }
 
   @override
-  Future<UserAccountModel?> queryAccount(String username) async {
+  Future<UserAccountModel?> queryAccount(String username, String password) async {
     final db = await database;
     final List<Map<String, dynamic>> maps =
         await db.query("user", where: "username = ?", whereArgs: [username]);
-    if (maps.isNotEmpty) {
+    if (maps.isNotEmpty && maps.first["password"] == password) {
       return UserAccountModelDB.fromMap(maps.first);
     }
     return null;

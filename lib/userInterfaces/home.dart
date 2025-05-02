@@ -53,10 +53,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       accountManager: widget.accountManager,
     );
 
-    /* Future.microtask(() async {
-      await scheduleManager.generateSanitisedSchedule();
-     }); */
-
     _addTestTasks();
     _fetchSchedule();
   }
