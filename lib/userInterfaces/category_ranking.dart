@@ -5,6 +5,7 @@ import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/userInterfaces/notifications_page.dart';
+import 'package:student_75/app_settings.dart';
 
 class CategoryRankingScreen extends StatefulWidget {
   final AccountManager accountManager;
@@ -22,36 +23,12 @@ class CategoryRankingScreen extends StatefulWidget {
 
 class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
   List<Map<String, dynamic>> categories = [
-    {
-      "name": "Academic",
-      "enum": TaskCategory.academic,
-      "color": const Color(0xFF00BCD4)
-    },
-    {
-      "name": "Social",
-      "enum": TaskCategory.social,
-      "color": const Color(0xFF8AD483)
-    },
-    {
-      "name": "Health",
-      "enum": TaskCategory.health,
-      "color": const Color(0xFFF67373)
-    },
-    {
-      "name": "Employment",
-      "enum": TaskCategory.employment,
-      "color": const Color(0xFFEDBF45)
-    },
-    {
-      "name": "Chore",
-      "enum": TaskCategory.chore,
-      "color": const Color(0xFFE997CD)
-    },
-    {
-      "name": "Hobby",
-      "enum": TaskCategory.hobby,
-      "color": const Color(0xFF946AAE)
-    },
+    {"name": "Academic", "enum": TaskCategory.academic, "color": const Color(0xFF00BCD4)},
+    {"name": "Social", "enum": TaskCategory.social, "color": const Color(0xFF8AD483)},
+    {"name": "Health", "enum": TaskCategory.health, "color": const Color(0xFFF67373)},
+    {"name": "Employment", "enum": TaskCategory.employment, "color": const Color(0xFFEDBF45)},
+    {"name": "Chore", "enum": TaskCategory.chore, "color": const Color(0xFFE997CD)},
+    {"name": "Hobby", "enum": TaskCategory.hobby, "color": const Color(0xFF946AAE)},
   ];
 
   List<Map<String, dynamic>?> droppedItems = List.filled(6, null);
@@ -73,8 +50,7 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios,
-                          color: Color(0xFF00A59B), size: 30),
+                      icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -181,17 +157,17 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
                 super.widget.accountManager.createAccount(
                       super.widget.signUpFlowState.copyWith(
                             categoryOrder: rankedCategories,
-                            sleepDuration:
-                                const Duration(hours: 8), //! Needs a page
-                            bedtimeNotifyBefore: Duration.zero, //! Needs a page
+                            // Default values, can be changed on the next page
+                            sleepDuration: Duration(hours: AppSettings.defaultSleepDuration),
+                            bedtimeNotifyBefore: Duration.zero,
                             bedtime: DateTime(
                                 DateTime.now().year,
                                 DateTime.now().month,
                                 DateTime.now().day,
-                                22,
-                                0), //! Needs a page
+                                AppSettings.defaultBedtimeHour,
+                                AppSettings.defaultBedtimeMinute),
                             mindfulnessDuration:
-                                const Duration(minutes: 10), //! Needs a page
+                                Duration(minutes: AppSettings.defaultMindfulnessDuration),
                           ),
                     );
 
@@ -269,13 +245,9 @@ class _CategoryRankingScreenState extends State<CategoryRankingScreen> {
             width: 350,
             height: 50,
             decoration: BoxDecoration(
-              color: droppedItems[index] != null
-                  ? droppedItems[index]!["color"]
-                  : Colors.white,
+              color: droppedItems[index] != null ? droppedItems[index]!["color"] : Colors.white,
               borderRadius: BorderRadius.circular(10),
-              boxShadow: const [
-                BoxShadow(color: Colors.black26, blurRadius: 5)
-              ],
+              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 5)],
             ),
             child: Center(
               child: Text(

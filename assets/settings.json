@@ -7,5 +7,10 @@
 
     "locationRadius": 100,
 
-    "backlogPeakDepth": 5
+    "backlogPeakDepth": 5,
+
+    "defaultSleepDuration": 8,
+    "defaultBedtimeHour": 22,
+    "defaultBedtimeMinute": 0,
+    "defaultMindfulnessDuration": 30
 }
