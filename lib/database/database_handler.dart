@@ -49,4 +49,14 @@ class DatabaseService {
     final db = await database;
     db.delete("task", where: 'task_id = ?', whereArgs: [taskId]);
   }
+
+  Future<TaskModel?> queryTask(int taskId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query("task", where: "task_id = ?", whereArgs: [taskId]);
+    if (maps.isNotEmpty) {
+      return TaskModelDB.fromMap(maps.first);
+    }
+    return null;
+  }
 }
