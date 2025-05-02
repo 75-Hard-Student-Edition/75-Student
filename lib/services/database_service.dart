@@ -17,6 +17,7 @@ abstract class IDatabaseService {
 
   // AccountManager -> Database methods
   Future<void> addAccountRecord(UserAccountModel account);
+  Future<void> updateAccountRecord(UserAccountModel account);
   Future<void> removeAccountRecord(UserAccountModel account);
 
   // Database -> AccountManager methods
