@@ -2,6 +2,19 @@ import 'package:student_75/models/location_model.dart';
 
 enum TaskPriority { low, medium, high }
 
+extension TaskPriorityExtension on TaskPriority {
+  double get value {
+    switch (this) {
+      case TaskPriority.low:
+        return 1;
+      case TaskPriority.medium:
+        return 2;
+      case TaskPriority.high:
+        return 3;
+    }
+  }
+}
+
 enum TaskCategory { academic, social, health, employment, chore, hobby }
 
 class TaskModel {
@@ -10,31 +23,35 @@ class TaskModel {
   final String description;
 
   final bool isMovable;
-  final bool isComplete = false;
+  bool isComplete;
 
   final TaskCategory category;
   final TaskPriority priority;
   final Location? location;
 
   final DateTime startTime;
+  final Duration duration;
   late final DateTime endTime;
   late final DateTime nextScheduled;
   final Duration? period;
 
   final Duration notifyBefore;
+  final String? links;
 
   TaskModel({
     required this.id,
     required this.name,
     this.description = '',
     required this.isMovable,
+    this.isComplete = false,
     required this.category,
     required this.priority,
     this.location,
     required this.startTime,
-    required Duration duration,
+    required this.duration,
     this.period,
     this.notifyBefore = Duration.zero,
+    this.links,
   }) {
     // Calculate end time and next scheduled time
     endTime = startTime.add(duration);
@@ -67,30 +84,31 @@ class TaskModel {
     TaskPriority? priority,
     Location? location,
     DateTime? startTime,
+    Duration? duration,
     DateTime? endTime,
     DateTime? nextScheduled,
     Duration? period,
     Duration? notifyBefore,
+    String? links,
   }) {
     return TaskModel(
       id: id,
       name: name ?? this.name,
       description: description ?? this.description,
       isMovable: isMovable ?? this.isMovable,
+      isComplete: isComplete ?? this.isComplete,
       category: category ?? this.category,
       priority: priority ?? this.priority,
       location: location ?? this.location,
       startTime: startTime ?? this.startTime,
-      duration:
-          (endTime ?? this.endTime).difference(startTime ?? this.startTime),
+      duration: duration ?? this.duration,
       period: period ?? this.period,
       notifyBefore: notifyBefore ?? this.notifyBefore,
+      links: links ?? this.links,
     );
   }
 
-  int getPoint() {
-    int point = 0;
-    return point;
-  }
-
+  @override
+  String toString() =>
+      "TaskModel(id: $id, name: $name, description: $description, isMovable: $isMovable, isComplete: $isComplete, category: $category, priority: $priority, location: $location, startTime: $startTime, duration: $duration, endTime: $endTime, nextScheduled: $nextScheduled, period: $period, notifyBefore: $notifyBefore, links: $links)";
 }

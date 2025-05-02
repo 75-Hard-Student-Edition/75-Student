@@ -108,7 +108,7 @@ class DailySchedule {
 
 class ScheduleHandler {
   //! Need a way to determine bedtime - user settings or algorithmic?
-  DateTime? bedtime = null;
+  DateTime? bedtime;
   late DailySchedule today;
   late DailySchedule tomorrow;
   //! Need to be able to write backlog to the database as well, in case of logout

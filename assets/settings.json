@@ -5,5 +5,7 @@
         "hard": 1
     },
 
-    "locationRadius": 100
+    "locationRadius": 100,
+
+    "backlogPeakDepth": 5
 }

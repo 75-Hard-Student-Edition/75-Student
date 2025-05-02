@@ -1,79 +1,100 @@
+import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/Components/schedule_manager/schedule_manager_interface.dart';
+import 'package:student_75/Components/points_manager.dart';
+import 'package:student_75/app_settings.dart';
 import 'package:student_75/models/task_model.dart';
-import 'package:student_75/components/schedule.dart';
-import 'package:student_75/components/points_manager.dart';
-import 'package:student_75/components/notification_manager.dart';
+import 'package:student_75/Components/schedule_manager/schedule.dart';
+import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
+import 'package:student_75/Components/notification_manager.dart';
+import 'package:student_75/Components/schedule_manager/backlog.dart';
 
 // Interface for ScheduleManager to interact with the GUI
-abstract class IScheduleManager {
-  // ScheduleManager -> GUI methods
-  List<TaskModel> getSchedule();
-  List<TaskModel> getBacklogSuggestions();
 
-  // GUI -> ScheduleManager methods
-  void addTask(TaskModel task);
-  void deleteTask(int taskId);
-  void editTask(TaskModel task);
-  void postPoneTask(int taskId);
-  void completeTask(int taskId);
-  void scheduleBacklogSuggestion(int taskId);
+class TaskOverlapException implements Exception {
+  final String message;
+  TaskOverlapException(this.message);
+
+  @override
+  String toString() => 'TaskOverlapException: $message';
 }
 
-class Backlog {
-  /* Stub implementation of Backlog */
-  void add(TaskModel task) {}
-  TaskModel getTask(int taskId) => TaskModel(
-      id: taskId,
-      name: 'Stub Task',
-      isMovable: true,
-      category: TaskCategory.academic,
-      priority: TaskPriority.low,
-      startTime: DateTime.now(),
-      duration: const Duration(hours: 1),
-      period: const Duration(days: 1));
-  void remove(int taskId) {}
-  List<TaskModel> peak(int depth) => [
-        TaskModel(
-            id: 0,
-            name: 'Stub Task',
-            isMovable: true,
-            category: TaskCategory.academic,
-            priority: TaskPriority.low,
-            startTime: DateTime.now(),
-            duration: const Duration(hours: 1),
-            period: const Duration(days: 1))
-      ];
+class TaskNotFoundException implements Exception {
+  final String message;
+  TaskNotFoundException(this.message);
+
+  @override
+  String toString() => 'TaskNotFoundException: $message';
 }
 
 class ScheduleManager implements IScheduleManager {
   late Schedule todaysSchedule;
   late Backlog backlog;
   late PointsManager pointsManager;
+  late AccountManager accountManager;
   late NotificationManager notificationManager;
+  late Future<TaskModel?> Function(TaskModel, TaskModel, String) userBinarySelectCallback;
+  late void Function(String) displayErrorCallback;
 
-  ScheduleManager() {
-    //! All this data needs to be fetched by database service in constructor
+  ScheduleManager({
+    required this.displayErrorCallback,
+    required this.accountManager,
+    required this.userBinarySelectCallback,
+  }) {
+    //this.userBinarySelectCallback, this.displayErrorCallback) {
+    //todo All this data needs to be fetched by database service in constructor
     todaysSchedule = Schedule(tasks: []);
-    backlog = Backlog();
-    pointsManager = PointsManager(
-      maxPoints: 100,
-      currentPoints: 0,
-      pointsToPass: 50,
-    );
+    backlog = Backlog(initialTasks: []);
+    pointsManager = PointsManager(initialSchedule: todaysSchedule, accountManager: accountManager);
     notificationManager = NotificationManager(notifications: []);
+
+    print("ScheduleManager initialised with the following account data:");
+    print(accountManager.userAccount.toString());
   }
 
   //* == ScheduleManager -> GUI methods ==
   @override
-  List<TaskModel> getSchedule() => todaysSchedule.tasks;
+  Schedule get schedule => todaysSchedule;
+
   @override
-  //todo Decide on some way of deciding peak depth
-  List<TaskModel> getBacklogSuggestions() => backlog.peak(5);
+  List<TaskModel> getBacklogSuggestions() => backlog.peak(AppSettings.backlogPeakDepth);
+
+  @override
+  Future<TaskModel?> userBinarySelect(TaskModel task1, TaskModel task2, String message) async =>
+      await userBinarySelectCallback(task1, task2, message);
+  @override
+  void displayError(String message) {
+    displayErrorCallback(message);
+  }
+
+  @override
+  AccountManager get accManager => accountManager;
 
   //* == GUI -> ScheduleManager methods ==
   @override
   void addTask(TaskModel task) {
     // Add task to schedule
-    todaysSchedule.add(task);
+    // todaysSchedule.add(task);
+    try {
+      todaysSchedule.add(task);
+    } on TaskOverlapException catch (e) {
+      throw TaskOverlapException("Tasks overlapping");
+      // print("TaskOverlapException caught");
+      // // displayError(e.toString());
+      // TaskModel overlappingTask = schedule.tasks
+      //     .firstWhere((currentTask) => currentTask.startTime == task.startTime);
+      // TaskModel? selectedTask = await userBinarySelect(task, overlappingTask,
+      //     "Tasks overlapping. Please select which task to keep");
+      // if (selectedTask == task) {
+      //   schedule.tasks.add(task);
+      //   postPoneTask(task.id);
+      // } else {
+      //   postPoneTask(overlappingTask.id);
+      //   addTask(task);
+      // }
+    } catch (e) {
+      // Handle other exceptions
+      displayError("Uncaught Exception on addTask: ${e.toString()}");
+    }
     // Add notification for task
     notificationManager.addNotification(task);
     //todo Update points
@@ -85,7 +106,14 @@ class ScheduleManager implements IScheduleManager {
   @override
   void deleteTask(int taskId) {
     // Remove task from schedule
-    todaysSchedule.remove(taskId);
+    try {
+      todaysSchedule.remove(taskId);
+    } on TaskNotFoundException catch (e) {
+      displayError(e.toString());
+    } catch (e) {
+      // Handle other exceptions
+      displayError("Uncaught Exception on deleteTask: ${e.toString()}");
+    }
     // Remove notification for task
     notificationManager.removeNotification(taskId);
     //todo Update points
@@ -95,26 +123,43 @@ class ScheduleManager implements IScheduleManager {
   }
 
   @override
-  void editTask(TaskModel task) {
-    // Works by deleting and re-adding the task, assuming that the task ID is not changed
-    deleteTask(task.id);
-    addTask(task);
+  void editTask(TaskModel updatedTask) {
+    try {
+      // Check for overlap *excluding* itself
+      for (var otherTask in todaysSchedule.tasks) {
+        if (otherTask.id != updatedTask.id &&
+            otherTask.startTime.isBefore(updatedTask.endTime) &&
+            otherTask.endTime.isAfter(updatedTask.startTime)) {
+          throw TaskOverlapException('Tasks overlapping');
+        }
+      }
+      deleteTask(updatedTask.id);
+      addTask(updatedTask);
+    } on TaskOverlapException {
+      rethrow;
+    } catch (e) {
+      displayError("Uncaught Exception on editTask: ${e.toString()}");
+    }
   }
 
   @override
   void postPoneTask(int taskId) {
     // Add task to backlog
-    final TaskModel task = todaysSchedule.getTaskModel(taskId);
-    backlog.add(task);
+    final TaskModel? task = todaysSchedule.getTaskModelFromId(taskId);
+    if (task == null) {
+      throw TaskNotFoundException(
+          "Task with id '$taskId' not found in schedule when trying to postpone");
+    }
+    backlog.enqueue(task);
     // Remove task from schedule
     deleteTask(taskId);
   }
 
   @override
   void completeTask(int taskId) {
-    final int taskIndex = todaysSchedule.getTaskIndex(taskId);
+    final int taskIndex = todaysSchedule.getTaskIndexFromId(taskId);
     final TaskModel task = todaysSchedule.tasks[taskIndex];
-    todaysSchedule.tasks[taskIndex] = task.copyWith(isComplete: true);
+    editTask(task.copyWith(isComplete: !task.isComplete));
   }
 
   @override
@@ -127,8 +172,13 @@ class ScheduleManager implements IScheduleManager {
     backlog.remove(taskId);
   }
 
+  @override
+  DateTime? findAvailableTimeSlot(TaskModel task) =>
+      ScheduleGenerator.checkMovePossible(todaysSchedule, task, accountManager);
+
   //* == Internal methods ==
-  void endOfDayProcess() {
+  Future<void> endOfDayProcess() async {
+    backlog.age();
     //* 1. Process old schedule
     for (final task in todaysSchedule.tasks) {
       if (task.isComplete) {
@@ -139,103 +189,28 @@ class ScheduleManager implements IScheduleManager {
         }
       } else if (task.isMovable) {
         // Add task to backlog - have to figure this out in the database
-        backlog.add(task);
+        backlog.enqueue(task);
       } else {
-        //! Have to decide what to do if the task is not complete or movable
+        deleteTask(task.id);
       }
     }
-    if (pointsManager.determinePass()) {
-      // DatabaseService.updateUserRecord(); // Increment streak somehow
-    } else {
-      // DatabaseService.updateUserRecord(); // Reset streak somehow
-    }
+    //if (pointsManager.determinePass()) {
+    // DatabaseService.updateUserRecord(); // Increment streak somehow
+    //} else {
+    // DatabaseService.updateUserRecord(); // Reset streak somehow
+    //}
 
-    //* 2. Fetch new automatic schedule
-    List<TaskModel> newScheduleTasks =
-        []; //todo Fetch new schedule from database
-
-    //* 3. Order new schedule
-    List<TaskModel> sanitisedSchedule = santitiseSchedule(newScheduleTasks);
+    //* 2. Generate new schedule
+    ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
-    todaysSchedule = Schedule(tasks: sanitisedSchedule);
+    todaysSchedule = sanitisedSchedule;
   }
 
-  List<TaskModel> santitiseSchedule(List<TaskModel> schedule) {
-    // Empty or singleton schedules are automatically valid
-    if (schedule.isEmpty || schedule.length == 1) return schedule;
-
-    // Sort Schedule by start time
-    schedule.sort((a, b) => a.startTime.compareTo(b.startTime));
-
-    bool passIsClean = false;
-    while (!passIsClean) {
-      passIsClean = true;
-      int nextTaskIndex = 1;
-
-      // Need to break any time the pass is not clean to ensure we are not mutating the list while iterating
-      while (nextTaskIndex < schedule.length && passIsClean) {
-        TaskModel currentTask = schedule[nextTaskIndex - 1];
-        TaskModel nextTask = schedule[nextTaskIndex];
-
-        // Check for overlap
-        if (!currentTask.endTime.isAfter(nextTask.startTime)) {
-          // If there is no overlap, move to the next task
-          nextTaskIndex++;
-          continue;
-        }
-
-        passIsClean = false;
-
-        // Handle overlap
-
-        if (!currentTask.isMovable && !currentTask.isMovable) {
-          // If neither task is movable, and overlapping, we have a problem
-          //? Currently I've implemented this as an exception but we could also remove the task with the lower priority
-          throw Exception(
-              'Tasks ${currentTask.id} and ${nextTask.id} overlap and are not movable');
-        }
-
-        if (nextTask.isMovable) {
-          // If the next task is movable, attempt to move it
-          List<TaskModel> movedSchedule = attemptMove(schedule, nextTaskIndex);
-          if (movedSchedule != schedule) {
-            schedule = movedSchedule;
-            //? Maybe continue instead im not sure
-            break;
-          }
-        } else {
-          // If the current task is movable, attempt to move it
-          List<TaskModel> movedSchedule =
-              attemptMove(schedule, nextTaskIndex - 1);
-          if (movedSchedule != schedule) {
-            schedule = movedSchedule;
-            //? Maybe continue instead im not sure
-            break;
-          }
-        }
-
-        // If we reach this point, we have failed to move the tasks
-        // Therefore, we must postPone the task that can be moved, or the lower priority if they both can
-        if (currentTask.isMovable && nextTask.isMovable) {
-          // If both tasks are movable, postpone the lower priority task
-          if (currentTask.priority.index < nextTask.priority.index) {
-            postPoneTask(nextTask.id);
-          } else {
-            postPoneTask(currentTask.id);
-          }
-        } else if (currentTask.isMovable) {
-          postPoneTask(currentTask.id);
-        } else {
-          postPoneTask(nextTask.id);
-        }
-      }
-    }
-    return schedule;
-  }
-
-  List<TaskModel> attemptMove(List<TaskModel> schedule, int taskIndex) {
-    //todo Implement this - make no change if not possible
-    return schedule;
+  Future<void> generateSanitisedSchedule() async {
+    ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
+    todaysSchedule = sanitisedSchedule;
   }
 }
