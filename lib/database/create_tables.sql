@@ -32,6 +32,7 @@ CREATE TABLE "task" (
     is_moveable INTEGER DEFAULT 0, -- SQLite doesn't have a boolean type
     is_complete INTEGER DEFAULT 0, 
     category INTEGER NOT NULL,
+    priority INTEGER NOT NULL,
     start_time TEXT NOT NULL,
     duration_minutes INT NOT NULL, 
     repeat_period TEXT, 
