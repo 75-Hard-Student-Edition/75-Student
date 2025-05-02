@@ -8,7 +8,8 @@ import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 class AddTaskScreen extends StatefulWidget {
   final ScheduleManager scheduleManager;
   final TaskModel? initialTask;
-  const AddTaskScreen({super.key, required this.scheduleManager, this.initialTask});
+  const AddTaskScreen(
+      {super.key, required this.scheduleManager, this.initialTask});
 
   @override
   _AddTaskScreenState createState() =>
@@ -34,7 +35,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TaskCategory? _selectedCategory;
   String? _selectedRepeatOption;
   final bool _isMovable = true;
-  final bool _isComplete = false;
+  // final bool _isComplete = false;
   Duration? _period;
   //Location? _taskLocation;
 
@@ -54,33 +55,40 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       _selectedDate = initialTask!.startTime;
       _selectedTime = DateFormat('HH:mm').format(initialTask!.startTime);
       _selectedDuration = initialTask!.duration.inMinutes;
-      _endTime = DateFormat('HH:mm').format(initialTask!.startTime.add(initialTask!.duration));
+      _endTime = DateFormat('HH:mm')
+          .format(initialTask!.startTime.add(initialTask!.duration));
       _selectedCategory = initialTask!.category;
       // Update colors to match selected category
       switch (_selectedCategory!) {
         case TaskCategory.academic:
           _selectedCategoryColor = lightenColor(const Color(0xFF00BCD4), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFF00BCD4), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFF00BCD4), 0.2);
           break;
         case TaskCategory.social:
           _selectedCategoryColor = lightenColor(const Color(0xFF8AD483), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFF8AD483), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFF8AD483), 0.2);
           break;
         case TaskCategory.health:
           _selectedCategoryColor = lightenColor(const Color(0xFFF67373), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFFF67373), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFFF67373), 0.2);
           break;
         case TaskCategory.chore:
           _selectedCategoryColor = lightenColor(const Color(0xFFE997CD), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFFE997CD), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFFE997CD), 0.2);
           break;
         case TaskCategory.hobby:
           _selectedCategoryColor = lightenColor(const Color(0xFF946AAE), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFF946AAE), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFF946AAE), 0.2);
           break;
         case TaskCategory.employment:
           _selectedCategoryColor = lightenColor(const Color(0xFFEDBF45), 0.4);
-          _selectedCategoryBorderColor = darkenColor(const Color(0xFFEDBF45), 0.2);
+          _selectedCategoryBorderColor =
+              darkenColor(const Color(0xFFEDBF45), 0.2);
           break;
       }
       _location = initialTask!.location;
@@ -121,7 +129,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
-  Future<void> _showCupertinoInputDialog(String title, Function(String) onSave) async {
+  Future<void> _showCupertinoInputDialog(
+      String title, Function(String) onSave) async {
     TextEditingController controller = TextEditingController();
 
     await showCupertinoDialog(
@@ -154,7 +163,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("Cancel", style: TextStyle(color: Color(0xFFE05151))),
+              child: const Text("Cancel",
+                  style: TextStyle(color: Color(0xFFE05151))),
             ),
             CupertinoDialogAction(
               onPressed: () {
@@ -163,7 +173,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               },
               isDefaultAction: true,
               child: const Text("Enter",
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF43AB37))),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Color(0xFF43AB37))),
             ),
           ],
         );
@@ -455,7 +466,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             children: [
               // Cancel
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -496,23 +508,27 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     Expanded(
                       child: CupertinoPicker(
                         itemExtent: 40,
-                        scrollController: FixedExtentScrollController(initialItem: selectedHour),
+                        scrollController: FixedExtentScrollController(
+                            initialItem: selectedHour),
                         onSelectedItemChanged: (int index) {
                           selectedHour = index;
                         },
                         children: List<Widget>.generate(
                           24,
-                          (int index) => Center(child: Text(index.toString().padLeft(2, '0'))),
+                          (int index) => Center(
+                              child: Text(index.toString().padLeft(2, '0'))),
                         ),
                       ),
                     ),
-                    const Text(":", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    const Text(":",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
                     // minutes
                     Expanded(
                       child: CupertinoPicker(
                         itemExtent: 40,
-                        scrollController:
-                            FixedExtentScrollController(initialItem: selectedMinute ~/ 15),
+                        scrollController: FixedExtentScrollController(
+                            initialItem: selectedMinute ~/ 15),
                         onSelectedItemChanged: (int index) {
                           selectedMinute = index * 15;
                         },
@@ -678,23 +694,28 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildCategoryChip("Academic", const Color(0xFF00BCD4), TaskCategory.academic),
+                  _buildCategoryChip("Academic", const Color(0xFF00BCD4),
+                      TaskCategory.academic),
                   const SizedBox(width: 8),
-                  _buildCategoryChip("Social", const Color(0xFF8AD483), TaskCategory.social),
+                  _buildCategoryChip(
+                      "Social", const Color(0xFF8AD483), TaskCategory.social),
                   const SizedBox(width: 8),
-                  _buildCategoryChip("Health", const Color(0xFFF67373), TaskCategory.health),
+                  _buildCategoryChip(
+                      "Health", const Color(0xFFF67373), TaskCategory.health),
                 ],
               ),
               const SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildCategoryChip("Chore", const Color(0xFFE997CD), TaskCategory.chore),
-                  const SizedBox(width: 8),
-                  _buildCategoryChip("Hobby", const Color(0xFF946AAE), TaskCategory.hobby),
+                  _buildCategoryChip(
+                      "Chore", const Color(0xFFE997CD), TaskCategory.chore),
                   const SizedBox(width: 8),
                   _buildCategoryChip(
-                      "Employment", const Color(0xFFEDBF45), TaskCategory.employment),
+                      "Hobby", const Color(0xFF946AAE), TaskCategory.hobby),
+                  const SizedBox(width: 8),
+                  _buildCategoryChip("Employment", const Color(0xFFEDBF45),
+                      TaskCategory.employment),
                 ],
               ),
             ],
@@ -862,7 +883,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   );
                 } else {
                   _location = value.trim().isNotEmpty
-                      ? Location(name: value.trim(), latitude: 0.0, longitude: 0.0)
+                      ? Location(
+                          name: value.trim(), latitude: 0.0, longitude: 0.0)
                       : null;
                 }
               });
@@ -889,7 +911,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
                 const SizedBox(height: 8),
                 (_location != null && _location!.name.isNotEmpty)
-                    ? Text(_location!.name, style: const TextStyle(fontSize: 14))
+                    ? Text(_location!.name,
+                        style: const TextStyle(fontSize: 14))
                     : Container(
                         height: 40,
                         decoration: BoxDecoration(
@@ -1067,7 +1090,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               if (_selectedDuration <= 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Please select a valid duration!")),
+                  const SnackBar(
+                      content: Text("Please select a valid duration!")),
                 );
                 return;
               }

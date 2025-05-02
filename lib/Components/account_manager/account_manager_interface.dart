@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/models/user_account_model.dart';
@@ -32,5 +31,5 @@ abstract class IAccountManager {
 
   // AccountManager -> ScheduleManager methods
   int getUserId();
-  TimeOfDay getBedtime();
+  DateTime getBedtime();
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:student_75/Components/account_manager/account_manager_interface.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/user_account_model.dart';
@@ -45,7 +44,8 @@ class AccountManager implements IAccountManager {
         TaskCategory.social
       ],
       sleepDuration: const Duration(hours: 8),
-      bedtime: const TimeOfDay(hour: 22, minute: 0),
+      bedtime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 22, 0),
       bedtimeNotifyBefore: const Duration(minutes: 30),
       mindfulnessDuration: const Duration(minutes: 10),
     );
@@ -91,7 +91,8 @@ class AccountManager implements IAccountManager {
       difficulty: Difficulty.easy,
       categoryOrder: [],
       sleepDuration: const Duration(hours: 8),
-      bedtime: const TimeOfDay(hour: 22, minute: 0),
+      bedtime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 22, 0),
       bedtimeNotifyBefore: const Duration(minutes: 30),
       mindfulnessDuration: const Duration(minutes: 10),
     );
@@ -147,7 +148,7 @@ class AccountManager implements IAccountManager {
   }
 
   @override
-  TimeOfDay getBedtime() {
+  DateTime getBedtime() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
     if (userAccount!.bedtime == null) {
       throw NoUserSignedInException('No bedtimes set for user');

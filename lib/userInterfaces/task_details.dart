@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:student_75/Components/points_manager.dart';
 import 'package:student_75/models/task_model.dart';
-import 'package:student_75/userInterfaces/add_task.dart';
+// import 'package:student_75/userInterfaces/add_task.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 
 class TaskDetails extends StatefulWidget {
@@ -42,7 +42,7 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
     Color taskColor = _getTaskColor(widget.task.category);
 
     return SizedBox(
@@ -68,7 +68,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black26, blurRadius: 4)
+                    ],
                   ),
                   child: Center(
                     child: Icon(_getCategoryIcon(widget.task.category),
@@ -84,7 +86,8 @@ class _TaskDetailsState extends State<TaskDetails> {
                         children: [
                           Expanded(
                             child: Text(
-                              DateFormat('dd/MM/yyyy').format(widget.task.startTime),
+                              DateFormat('dd/MM/yyyy')
+                                  .format(widget.task.startTime),
                               style: const TextStyle(
                                 fontFamily: 'KdamThmorPro',
                                 fontSize: 14,
@@ -116,7 +119,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      _buildBadge(widget.task.category.toString().split('.').last, taskColor),
+                      _buildBadge(
+                          widget.task.category.toString().split('.').last,
+                          taskColor),
                     ],
                   ),
                 )
@@ -142,7 +147,8 @@ class _TaskDetailsState extends State<TaskDetails> {
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildSection("    📍 Location", widget.task.location?.name ?? ""),
+                    child: _buildSection(
+                        "    📍 Location", widget.task.location?.name ?? ""),
                   ),
                   const Divider(
                     color: Color(0xFFCCC4C4),
@@ -155,7 +161,6 @@ class _TaskDetailsState extends State<TaskDetails> {
                     child: _buildSection("    Notes", widget.task.description),
                   ),
                   const SizedBox(height: 16),
-
                   const Divider(
                     color: Color(0xFFCCC4C4),
                     thickness: 1,
@@ -172,7 +177,6 @@ class _TaskDetailsState extends State<TaskDetails> {
                     indent: 16,
                     endIndent: 16,
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -181,7 +185,8 @@ class _TaskDetailsState extends State<TaskDetails> {
                           showCupertinoDialog(
                             context: context,
                             builder: (_) => CupertinoAlertDialog(
-                              title: const Text("Are you sure you want to delete?"),
+                              title: const Text(
+                                  "Are you sure you want to delete?"),
                               actions: [
                                 CupertinoDialogAction(
                                   isDestructiveAction: true,
@@ -212,10 +217,12 @@ class _TaskDetailsState extends State<TaskDetails> {
                           setState(() {
                             if (isComplete) {
                               widget.pointsManager.uncompleteTask(widget.task);
-                              widget.scheduleManager.uncompleteTask(widget.task.id);
+                              widget.scheduleManager
+                                  .uncompleteTask(widget.task.id);
                             } else {
                               widget.pointsManager.completeTask(widget.task);
-                              widget.scheduleManager.completeTask(widget.task.id);
+                              widget.scheduleManager
+                                  .completeTask(widget.task.id);
                             }
                             isComplete = !isComplete;
                             widget.task.isComplete = isComplete;
@@ -234,12 +241,15 @@ class _TaskDetailsState extends State<TaskDetails> {
                         backgroundColor: taskColor,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 12),
                       ),
                       onPressed: widget.onEdit,
                       child: const Text("Edit Task",
-                          style: TextStyle(color: Colors.white, fontFamily: 'KdamThmorPro',)),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'KdamThmorPro',
+                          )),
                     ),
                   ),
                 ],
@@ -260,7 +270,8 @@ class _TaskDetailsState extends State<TaskDetails> {
         Text(
           title,
           textAlign: TextAlign.left,
-          style: const TextStyle(fontFamily: 'KdamThmorPro',color: Color(0xFFCCC4C4)),
+          style: const TextStyle(
+              fontFamily: 'KdamThmorPro', color: Color(0xFFCCC4C4)),
         ),
         const SizedBox(height: 5),
         if (!isEmpty)
@@ -301,7 +312,9 @@ class _TaskDetailsState extends State<TaskDetails> {
       children: [
         Icon(icon, color: color, size: 30),
         const SizedBox(height: 5),
-        Text(label, style: TextStyle(color: color, fontSize: 12, fontFamily: 'KdamThmorPro')),
+        Text(label,
+            style: TextStyle(
+                color: color, fontSize: 12, fontFamily: 'KdamThmorPro')),
       ],
     );
   }

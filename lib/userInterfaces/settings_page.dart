@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
     double topPadding = MediaQuery.of(context).padding.top;
     Difficulty difficulty = accountManager.getDifficulty();
     TaskCategory topCategory = accountManager.getCategoryOrder().first;
@@ -35,7 +35,8 @@ class SettingsPage extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
+                  icon: const Icon(Icons.arrow_back_ios,
+                      color: Color(0xFF00A59B), size: 30),
                   onPressed: () => Navigator.pop(context),
                   color: Colors.black87,
                 ),
@@ -66,7 +67,10 @@ class SettingsPage extends StatelessWidget {
                 color: const Color(0xFFEBEFF0),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: const [
-                  BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(2, 2))
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 4,
+                      offset: Offset(2, 2))
                 ],
               ),
               child: const TextField(
@@ -78,15 +82,18 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            _buildSettingItem(context, Icons.person, "Account", difficulty, topCategory),
             _buildSettingItem(
-                context, Icons.notifications, "Notifications", difficulty, topCategory),
-            _buildSettingItem(context, Icons.remove_red_eye, "Appearance", difficulty, topCategory),
-            _buildSettingItem(
-                context, Icons.accessibility_new, "Accessibility", difficulty, topCategory),
-            _buildSettingItem(
-                context, Icons.mail_outline, "Invite Friends", difficulty, topCategory),
-            _buildSettingItem(context, Icons.lightbulb_outline, "Help", difficulty, topCategory),
+                context, Icons.person, "Account", difficulty, topCategory),
+            _buildSettingItem(context, Icons.notifications, "Notifications",
+                difficulty, topCategory),
+            _buildSettingItem(context, Icons.remove_red_eye, "Appearance",
+                difficulty, topCategory),
+            _buildSettingItem(context, Icons.accessibility_new, "Accessibility",
+                difficulty, topCategory),
+            _buildSettingItem(context, Icons.mail_outline, "Invite Friends",
+                difficulty, topCategory),
+            _buildSettingItem(context, Icons.lightbulb_outline, "Help",
+                difficulty, topCategory),
             const SizedBox(height: 16),
             Center(
               child: TextButton.icon(
@@ -96,7 +103,8 @@ class SettingsPage extends StatelessWidget {
                     builder: (BuildContext context) {
                       return CupertinoAlertDialog(
                         title: const Text("Log Out"),
-                        content: const Text("Are you sure you want to log out?"),
+                        content:
+                            const Text("Are you sure you want to log out?"),
                         actions: [
                           CupertinoDialogAction(
                             child: const Text("Cancel"),
@@ -111,7 +119,8 @@ class SettingsPage extends StatelessWidget {
                               Navigator.pop(context);
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                                MaterialPageRoute(
+                                    builder: (context) => WelcomeScreen()),
                               );
                             },
                           ),
@@ -138,8 +147,8 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingItem(BuildContext context, IconData icon, String title, Difficulty difficulty,
-      TaskCategory topCategory) {
+  Widget _buildSettingItem(BuildContext context, IconData icon, String title,
+      Difficulty difficulty, TaskCategory topCategory) {
     return Column(
       children: [
         ListTile(

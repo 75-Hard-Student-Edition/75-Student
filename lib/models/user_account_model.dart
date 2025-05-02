@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart'; // TimeOfDay
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
 
@@ -11,10 +10,10 @@ class UserAccountModel {
   final Difficulty? difficulty;
   final List<TaskCategory>? categoryOrder;
   final Duration? sleepDuration;
-  final TimeOfDay? bedtime;
-  final Duration? bedtimeNotifyBefore; //! Should be "notifyBefore"
+  final DateTime? bedtime;
+  final Duration?
+      bedtimeNotifyBefore; //! Should be "notifyBefore". Remember to update DB models if you change this
   final Duration? mindfulnessDuration;
-
   UserAccountModel({
     required this.id,
     required this.username,
@@ -37,7 +36,7 @@ class UserAccountModel {
     Difficulty? difficulty,
     List<TaskCategory>? categoryOrder,
     Duration? sleepDuration,
-    TimeOfDay? bedtime,
+    DateTime? bedtime,
     Duration? bedtimeNotifyBefore,
     Duration? mindfulnessDuration,
   }) {
