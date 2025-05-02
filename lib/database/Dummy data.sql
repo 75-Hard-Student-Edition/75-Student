@@ -32,10 +32,3 @@ VALUES
 (1, 1, 1, 'Study for exam', 'Review math notes', FALSE, FALSE, '2025-02-18 10:00:00', '2025-02-18 12:00:00', '1 day', '15 minutes'),
 (1, 3, 3, 'Morning workout', 'Cardio and weights session', TRUE, FALSE, '2025-02-18 06:00:00', '2025-02-18 07:00:00', '1 day', '10 minutes'),
 (2, 4, 2, 'Job interview', 'Online interview with XYZ Corp', FALSE, FALSE, '2025-02-20 14:00:00', '2025-02-20 15:00:00', NULL, '30 minutes');
-
--- Insert into Alarm table
-INSERT INTO "alarm" (user_id, day_id, time)
-VALUES
-(1, 1, '07:00:00'),
-(2, 2, '06:30:00'),
-(1, 3, '07:15:00');

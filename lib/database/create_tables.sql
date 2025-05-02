@@ -52,10 +52,3 @@ CREATE TABLE "task" (
     notify_interval TEXT NOT NULL -- formerly INTERVAL
 ) STRICT;
 
--- Create Alarm table
-CREATE TABLE "alarm" (
-    user_id INT REFERENCES "user"(user_id) ON DELETE CASCADE,
-    day_id INTEGER NOT NULL REFERENCES "day"(day_id) ON DELETE CASCADE,
-    time TEXT NOT NULL, -- formerly TIME
-    PRIMARY KEY (user_id, day_id)
-) STRICT;
