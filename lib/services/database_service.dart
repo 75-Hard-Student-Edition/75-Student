@@ -9,7 +9,7 @@ abstract class IDatabaseService {
   // ScheduleManager -> Database methods
   Future<void> addTaskRecord(TaskModel task, int userId);
   Future<void> updateTaskRecord(TaskModel task);
-  Future<void> removeTaskRecord(TaskModel task);
+  Future<void> removeTaskRecord(int taskId);
 
   // Database -> ScheduleManager methods
   Future<TaskModel?> queryTask(int taskId);
