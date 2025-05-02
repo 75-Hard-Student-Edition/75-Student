@@ -73,7 +73,6 @@ class ScheduleManager implements IScheduleManager {
   @override
   void addTask(TaskModel task) {
     // Add task to schedule
-    // todaysSchedule.add(task);
     try {
       todaysSchedule.add(task);
     } on TaskOverlapException catch (e) {
