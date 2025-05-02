@@ -95,9 +95,18 @@ class LogInScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       // Log in to the account using the AccountManager
-                      await accountManager.login("username",
-                          "password"); //todo @widad: replace with actual values from the text fields
-                      //todo also add error handling like with sign up
+                      try {
+                        await accountManager.login("username",
+                            "password"); //todo @widad: replace with actual values from the text fields
+                      } on AccountNotFoundException catch (e) {
+                        // Handle login error (e.g., show a dialog or snackbar)
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Login failed: $e'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
 
                       // Navigate to the ScheduleScreen after logging in
                       Navigator.push(

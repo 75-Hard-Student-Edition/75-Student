@@ -12,6 +12,14 @@ class NoUserSignedInException implements Exception {
   String toString() => 'NoUserSignedInException: $message';
 }
 
+class AccountNotFoundException implements Exception {
+  final String message;
+  AccountNotFoundException(this.message);
+
+  @override
+  String toString() => 'AccountNotFoundException: $message';
+}
+
 class AccountManager implements IAccountManager {
   UserAccountModel? userAccount;
 
@@ -30,8 +38,14 @@ class AccountManager implements IAccountManager {
 
   //* GUI -> AccountManager methods
   @override
-  Future<void> login(String username, String password) async =>
-      userAccount = await DatabaseService().queryAccount(username, password);
+  Future<void> login(String username, String password) async {
+    UserAccountModel? fetchedAccount = await DatabaseService().queryAccount(username, password);
+    if (fetchedAccount == null) {
+      throw AccountNotFoundException(
+          'Account with that password not found for username: $username');
+    }
+    userAccount = fetchedAccount;
+  }
 
   @override
   void logout() => userAccount = null;
