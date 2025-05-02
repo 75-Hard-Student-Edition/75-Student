@@ -28,3 +28,6 @@ doc/api/
 .DS_Store
 .idea/
 lib/.DS_Store
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/flutter_export_environment.sh
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
