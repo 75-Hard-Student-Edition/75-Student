@@ -30,4 +30,14 @@ extension UserAccountModelDB on UserAccountModel {
       "mindfulness_minutes": mindfulnessDuration!.inMinutes,
     };
   }
+
+  static UserAccountModel fromMap(Map<String, dynamic> map) {
+    return UserAccountModel(
+      id: map["user_id"],
+      username: map["username"],
+      email: map["email"] == "" ? null : map["email"],
+      phoneNumber: map["phone_number"] == "" ? null : map["phone_number"],
+      streak: map["streak"],
+    );
+  }
 }

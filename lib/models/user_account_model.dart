@@ -6,7 +6,7 @@ class UserAccountModel {
   final String username;
   final String? email;
   final String? phoneNumber;
-  final int streak = 0;
+  final int streak;
   final Difficulty? difficulty;
   final List<TaskCategory>? categoryOrder;
   final Duration? sleepDuration;
@@ -19,6 +19,7 @@ class UserAccountModel {
     required this.username,
     this.email,
     this.phoneNumber,
+    required this.streak,
     required this.difficulty,
     required this.categoryOrder,
     required this.sleepDuration,
@@ -45,6 +46,7 @@ class UserAccountModel {
       username: username ?? this.username,
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      streak: streak ?? this.streak,
       difficulty: difficulty ?? this.difficulty,
       categoryOrder: categoryOrder ?? this.categoryOrder,
       sleepDuration: sleepDuration ?? this.sleepDuration,

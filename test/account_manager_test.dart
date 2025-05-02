@@ -61,6 +61,7 @@ void main() {
       final updatedAccount = UserAccountModel(
         id: 1,
         username: 'updateduser',
+        streak: 0,
         difficulty: Difficulty.medium,
         categoryOrder: [TaskCategory.social, TaskCategory.hobby],
         sleepDuration: const Duration(hours: 7),

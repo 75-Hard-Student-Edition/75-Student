@@ -20,7 +20,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   String _selectedCountryCode = '+44'; // UK default
   final List<Map<String, String>> _countryData = [
     {'code': '+1', 'flag': '🇺🇸'},
@@ -51,7 +52,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 // Back arrow
                 IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B)),
+                  icon: const Icon(Icons.arrow_back_ios,
+                      color: Color(0xFF00A59B)),
                   iconSize: 28,
                   onPressed: () => Navigator.pushReplacement(
                     context,
@@ -78,7 +80,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Text(
                     'Sign Up',
                     style: TextStyle(
-                        fontFamily: 'KdamThmorPro', fontSize: 24, color: Color(0xFF00B3A1)),
+                        fontFamily: 'KdamThmorPro',
+                        fontSize: 24,
+                        color: Color(0xFF00B3A1)),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -89,7 +93,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     GestureDetector(
                       onTap: _showInputTypePicker,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 14),
                         decoration: BoxDecoration(
                           color: const Color(0xFFEBEFF0),
                           borderRadius: BorderRadius.circular(12),
@@ -108,7 +113,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       GestureDetector(
                         onTap: _showCountryPicker,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 14),
                           decoration: BoxDecoration(
                             color: const Color(0xFFEBEFF0),
                             borderRadius: BorderRadius.circular(12),
@@ -141,11 +147,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: TextFormField(
                           controller: _mobileEmailController,
                           decoration: InputDecoration(
-                            hintText: _selectedInputType == 'Email' ? 'Email' : 'Mobile',
+                            hintText: _selectedInputType == 'Email'
+                                ? 'Email'
+                                : 'Mobile',
                             filled: true,
                             fillColor: const Color(0xFFEBEFF0),
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 18),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -155,7 +163,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             if (_selectedInputType == 'Email') {
                               if (value == null ||
                                   value.isEmpty ||
-                                  !(value.contains('@') && value.contains('.'))) {
+                                  !(value.contains('@') &&
+                                      value.contains('.'))) {
                                 return 'Enter a valid email';
                               }
                             } else {
@@ -189,14 +198,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: 'Full Name',
                       filled: true,
                       fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 18),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty || value.split(' ').length < 2) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          value.split(' ').length < 2) {
                         return 'Enter your Full Name';
                       }
                       return null;
@@ -222,7 +234,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: 'Username',
                       filled: true,
                       fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 18),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -250,7 +263,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: 'Password',
                       filled: true,
                       fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 18),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -278,7 +292,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: 'Confirm Password',
                       filled: true,
                       fillColor: const Color(0xFFEBEFF0),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 18),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -299,7 +314,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Already have an account? ", style: TextStyle(color: Colors.grey)),
+                    const Text("Already have an account? ",
+                        style: TextStyle(color: Colors.grey)),
                     GestureDetector(
                       onTap: () => Navigator.push(
                         context,
@@ -333,6 +349,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     signUpFlowState: UserAccountModel(
                                       id: 0,
                                       username: "testUser",
+                                      streak: 0,
                                       difficulty: null,
                                       categoryOrder: null,
                                       sleepDuration: null,

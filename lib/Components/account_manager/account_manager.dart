@@ -34,6 +34,7 @@ class AccountManager implements IAccountManager {
     UserAccountModel fetchFromDb = UserAccountModel(
       id: 0,
       username: username,
+      streak: 0,
       difficulty: Difficulty.easy,
       categoryOrder: [
         TaskCategory.academic,
@@ -88,6 +89,7 @@ class AccountManager implements IAccountManager {
     return UserAccountModel(
       id: 0,
       username: 'Stub User',
+      streak: 0,
       difficulty: Difficulty.easy,
       categoryOrder: [],
       sleepDuration: const Duration(hours: 8),
