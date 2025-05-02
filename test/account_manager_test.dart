@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/material.dart';
 import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
@@ -65,7 +64,8 @@ void main() {
         difficulty: Difficulty.medium,
         categoryOrder: [TaskCategory.social, TaskCategory.hobby],
         sleepDuration: const Duration(hours: 7),
-        bedtime: const TimeOfDay(hour: 22, minute: 30),
+        bedtime: DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, 22, 30),
         bedtimeNotifyBefore: const Duration(minutes: 20),
         mindfulnessDuration: const Duration(minutes: 15),
       );
