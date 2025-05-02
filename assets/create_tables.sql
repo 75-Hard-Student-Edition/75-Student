@@ -7,13 +7,12 @@ This means that integrity will need to be ensured in the code that
 interfaces with the database, rather than the database itself.
  */
 
--- Create user table
-CREATE TABLE "user" (
+CREATE TABLE IF NOT EXISTS "user" (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,                 
     email TEXT UNIQUE,            
     phone_number TEXT UNIQUE,
-    password TEXT NOT NULL,              
+    password TEXT,              
     streak INT DEFAULT 0,
     difficulty INTEGER NOT NULL,
     category_order TEXT NOT NULL,
@@ -21,10 +20,9 @@ CREATE TABLE "user" (
     bedtime TEXT NOT NULL,
     notify_time_minutes INT NOT NULL,
     mindfulness_minutes INT NOT NULL            
-) STRICT;
+);
 
--- Create Task table
-CREATE TABLE "task" (
+CREATE TABLE IF NOT EXISTS "task" (
     task_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES "user"(user_id) ON DELETE CASCADE,
     title TEXT NOT NULL, 
@@ -37,4 +35,4 @@ CREATE TABLE "task" (
     duration_minutes INT NOT NULL, 
     repeat_period TEXT, 
     links TEXT
-) STRICT;
+);

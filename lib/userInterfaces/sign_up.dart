@@ -107,9 +107,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     ),
     child: TextFormField(
       controller: _usernameController,
-      obscureText: true,
+      obscureText: false,
       decoration: InputDecoration(
-        hintText: 'Password',
+        hintText: 'Username',
         filled: true,
         fillColor: const Color(0xFFEBEFF0),
         contentPadding:

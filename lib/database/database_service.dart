@@ -25,21 +25,43 @@ class DatabaseService implements IDatabaseService {
   }
 
   Future<void> initDatabase() async {
-    // Note: Using the `join` function from the
-    // `path` package is best practice to ensure the path is correctly
-    // constructed for each platform.
     path = join(await getDatabasesPath(), '75_student_db.db');
-    // read sql from file, store as string
-    String createDatabaseSql =
-        await rootBundle.loadString('assets/create_tables.sql');
+
+    String createDatabaseSql = await rootBundle.loadString('assets/create_tables.sql');
 
     _database = await openDatabase(
-        // Set the path to the database.
-        path!, onCreate: (db, version) {
-      // Run the CREATE TABLE statement on the database.
-      // get database from a file
-      return db.execute(createDatabaseSql);
-    }, version: 1);
+      path!,
+      version: 1,
+      onCreate: (db, version) async {
+        print("🔧 Running SQL to create tables (onCreate)");
+        await db.execute(createDatabaseSql);
+      },
+    );
+
+    // Failsafe: Check if 'task' and 'user' tables exist
+    final existingTables = await _database!.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('task', 'user');",
+    );
+
+    final existingTableNames = existingTables.map((e) => e['name']).toSet();
+
+    if (!existingTableNames.contains('task') || !existingTableNames.contains('user')) {
+      print("⚠️ One or more required tables are missing — creating them manually.");
+      final statements = createDatabaseSql.split(';');
+      for (final statement in statements) {
+        final trimmed = statement.trim();
+        if (trimmed.isNotEmpty) {
+          try {
+            await _database!.execute(trimmed + ';');
+          } catch (e) {
+            print("⚠️ SQL error in fallback: $e");
+            print("🧨 Failed statement: $trimmed");
+          }
+        }
+      }
+    } else {
+      print("✅ 'task' and 'user' tables exist.");
+    }
   }
 
   @override
@@ -94,17 +116,21 @@ class DatabaseService implements IDatabaseService {
   }
 
   @override
-  Future<void> addAccountRecord(UserAccountModel account) async {
+  Future<void> addAccountRecord(
+      UserAccountModel account, String password) async {
     final db = await database;
     await db.insert("user", account.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    // Add password
+    await db.update("user", {"password": password},
+        where: "username = ?", whereArgs: [account.username]);
   }
 
   @override
   Future<void> updateAccountRecord(UserAccountModel account) async {
     final db = await database;
-    await db.insert("user", account.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.update("user", account.toMap(),
+        where: "id = ?", whereArgs: [account.id]);
   }
 
   @override

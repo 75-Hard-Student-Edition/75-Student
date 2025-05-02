@@ -22,8 +22,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    selectedWindDownTime = TimeOfDay.fromDateTime(widget.accountManager.getBedtime());
-    mindfulnessDuration = widget.accountManager.getMindfulnessDuration().inMinutes;
+    selectedWindDownTime =
+        TimeOfDay.fromDateTime(widget.accountManager.getBedtime());
+    mindfulnessDuration =
+        widget.accountManager.getMindfulnessDuration().inMinutes;
   }
 
   final Map<String, Duration> beforeTaskOptionsMap = {
@@ -70,7 +72,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEAF7F7),
-      bottomNavigationBar: CustomBottomNavBar(accountManager: widget.accountManager),
+      bottomNavigationBar:
+          CustomBottomNavBar(accountManager: widget.accountManager),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -79,7 +82,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF00A59B), size: 30),
+                    icon: const Icon(Icons.arrow_back_ios,
+                        color: Color(0xFF00A59B), size: 30),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -101,7 +105,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Enable Notifications', style: TextStyle(fontFamily: 'KdamThmorPro')),
+                  const Text('Enable Notifications',
+                      style: TextStyle(fontFamily: 'KdamThmorPro')),
                   const SizedBox(width: 10),
                   CupertinoSwitch(
                     value: notificationsEnabled,
@@ -124,7 +129,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(Icons.notifications, size: 20, color: Color(0xFF6E6E6E)),
+                              Icon(Icons.notifications,
+                                  size: 20, color: Color(0xFF6E6E6E)),
                               SizedBox(width: 10),
                               Text(
                                 'Task Notifications',
@@ -147,10 +153,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             Column(
                               children: [
                                 Container(
-                                  width: MediaQuery.of(context).size.width * 0.45,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
                                   child: ChoiceChip(
                                     label: const Text('Before Task',
-                                        style: TextStyle(fontFamily: 'KdamThmorPro')),
+                                        style: TextStyle(
+                                            fontFamily: 'KdamThmorPro')),
                                     selected: notificationType == 'Before Task',
                                     onSelected: (_) {
                                       setState(() {
@@ -160,7 +168,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.info_outline, size: 16),
+                                  icon:
+                                      const Icon(Icons.info_outline, size: 16),
                                   onPressed: () {
                                     showCupertinoDialog(
                                       context: context,
@@ -191,11 +200,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             Column(
                               children: [
                                 Container(
-                                  width: MediaQuery.of(context).size.width * 0.45,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
                                   child: ChoiceChip(
                                     label: const Text('Start of Task',
-                                        style: TextStyle(fontFamily: 'KdamThmorPro')),
-                                    selected: notificationType == 'Start of Task',
+                                        style: TextStyle(
+                                            fontFamily: 'KdamThmorPro')),
+                                    selected:
+                                        notificationType == 'Start of Task',
                                     onSelected: (_) {
                                       setState(() {
                                         notificationType = 'Start of Task';
@@ -204,7 +216,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.info_outline, size: 16),
+                                  icon:
+                                      const Icon(Icons.info_outline, size: 16),
                                   onPressed: () {
                                     showCupertinoDialog(
                                       context: context,
@@ -248,7 +261,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               itemExtent: 32.0,
                               scrollController: FixedExtentScrollController(
                                 initialItem: selectedBeforeTime != null
-                                    ? beforeTaskOptions.indexOf(selectedBeforeTime!)
+                                    ? beforeTaskOptions
+                                        .indexOf(selectedBeforeTime!)
                                     : 0,
                               ),
                               onSelectedItemChanged: (int index) {
@@ -279,124 +293,165 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                            const Text('BED TIME',
-                                style: TextStyle(fontFamily: 'KdamThmorPro', fontSize: 16)),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 4),
-                              child: CupertinoButton(
-                                child: Text(
-                                  selectedWindDownTime.format(context),
-                                  style: const TextStyle(
-                                    color: Color(0xFF00B3A1),
-                                    fontFamily: 'KdamThmorPro',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  TimeOfDay tempSelectedTime = selectedWindDownTime;
-                                  bool tempSnooze = allowSnooze;
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('BED TIME',
+                                    style: TextStyle(
+                                        fontFamily: 'KdamThmorPro',
+                                        fontSize: 16)),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  child: CupertinoButton(
+                                    child: Text(
+                                      selectedWindDownTime.format(context),
+                                      style: const TextStyle(
+                                        color: Color(0xFF00B3A1),
+                                        fontFamily: 'KdamThmorPro',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      TimeOfDay tempSelectedTime =
+                                          selectedWindDownTime;
+                                      bool tempSnooze = allowSnooze;
 
-                                  showCupertinoModalPopup(
-                                    context: context,
-                                    builder: (_) => StatefulBuilder(
-                                      builder: (context, setModalState) {
-                                        return Container(
-                                          height: 300,
-                                          color: Colors.white,
-                                          child: Column(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 16, vertical: 8),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    CupertinoButton(
-                                                      padding: EdgeInsets.zero,
-                                                      child: const Text('Cancel'),
-                                                      onPressed: () => Navigator.of(context).pop(),
+                                      showCupertinoModalPopup(
+                                        context: context,
+                                        builder: (_) => StatefulBuilder(
+                                          builder: (context, setModalState) {
+                                            return Container(
+                                              height: 300,
+                                              color: Colors.white,
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 8),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        CupertinoButton(
+                                                          padding:
+                                                              EdgeInsets.zero,
+                                                          child: const Text(
+                                                              'Cancel'),
+                                                          onPressed: () =>
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(),
+                                                        ),
+                                                        CupertinoButton(
+                                                          padding:
+                                                              EdgeInsets.zero,
+                                                          child: const Text(
+                                                              'Save'),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              selectedWindDownTime =
+                                                                  tempSelectedTime;
+                                                              allowSnooze =
+                                                                  tempSnooze;
+                                                            });
+                                                            widget
+                                                                .accountManager
+                                                                .updateAccount(widget
+                                                                    .accountManager
+                                                                    .userAccount!
+                                                                    .copyWith(
+                                                              bedtimeNotifyBefore:
+                                                                  Duration.zero,
+                                                              bedtime: DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime.now()
+                                                                      .month,
+                                                                  DateTime.now()
+                                                                      .day,
+                                                                  selectedWindDownTime
+                                                                      .hour,
+                                                                  selectedWindDownTime
+                                                                      .minute),
+                                                            ));
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                        ),
+                                                      ],
                                                     ),
-                                                    CupertinoButton(
-                                                      padding: EdgeInsets.zero,
-                                                      child: const Text('Save'),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          selectedWindDownTime = tempSelectedTime;
-                                                          allowSnooze = tempSnooze;
+                                                  ),
+                                                  SizedBox(
+                                                    height: 150,
+                                                    child: CupertinoDatePicker(
+                                                      mode:
+                                                          CupertinoDatePickerMode
+                                                              .time,
+                                                      use24hFormat: false,
+                                                      initialDateTime: DateTime(
+                                                        2025,
+                                                        1,
+                                                        1,
+                                                        selectedWindDownTime
+                                                            .hour,
+                                                        selectedWindDownTime
+                                                            .minute,
+                                                      ),
+                                                      onDateTimeChanged:
+                                                          (DateTime
+                                                              newDateTime) {
+                                                        setModalState(() {
+                                                          tempSelectedTime =
+                                                              TimeOfDay(
+                                                            hour: newDateTime
+                                                                .hour,
+                                                            minute: newDateTime
+                                                                .minute,
+                                                          );
                                                         });
-                                                        widget.accountManager.updateAccount(widget
-                                                            .accountManager.userAccount!
-                                                            .copyWith(
-                                                          bedtimeNotifyBefore: Duration.zero,
-                                                          bedtime: DateTime(
-                                                              DateTime.now().year,
-                                                              DateTime.now().month,
-                                                              DateTime.now().day,
-                                                              selectedWindDownTime.hour,
-                                                              selectedWindDownTime.minute),
-                                                        ));
-                                                        Navigator.of(context).pop();
                                                       },
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 150,
-                                                child: CupertinoDatePicker(
-                                                  mode: CupertinoDatePickerMode.time,
-                                                  use24hFormat: false,
-                                                  initialDateTime: DateTime(
-                                                    2025,
-                                                    1,
-                                                    1,
-                                                    selectedWindDownTime.hour,
-                                                    selectedWindDownTime.minute,
                                                   ),
-                                                  onDateTimeChanged: (DateTime newDateTime) {
-                                                    setModalState(() {
-                                                      tempSelectedTime = TimeOfDay(
-                                                        hour: newDateTime.hour,
-                                                        minute: newDateTime.minute,
-                                                      );
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  const SizedBox(width: 16),
-                                                  const Text(
-                                                    'Snooze',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black,
-                                                      fontFamily: 'KdamThmorPro',
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 10),
-                                                  CupertinoSwitch(
-                                                    value: tempSnooze,
-                                                    onChanged: (bool value) {
-                                                      setModalState(() {
-                                                        tempSnooze = value;
-                                                      });
-                                                    },
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      const SizedBox(width: 16),
+                                                      const Text(
+                                                        'Snooze',
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                          fontFamily:
+                                                              'KdamThmorPro',
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                      CupertinoSwitch(
+                                                        value: tempSnooze,
+                                                        onChanged:
+                                                            (bool value) {
+                                                          setModalState(() {
+                                                            tempSnooze = value;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ]),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ]),
                         ),
 
                         const SizedBox(height: 10),
@@ -409,10 +464,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 children: [
                                   const Text(
                                     'MINDFULNESS',
-                                    style: TextStyle(fontSize: 16, fontFamily: 'KdamThmorPro'),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'KdamThmorPro'),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.info_outline, size: 16),
+                                    icon: const Icon(Icons.info_outline,
+                                        size: 16),
                                     onPressed: () {
                                       showCupertinoDialog(
                                         context: context,
@@ -461,30 +519,43 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         child: Column(
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 16, vertical: 8),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 8),
                                               child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   CupertinoButton(
                                                     padding: EdgeInsets.zero,
                                                     child: const Text('Cancel'),
-                                                    onPressed: () => Navigator.of(context).pop(),
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(),
                                                   ),
                                                   CupertinoButton(
                                                     padding: EdgeInsets.zero,
                                                     child: const Text('Save'),
                                                     onPressed: () {
                                                       setState(() {
-                                                        mindfulnessDuration = tempDuration;
+                                                        mindfulnessDuration =
+                                                            tempDuration;
                                                       });
-                                                      widget.accountManager.updateAccount(
-                                                        widget.accountManager.userAccount!.copyWith(
-                                                          mindfulnessDuration: Duration(
-                                                              minutes: mindfulnessDuration),
+                                                      widget.accountManager
+                                                          .updateAccount(
+                                                        widget.accountManager
+                                                            .userAccount!
+                                                            .copyWith(
+                                                          mindfulnessDuration:
+                                                              Duration(
+                                                                  minutes:
+                                                                      mindfulnessDuration),
                                                         ),
                                                       );
-                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context)
+                                                          .pop();
                                                     },
                                                   ),
                                                 ],
@@ -492,13 +563,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                             ),
                                             Expanded(
                                               child: CupertinoPicker(
-                                                scrollController: FixedExtentScrollController(
-                                                  initialItem: mindfulnessDurations
-                                                      .indexOf(mindfulnessDuration),
+                                                scrollController:
+                                                    FixedExtentScrollController(
+                                                  initialItem:
+                                                      mindfulnessDurations.indexOf(
+                                                          mindfulnessDuration),
                                                 ),
                                                 itemExtent: 32.0,
                                                 onSelectedItemChanged: (index) {
-                                                  tempDuration = mindfulnessDurations[index];
+                                                  tempDuration =
+                                                      mindfulnessDurations[
+                                                          index];
                                                 },
                                                 children: mindfulnessDurations
                                                     .map((duration) => Center(
@@ -507,7 +582,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                 ? '${duration ~/ 60}h ${duration % 60}min'
                                                                 : '$duration min',
                                                             style: const TextStyle(
-                                                                fontFamily: 'KdamThmorPro'),
+                                                                fontFamily:
+                                                                    'KdamThmorPro'),
                                                           ),
                                                         ))
                                                     .toList(),
@@ -559,8 +635,8 @@ class CustomBottomNavBar extends StatelessWidget {
                 builder: (BuildContext context) {
                   return CupertinoAlertDialog(
                     title: const Text('Save Settings?'),
-                    content:
-                        const Text('Are you sure you want to save your notification preferences?'),
+                    content: const Text(
+                        'Are you sure you want to save your notification preferences?'),
                     actions: [
                       CupertinoDialogAction(
                         child: const Text('Cancel'),
@@ -588,7 +664,8 @@ class CustomBottomNavBar extends StatelessWidget {
                 },
               );
             },
-            child: const Text('Save', style: TextStyle(fontFamily: 'KdamThmorPro')),
+            child: const Text('Save',
+                style: TextStyle(fontFamily: 'KdamThmorPro')),
           ),
           // const SizedBox(height: 10),
           // CircleAvatar(

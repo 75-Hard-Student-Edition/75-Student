@@ -16,7 +16,7 @@ abstract class IDatabaseService {
   Future<List<TaskModel>> fetchTodaysScheduledTasks(int userId);
 
   // AccountManager -> Database methods
-  Future<void> addAccountRecord(UserAccountModel account);
+  Future<void> addAccountRecord(UserAccountModel account, String password);
   Future<void> updateAccountRecord(UserAccountModel account);
   Future<void> removeAccountRecord(int userId);
 
