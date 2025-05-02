@@ -155,6 +155,8 @@ class ScheduleManager implements IScheduleManager {
     final TaskModel task = todaysSchedule.tasks[taskIndex];
     editTask(task.copyWith(isComplete: true));
     pointsManager.completeTask(task);
+    DatabaseService()
+        .updateTaskRecord(task.copyWith(isComplete: true), accountManager.userAccount!.id);
   }
 
   @override
@@ -163,6 +165,8 @@ class ScheduleManager implements IScheduleManager {
     final TaskModel task = todaysSchedule.tasks[taskIndex];
     editTask(task.copyWith(isComplete: false));
     pointsManager.uncompleteTask(task);
+    DatabaseService()
+        .updateTaskRecord(task.copyWith(isComplete: false), accountManager.userAccount!.id);
   }
 
   @override
