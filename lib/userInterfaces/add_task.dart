@@ -1087,7 +1087,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 name: _taskName,
                 description: _notes,
                 isMovable: _isMovable,
-                isComplete: _isComplete,
+                isComplete: false,
                 category: _selectedCategory!,
                 priority: TaskPriority.medium,
                 location: _location,

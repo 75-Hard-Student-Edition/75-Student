@@ -73,32 +73,17 @@ class ScheduleManager implements IScheduleManager {
   @override
   void addTask(TaskModel task) {
     // Add task to schedule
-    // todaysSchedule.add(task);
     try {
       todaysSchedule.add(task);
     } on TaskOverlapException catch (e) {
       throw TaskOverlapException("Tasks overlapping");
-      // print("TaskOverlapException caught");
-      // // displayError(e.toString());
-      // TaskModel overlappingTask = schedule.tasks
-      //     .firstWhere((currentTask) => currentTask.startTime == task.startTime);
-      // TaskModel? selectedTask = await userBinarySelect(task, overlappingTask,
-      //     "Tasks overlapping. Please select which task to keep");
-      // if (selectedTask == task) {
-      //   schedule.tasks.add(task);
-      //   postPoneTask(task.id);
-      // } else {
-      //   postPoneTask(overlappingTask.id);
-      //   addTask(task);
-      // }
     } catch (e) {
       // Handle other exceptions
       displayError("Uncaught Exception on addTask: ${e.toString()}");
     }
     // Add notification for task
     notificationManager.addNotification(task);
-    //todo Update points
-    // pointsManager.updatePoints(task);
+    pointsManager.addTask(task);
     //todo Update database
     // databaseService.addTaskRecord(task);
   }
@@ -107,6 +92,7 @@ class ScheduleManager implements IScheduleManager {
   void deleteTask(int taskId) {
     // Remove task from schedule
     try {
+      pointsManager.removeTask(todaysSchedule.getTaskModelFromId(taskId)!);
       todaysSchedule.remove(taskId);
     } on TaskNotFoundException catch (e) {
       displayError(e.toString());
@@ -117,7 +103,6 @@ class ScheduleManager implements IScheduleManager {
     // Remove notification for task
     notificationManager.removeNotification(taskId);
     //todo Update points
-    // pointsManager.updatePoints(task);
     //todo Update database
     // databaseService.deleteTaskRecord(taskId);
   }
@@ -145,12 +130,13 @@ class ScheduleManager implements IScheduleManager {
   @override
   void postPoneTask(int taskId) {
     // Add task to backlog
-    final TaskModel? task = todaysSchedule.getTaskModelFromId(taskId);
-    if (task == null) {
+    try {
+      final TaskModel? task = todaysSchedule.getTaskModelFromId(taskId);
+      backlog.enqueue(task!);
+    } on TaskNotFoundException catch (e) {
       throw TaskNotFoundException(
-          "Task with id '$taskId' not found in schedule when trying to postpone");
+          "Task with id '$taskId' not found in schedule when trying to postpone: ${e.message}");
     }
-    backlog.enqueue(task);
     // Remove task from schedule
     deleteTask(taskId);
   }
@@ -159,7 +145,16 @@ class ScheduleManager implements IScheduleManager {
   void completeTask(int taskId) {
     final int taskIndex = todaysSchedule.getTaskIndexFromId(taskId);
     final TaskModel task = todaysSchedule.tasks[taskIndex];
-    editTask(task.copyWith(isComplete: !task.isComplete));
+    editTask(task.copyWith(isComplete: true));
+    pointsManager.completeTask(task);
+  }
+
+  @override
+  void uncompleteTask(int taskId) {
+    final int taskIndex = todaysSchedule.getTaskIndexFromId(taskId);
+    final TaskModel task = todaysSchedule.tasks[taskIndex];
+    editTask(task.copyWith(isComplete: false));
+    pointsManager.uncompleteTask(task);
   }
 
   @override

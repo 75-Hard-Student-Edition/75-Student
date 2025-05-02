@@ -55,8 +55,19 @@ class PointsManager {
   /// Updates [currentPoints] and [completedTasks] when a task is marked as completed
   void completeTask(TaskModel task) {
     int taskPoints = getTaskPoints(task);
-    currentPoints += taskPoints;
-    completedTasks.add(task.id);
+    if (!completedTasks.contains(task.id)) {
+      currentPoints += taskPoints;
+      completedTasks.add(task.id);
+    }
+  }
+
+  /// Removes points for a completed task (un-completing it), without affecting maxPoints.
+  void uncompleteTask(TaskModel task) {
+    int taskPoints = getTaskPoints(task);
+    if (completedTasks.contains(task.id)) {
+      currentPoints -= taskPoints;
+      completedTasks.remove(task.id);
+    }
   }
 
   /// Updates [currentPoints] and [completedTasks] when a task is removed from the schedule
@@ -85,3 +96,5 @@ class PointsManager {
   /// Returns true if the user has passed, false otherwise
   bool determinePass() => currentPoints >= pointsToPass;
 }
+
+  

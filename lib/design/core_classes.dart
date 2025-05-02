@@ -162,7 +162,7 @@ enum Difficulty { easy, medium, hard }
 
 class UserAccount {
   late final String username;
-  late int streak;
+  int streak = 0;
   late Difficulty difficulty;
 
   UserAccount() {
@@ -172,11 +172,13 @@ class UserAccount {
   void fetchUserDetails() {
     // Fetch details from database
     username = "temp";
-    streak = -1;
+    streak = 0;
     difficulty = Difficulty.easy;
   }
 
-  void incrementStreak() => ++streak;
+  void incrementStreak() {
+    streak++;
+  }
 }
 
 /// Acts as an interface between the app, database, and userAccount

@@ -16,11 +16,11 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 24.0),
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       '75 Student',
                       style: TextStyle(
                         fontFamily: 'KdamThmorPro',
@@ -28,10 +28,19 @@ class WelcomeScreen extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 55),
-                    Image(
-                      image: AssetImage('assets/images/logo75.png'),
+                    const SizedBox(height: 55),
+                    Container(
                       width: 250,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(30),
+                        image:  DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage('assets/images/logo.png'),
+                        ),
+                        border: Border.all(color: const Color(0x00FFFFFF), width: 1),
+                      ),
                     ),
                   ],
                 ),
