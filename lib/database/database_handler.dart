@@ -1,6 +1,7 @@
 import "dart:io";
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:student_75/database/task_model_database_extension.dart';
 import 'package:student_75/models/task_model.dart';
 
 class DatabaseService {
@@ -31,5 +32,21 @@ class DatabaseService {
     }, version: 1);
   }
 
-  void addTaskRecord(TaskModel task) async {}
+  void addTaskRecord(TaskModel task, int userId) async {
+    final db = await database;
+    await db.insert("task", task.toMap(userId),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  // in terms of functionality this is the exact same as insertion
+  void updateTaskRecord(TaskModel task, int userId) async {
+    final db = await database;
+    await db.insert("task", task.toMap(userId),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  void deleteTaskRecord(int taskId) async {
+    final db = await database;
+    db.delete("task", where: 'task_id = ?', whereArgs: [taskId]);
+  }
 }

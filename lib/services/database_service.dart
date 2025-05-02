@@ -7,7 +7,7 @@ as an intermediary layer between the database and business logic.
 */
 abstract class IDatabaseService {
   // ScheduleManager -> Database methods
-  Future<void> addTaskRecord(TaskModel task);
+  Future<void> addTaskRecord(TaskModel task, int userId);
   Future<void> updateTaskRecord(TaskModel task);
   Future<void> removeTaskRecord(TaskModel task);
 
