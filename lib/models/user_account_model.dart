@@ -12,7 +12,7 @@ class UserAccountModel {
   final List<TaskCategory>? categoryOrder;
   final Duration? sleepDuration;
   final TimeOfDay? bedtime;
-  final Duration? bedtimeNotifyBefore;
+  final Duration? bedtimeNotifyBefore; //! Should be "notifyBefore"
   final Duration? mindfulnessDuration;
 
   UserAccountModel({
