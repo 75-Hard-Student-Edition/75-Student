@@ -8,7 +8,7 @@ as an intermediary layer between the database and business logic.
 abstract class IDatabaseService {
   // ScheduleManager -> Database methods
   Future<void> addTaskRecord(TaskModel task, int userId);
-  Future<void> updateTaskRecord(TaskModel task);
+  Future<void> updateTaskRecord(TaskModel task, int userId);
   Future<void> removeTaskRecord(int taskId);
 
   // Database -> ScheduleManager methods
@@ -18,7 +18,7 @@ abstract class IDatabaseService {
   // AccountManager -> Database methods
   Future<void> addAccountRecord(UserAccountModel account);
   Future<void> updateAccountRecord(UserAccountModel account);
-  Future<void> removeAccountRecord(UserAccountModel account);
+  Future<void> removeAccountRecord(int userId);
 
   // Database -> AccountManager methods
   Future<UserAccountModel?> queryAccount(String username);

@@ -3,7 +3,9 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:student_75/database/database_service_interface.dart';
 import 'package:student_75/database/task_model_database_extension.dart';
+import 'package:student_75/database/account_model_database_extension.dart';
 import 'package:student_75/models/task_model.dart';
+import 'package:student_75/models/user_account_model.dart';
 
 class DatabaseService implements IDatabaseService {
   // AI generated code turns DatabaseService into a singleton pattern
@@ -38,24 +40,28 @@ class DatabaseService implements IDatabaseService {
     }, version: 1);
   }
 
-  void addTaskRecord(TaskModel task, int userId) async {
+  @override
+  Future<void> addTaskRecord(TaskModel task, int userId) async {
     final db = await database;
     await db.insert("task", task.toMap(userId),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // in terms of functionality this is the exact same as insertion
-  void updateTaskRecord(TaskModel task, int userId) async {
+  @override
+  Future<void> updateTaskRecord(TaskModel task, int userId) async {
     final db = await database;
     await db.insert("task", task.toMap(userId),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  void deleteTaskRecord(int taskId) async {
+  @override
+  Future<void> removeTaskRecord(int taskId) async {
     final db = await database;
     db.delete("task", where: 'task_id = ?', whereArgs: [taskId]);
   }
 
+  @override
   Future<TaskModel?> queryTask(int taskId) async {
     final db = await database;
     final List<Map<String, dynamic>> maps =
@@ -66,6 +72,7 @@ class DatabaseService implements IDatabaseService {
     return null;
   }
 
+  @override
   Future<List<TaskModel>> fetchTodaysScheduledTasks() async {
     final db = await database;
     // Because the dates are stored as strings the selection for the current day
@@ -79,5 +86,36 @@ class DatabaseService implements IDatabaseService {
       }
     }
     return todaysTasks;
+  }
+
+  @override
+  Future<void> addAccountRecord(UserAccountModel account) async {
+    final db = await database;
+    await db.insert("user", account.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  @override
+  Future<void> updateAccountRecord(UserAccountModel account) async {
+    final db = await database;
+    await db.insert("user", account.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  @override
+  Future<void> removeAccountRecord(int userId) async {
+    final db = await database;
+    db.delete("user", where: 'user_id = ?', whereArgs: [userId]);
+  }
+
+  @override
+  Future<UserAccountModel?> queryAccount(String username) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query("user", where: "username = ?", whereArgs: [username]);
+    if (maps.isNotEmpty) {
+      return UserAccountModelDB.fromMap(maps.first);
+    }
+    return null;
   }
 }
