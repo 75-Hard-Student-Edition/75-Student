@@ -87,9 +87,10 @@ class ScheduleManager implements IScheduleManager {
     }
     // Add notification for task
     notificationManager.addNotification(task);
+    // Update points
     pointsManager.addTask(task);
-    //todo Update database
-    // databaseService.addTaskRecord(task);
+    // Update database
+    DatabaseService().addTaskRecord(task, accountManager.userAccount!.id);
   }
 
   @override
@@ -106,9 +107,10 @@ class ScheduleManager implements IScheduleManager {
     }
     // Remove notification for task
     notificationManager.removeNotification(taskId);
-    //todo Update points
-    //todo Update database
-    // databaseService.deleteTaskRecord(taskId);
+    // Update points
+    pointsManager.removeTask(todaysSchedule.getTaskModelFromId(taskId)!);
+    // Update database
+    DatabaseService().removeTaskRecord(taskId);
   }
 
   @override
@@ -129,6 +131,8 @@ class ScheduleManager implements IScheduleManager {
     } catch (e) {
       displayError("Uncaught Exception on editTask: ${e.toString()}");
     }
+    // Update Database
+    DatabaseService().updateTaskRecord(updatedTask, accountManager.userAccount!.id);
   }
 
   @override
