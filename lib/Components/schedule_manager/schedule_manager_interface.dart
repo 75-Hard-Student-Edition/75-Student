@@ -8,7 +8,6 @@ abstract class IScheduleManager {
   List<TaskModel> getBacklogSuggestions();
   Future<TaskModel?> userBinarySelect(TaskModel task1, TaskModel task2, String message);
   void displayError(String message);
-  AccountManager get accManager;
 
   // GUI -> ScheduleManager methods
   void addTask(TaskModel task);
@@ -16,6 +15,10 @@ abstract class IScheduleManager {
   void editTask(TaskModel task);
   void postPoneTask(int taskId);
   void completeTask(int taskId);
+  void uncompleteTask(int taskId);
   void scheduleBacklogSuggestion(int taskId);
   DateTime? findAvailableTimeSlot(TaskModel task);
+
+  // ScheduleManager -> ScheduleGenerator methods
+  AccountManager get accManager;
 }

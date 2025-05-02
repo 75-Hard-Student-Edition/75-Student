@@ -27,12 +27,16 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   late final ScheduleManager scheduleManager;
-  late Schedule displaySchedule; 
+  late Schedule displaySchedule;
   late PointsManager pointsManager;
 
   // Streak popup trigger and count
   bool hasTriggeredStreakPopup = false;
-  int streakCount = 25; //!replace with streak from backend
+  int streakCount = 74; //!replace with streak from backend
+
+  // For dragging time blocks
+  DateTime? _tentativeStart;
+  int? _draggingTaskId;
 
   @override
   void initState() {
@@ -79,8 +83,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     setState(() {
       displaySchedule = scheduleManager.schedule;
     });
-    print(
-        "Fetched schedule from backend: ${displaySchedule.length} tasks loaded.");
+    print("Fetched schedule from backend: ${displaySchedule.length} tasks loaded.");
   }
 
   void _addTestTasks() {
@@ -92,8 +95,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.chore,
       priority: TaskPriority.high,
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 3, 30),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 3, 30),
       duration: const Duration(minutes: 30),
       notifyBefore: const Duration(minutes: 10),
     );
@@ -108,8 +110,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.health,
       priority: TaskPriority.high,
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 30),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 30),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 10),
     );
@@ -124,8 +125,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.chore,
       priority: TaskPriority.medium,
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 0),
     );
@@ -140,8 +140,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.academic,
       priority: TaskPriority.high,
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 5),
     );
@@ -156,8 +155,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.social,
       priority: TaskPriority.high,
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 1, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 1, 0),
       duration: const Duration(hours: 2),
       notifyBefore: const Duration(minutes: 15),
     );
@@ -172,8 +170,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.academic,
       priority: TaskPriority.high,
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
       duration: const Duration(hours: 1),
       notifyBefore: const Duration(minutes: 15),
     );
@@ -188,8 +185,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       isComplete: false,
       category: TaskCategory.employment,
       priority: TaskPriority.high,
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 18, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 18, 0),
       duration: const Duration(hours: 4),
       notifyBefore: const Duration(minutes: 15),
     );
@@ -197,8 +193,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     pointsManager.addTask(task7);
   }
 
-  Future<TaskModel?> _userBinarySelect(
-      TaskModel task1, TaskModel task2, String message) async {
+  Future<TaskModel?> _userBinarySelect(TaskModel task1, TaskModel task2, String message) async {
     print("Showing conflict dialog: ${task1.name} vs ${task2.name}");
     return await showCupertinoDialog<TaskModel>(
       context: context,
@@ -254,6 +249,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         scheduleManager: scheduleManager,
         refreshSchedule: _fetchSchedule,
         accountManager: widget.accountManager,
+        pointsManager: pointsManager, // ← add this line
       ),
       body: Column(
         children: [
@@ -283,8 +279,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             children: [
               Text(
                 day,
-                style: TextStyle(
-                    fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: screenWidth * 0.12, fontWeight: FontWeight.bold),
               ),
               Text(
                 month.toUpperCase(),
@@ -303,13 +298,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.local_fire_department,
-                    color: Colors.orange, size: screenWidth * 0.06),
+                Icon(Icons.local_fire_department, color: Colors.orange, size: screenWidth * 0.06),
                 Text(
-                  "$streakCount", 
-                  style: TextStyle(
-                      fontSize: screenWidth * 0.05,
-                      fontWeight: FontWeight.bold),
+                  "$streakCount",
+                  style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -346,9 +338,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         child: Text(
                           hourText,
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: screenWidth * 0.03),
+                          style: TextStyle(color: Colors.black54, fontSize: screenWidth * 0.03),
                         ),
                       ),
                     ),
@@ -357,8 +347,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               );
             }),
           ),
-          for (var task in scheduleManager.schedule.tasks)
-            _buildDraggableTimeBlock(context, task),
+          for (var task in scheduleManager.schedule.tasks) _buildDraggableTimeBlock(context, task),
         ],
       ),
     );
@@ -366,15 +355,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Widget _buildProgressBar(BuildContext context, PointsManager pointsManager) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double progress = pointsManager.maxPoints == 0
-        ? 0
-        : pointsManager.currentPoints / pointsManager.maxPoints;
+    double progress =
+        pointsManager.maxPoints == 0 ? 0 : pointsManager.currentPoints / pointsManager.maxPoints;
     progress = progress.clamp(0.0, 1.0);
 
     // Calculate pointsToPass ratio (as a fraction of maxPoints)
-    double pointsToPassRatio = pointsManager.maxPoints == 0
-        ? 1.0
-        : pointsManager.pointsToPass / pointsManager.maxPoints;
+    double pointsToPassRatio =
+        pointsManager.maxPoints == 0 ? 1.0 : pointsManager.pointsToPass / pointsManager.maxPoints;
 
     // Show streak popup if not already triggered, and progress passes threshold
     if (!hasTriggeredStreakPopup && progress >= pointsToPassRatio) {
@@ -403,7 +390,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       });
     }
 
-    print("ProgressBar Debug -> currentPoints: ${pointsManager.currentPoints}, maxPoints: ${pointsManager.maxPoints}, progress: $progress");
+    print(
+        "ProgressBar Debug -> currentPoints: ${pointsManager.currentPoints}, maxPoints: ${pointsManager.maxPoints}, progress: $progress");
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
@@ -413,15 +401,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [
-                Colors.red,
-                Colors.orange,
-                Colors.green
-              ]),
+              gradient: const LinearGradient(colors: [Colors.red, Colors.orange, Colors.green]),
               borderRadius: BorderRadius.circular(4),
             ),
           ),
-          // pointsToPass 
+          // pointsToPass
           Positioned(
             left: (screenWidth * 0.8 - 2) *
                 (pointsManager.pointsToPass /
@@ -435,7 +419,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ),
           Positioned(
             left: (screenWidth * 0.8 - 12) * progress,
-            top: -2, 
+            top: -2,
             bottom: -2,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(4),
@@ -457,79 +441,88 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     double screenWidth = MediaQuery.of(context).size.width;
     double hourHeight = 50;
-
     Color taskColor = _getTaskColor(task.category);
 
+    // Calculate top position depending on drag state
+    final DateTime topTime =
+        (_draggingTaskId == task.id && _tentativeStart != null) ? _tentativeStart! : task.startTime;
+    final double top = topTime.hour * hourHeight + topTime.minute * hourHeight / 60;
+
+    // Calculate block height
+    final Duration blockDuration = task.endTime.difference(task.startTime);
+    final double blockHeight = hourHeight * blockDuration.inMinutes / 60;
+
     return Positioned(
-      top: task.startTime.hour * hourHeight +
-          task.startTime.minute * hourHeight / 60,
-      height:
-          hourHeight * task.endTime.difference(task.startTime).inMinutes / 60,
+      top: top,
+      height: blockHeight,
       left: screenWidth * 0.15,
       child: GestureDetector(
-        // change start time
         onVerticalDragUpdate: task.isMovable
+            ? (details) {
+                setState(() {
+                  _tentativeStart = (_tentativeStart ?? task.startTime)
+                      .add(Duration(minutes: (details.primaryDelta! / hourHeight * 60).round()));
+                  _draggingTaskId = task.id;
+                });
+              }
+            : null,
+        onVerticalDragEnd: task.isMovable
             ? (details) async {
-                DateTime newStart = task.startTime.add(Duration(
-                    minutes:
-                        (details.primaryDelta! / hourHeight * 60).round()));
+                if (_tentativeStart == null) return;
 
-                TaskModel updatedTask = task.copyWith(startTime: newStart);
-
-                // First manually check for overlap
+                TaskModel updatedTask = task.copyWith(startTime: _tentativeStart!);
                 bool hasConflict = scheduleManager.schedule.tasks.any(
-                    (currentTask) =>
-                        currentTask.id != updatedTask.id &&
-                        currentTask.startTime.isBefore(updatedTask.endTime) &&
-                        currentTask.endTime.isAfter(updatedTask.startTime));
+                  (currentTask) =>
+                      currentTask.id != updatedTask.id &&
+                      currentTask.startTime.isBefore(updatedTask.endTime) &&
+                      currentTask.endTime.isAfter(updatedTask.startTime),
+                );
 
                 if (!hasConflict) {
                   scheduleManager.editTask(updatedTask);
                   setState(() {});
                 } else {
-                  // Handle conflict manually
-                  TaskModel overlappingTask =
-                      scheduleManager.schedule.tasks.firstWhere(
+                  TaskModel overlappingTask = scheduleManager.schedule.tasks.firstWhere(
                     (currentTask) =>
                         currentTask.id != updatedTask.id &&
                         currentTask.startTime.isBefore(updatedTask.endTime) &&
                         currentTask.endTime.isAfter(updatedTask.startTime),
                   );
+
                   TaskModel? selectedTask = await _userBinarySelect(
                     task,
                     overlappingTask,
                     "Tasks overlapping. Please select which task to keep",
                   );
+
                   if (selectedTask == null) {
                     scheduleManager.editTask(updatedTask);
                   } else if (selectedTask == task) {
                     scheduleManager.deleteTask(overlappingTask.id);
-                    scheduleManager
-                        .editTask(task.copyWith(startTime: newStart));
+                    scheduleManager.editTask(updatedTask);
                   } else {
                     scheduleManager.deleteTask(task.id);
-                    scheduleManager
-                        .editTask(overlappingTask.copyWith(endTime: newStart));
+                    scheduleManager.editTask(overlappingTask.copyWith(endTime: _tentativeStart!));
                   }
                   _fetchSchedule();
                 }
+
+                setState(() {
+                  _tentativeStart = null;
+                  _draggingTaskId = null;
+                });
               }
             : null,
-
-        // Change task duration
+        // Change task duration (optional: keep as before)
         onPanUpdate: task.isMovable
             ? (details) {
                 setState(() {
-                  Duration newDuration =
-                      task.endTime.difference(task.startTime) +
-                          Duration(
-                              minutes: (details.primaryDelta! / hourHeight * 60)
-                                  .round());
+                  Duration newDuration = task.endTime.difference(task.startTime) +
+                      Duration(minutes: (details.primaryDelta! / hourHeight * 60).round());
 
                   if (newDuration.inMinutes > 10) {
                     // no 0-minute tasks
-                    TaskModel updatedTask =
-                        task.copyWith(endTime: task.startTime.add(newDuration));
+                    TaskModel updatedTask = task.copyWith(endTime: task.startTime.add(newDuration));
                     scheduleManager.editTask(updatedTask);
                     print(
                         "Resized Task: '${task.name}' - New Duration: ${newDuration.inMinutes} minutes");
@@ -537,7 +530,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 });
               }
             : null,
-
         child: GestureDetector(
           onTap: () {
             showModalBottomSheet(
@@ -550,8 +542,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   child: TaskDetails(
                     task: task,
                     scheduleManager: scheduleManager,
+                    pointsManager: pointsManager,
                     onEdit: () async {
-                      Navigator.pop(context); // Close modal before editing
+                      Navigator.pop(context);
 
                       final editedTask = await showModalBottomSheet<TaskModel>(
                         context: context,
@@ -566,8 +559,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 width: MediaQuery.of(context).size.width * 0.95,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(30)),
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                                 ),
                                 child: AddTaskScreen(
                                   scheduleManager: scheduleManager,
@@ -584,13 +576,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         _fetchSchedule();
                       }
                     },
-                    onComplete: () {
+                    onComplete: (bool nowComplete) {
                       setState(() {
-                        scheduleManager.completeTask(task.id);
-                        pointsManager.completeTask(task);
-                        _fetchSchedule(); 
+                        TaskModel updatedTask = task.copyWith(isComplete: nowComplete);
+                        scheduleManager.editTask(updatedTask);
+                        nowComplete
+                            ? pointsManager.completeTask(updatedTask)
+                            : pointsManager.uncompleteTask(updatedTask);
+                        _fetchSchedule();
                       });
-                      Navigator.pop(context);
                     },
                     onDelete: () {
                       scheduleManager.deleteTask(task.id);
@@ -611,8 +605,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 width: MediaQuery.of(context).size.width * 0.95,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(30)),
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                                 ),
                                 child: AddTaskScreen(
                                   scheduleManager: scheduleManager,
@@ -633,64 +626,66 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               },
             );
           },
-          child: Container(
-            width: screenWidth * 0.75,
-            height:
-                hourHeight * task.endTime.difference(task.startTime).inHours,
-            decoration: BoxDecoration(
-              color: taskColor.withOpacity(0.3),
-              border: Border.all(
-                color: taskColor,
-                width: task.duration.inMinutes < 30 ? 1.5 : 2,
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Stack(
-              children: [
-                Center(
-                  child: Text(
-                    task.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: task.duration.inMinutes < 30 ? 12 : 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+          child: Opacity(
+            opacity: (_draggingTaskId == task.id && _tentativeStart != null) ? 0.7 : 1.0,
+            child: Container(
+              width: screenWidth * 0.75,
+              height: hourHeight * task.endTime.difference(task.startTime).inHours,
+              decoration: BoxDecoration(
+                color: taskColor.withOpacity(0.3),
+                border: Border.all(
+                  color: taskColor,
+                  width: task.duration.inMinutes < 30 ? 1.5 : 2,
                 ),
-                // Toggle circle
-                Positioned(
-                  left: 8,
-                  top: (hourHeight * task.duration.inMinutes / 60) / 2 -
-                      (task.duration.inMinutes < 30 ? 7 : 10),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (task.isComplete) {
-                          scheduleManager.completeTask(task.id);
-                          pointsManager.uncompleteTask(task);
-                        } else {
-                          scheduleManager.completeTask(task.id);
-                          pointsManager.completeTask(task);
-                        }
-                        _fetchSchedule();
-                      });
-                    },
-                    child: Container(
-                      width: task.duration.inMinutes < 30 ? 14 : 20,
-                      height: task.duration.inMinutes < 30 ? 14 : 20,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: taskColor,
-                          width: task.duration.inMinutes < 30 ? 1.5 : 2,
-                        ),
-                        color: task.isComplete ? taskColor : Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Stack(
+                children: [
+                  Center(
+                    child: Text(
+                      task.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: task.duration.inMinutes < 30 ? 12 : 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ),
-              ],
+                  // Toggle circle
+                  Positioned(
+                    left: 8,
+                    top: (hourHeight * task.duration.inMinutes / 60) / 2 -
+                        (task.duration.inMinutes < 30 ? 7 : 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (task.isComplete) {
+                            scheduleManager.uncompleteTask(task.id);
+                            pointsManager.uncompleteTask(task);
+                          } else {
+                            scheduleManager.completeTask(task.id);
+                            pointsManager.completeTask(task);
+                          }
+                          _fetchSchedule();
+                        });
+                      },
+                      child: Container(
+                        width: task.duration.inMinutes < 30 ? 14 : 20,
+                        height: task.duration.inMinutes < 30 ? 14 : 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: taskColor,
+                            width: task.duration.inMinutes < 30 ? 1.5 : 2,
+                          ),
+                          color: task.isComplete ? taskColor : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -703,12 +698,14 @@ class BottomNavBar extends StatelessWidget {
   final ScheduleManager scheduleManager;
   final Function refreshSchedule;
   final AccountManager accountManager;
+  final PointsManager pointsManager;
 
   const BottomNavBar({
     super.key,
     required this.scheduleManager,
     required this.refreshSchedule,
     required this.accountManager,
+    required this.pointsManager,
   });
 
   @override
@@ -732,19 +729,20 @@ class BottomNavBar extends StatelessWidget {
                     isDismissible: true,
                     enableDrag: true,
                     backgroundColor: Colors.transparent,
-                    //barrierColor: Colors.black.withOpacity(0.5),
-                    shape: const ContinuousRectangleBorder(),
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    shape: const ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
                     builder: (context) {
                       return Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 50),
                           child: Container(
-                            width: MediaQuery.of(context).size.width * 1,
+                            width: MediaQuery.of(context).size.width * 0.95,
                             decoration: const BoxDecoration(
                               color: Color(0x00FFFFFF),
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(30)),
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                             ),
                             child: SingleChildScrollView(
                               child: Builder(
@@ -776,8 +774,7 @@ class BottomNavBar extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     barrierColor: Colors.black.withOpacity(0.5),
                     shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                     ),
                     builder: (context) {
                       return Align(
@@ -788,12 +785,10 @@ class BottomNavBar extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.95,
                             decoration: const BoxDecoration(
                               color: Color(0x00FFFFFF),
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(30)),
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                             ),
                             child: SingleChildScrollView(
-                              child: AddTaskScreen(
-                                  scheduleManager: scheduleManager),
+                              child: AddTaskScreen(scheduleManager: scheduleManager),
                             ),
                           ),
                         ),
@@ -801,6 +796,7 @@ class BottomNavBar extends StatelessWidget {
                     },
                   );
                   if (newTask != null) {
+                    pointsManager.addTask(newTask);
                     refreshSchedule();
                   }
                   print("After add: ${scheduleManager.schedule.toString()}");
@@ -813,8 +809,7 @@ class BottomNavBar extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          MindfulnessScreen(accountManager: accountManager),
+                      builder: (context) => MindfulnessScreen(accountManager: accountManager),
                     ),
                   );
                 },
@@ -861,8 +856,7 @@ class BottomNavBar extends StatelessWidget {
 // Display popup error message with the two provided choices
 // Return bool: true if choice1 is selected, false if choice2 is selected
 
-Future<bool> popupTwoChoices(
-    String choice1, String choice2, String message) async {
+Future<bool> popupTwoChoices(String choice1, String choice2, String message) async {
   return true;
 }
 

@@ -48,12 +48,13 @@ class Schedule {
   ///
   /// Throws a [TaskNotFoundException] if the task is not found in the schedule
   void remove(int taskId) {
-    TaskModel? task = getTaskModelFromId(taskId);
-    if (task == null) {
+    try {
+      TaskModel? task = getTaskModelFromId(taskId);
+      tasks.remove(task);
+    } on TaskNotFoundException catch (e) {
       throw TaskNotFoundException(
-          "Task with id '$taskId' not found in schedule when trying to remove");
-    }
-    tasks.remove(task);
+          "Task with id '$taskId' not found in schedule when trying to remove: ${e.message}");
+    } 
   }
 
   /// Replaces a task in the schedule with a new task
@@ -83,10 +84,13 @@ class Schedule {
 
   /// Returns the [TaskModel] in the schedule with the given id
   ///
-  /// Returns null if the task is not found
+  /// Throws a TaskNotFoundException if the task is not found
   TaskModel? getTaskModelFromId(int taskId) {
     int index = getTaskIndexFromId(taskId);
-    if (index == -1) return null;
+    if (index == -1) {
+      throw TaskNotFoundException(
+        "Task with id '$taskId' not found in schedule when trying to get");
+    }
     return tasks[index];
   }
 
