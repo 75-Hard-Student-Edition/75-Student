@@ -119,8 +119,6 @@ class ScheduleManager implements IScheduleManager {
     }
     // Remove notification for task
     notificationManager.removeNotification(taskId);
-    // Update points
-    pointsManager.removeTask(todaysSchedule.getTaskModelFromId(taskId)!);
     // Update database
     DatabaseService().removeTaskRecord(taskId);
   }
