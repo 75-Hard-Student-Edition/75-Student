@@ -19,7 +19,7 @@ extension TaskModelDB on TaskModel {
   }
 
   static TaskModel fromMap(Map<String, dynamic> map) {
-    return TaskModel(
+    final ret = TaskModel(
         id: map["task_id"],
         name: map["title"],
         description: map["description"],
@@ -31,5 +31,7 @@ extension TaskModelDB on TaskModel {
         duration: Duration(minutes: map["duration_minutes"]),
         period: map["period"] != "" ? Duration(minutes: map["period"]) : null,
         links: map["links"]);
+    print("TaskModelDB.fromMap: ${ret.toString()}");
+    return ret;
   }
 }
