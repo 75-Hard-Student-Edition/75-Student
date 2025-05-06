@@ -52,7 +52,7 @@ class DatabaseService implements IDatabaseService {
     final existingTableNames = existingTables.map((e) => e['name']).toSet();
 
     if (!existingTableNames.contains('task') || !existingTableNames.contains('user')) {
-      print("⚠️ One or more required tables are missing — creating them manually.");
+      print("One or more required tables are missing — creating them manually.");
       final statements = createDatabaseSql.split(';');
       for (final statement in statements) {
         final trimmed = statement.trim();
@@ -60,8 +60,8 @@ class DatabaseService implements IDatabaseService {
           try {
             await _database!.execute(trimmed + ';');
           } catch (e) {
-            print("⚠️ SQL error in fallback: $e");
-            print("🧨 Failed statement: $trimmed");
+            print("SQL error in fallback: $e");
+            print("Failed statement: $trimmed");
           }
         }
       }

@@ -30,7 +30,10 @@ extension TaskModelDB on TaskModel {
         priority: TaskPriority.values[map["priority"]],
         startTime: DateTime.parse(map["start_time"]),
         duration: Duration(minutes: map["duration_minutes"]),
-        period: map["period"] != "" ? Duration(minutes: map["period"]) : null,
+        period: (map["repeat_period"] != null &&
+                map["repeat_period"].toString().isNotEmpty)
+            ? Duration(days: int.parse(map["repeat_period"].toString()))
+            : null,
         links: map["links"]);
     print("TaskModelDB.fromMap: ${ret.toString()}");
     return ret;
