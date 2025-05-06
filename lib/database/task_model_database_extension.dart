@@ -9,7 +9,7 @@ extension TaskModelDB on TaskModel {
       "description": description,
       "is_moveable": isMovable ? 1 : 0,
       "is_complete": isComplete ? 1 : 0,
-      "category": category,
+      "category": TaskCategory.values.indexOf(category),
       "priority": TaskPriority.values.indexOf(priority),
       "start_time": startTime.toIso8601String(),
       "duration_minutes": duration.inMinutes,
