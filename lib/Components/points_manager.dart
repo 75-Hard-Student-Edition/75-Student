@@ -35,6 +35,8 @@ class PointsManager {
     for (var task in initialSchedule.tasks) {
       addTask(task);
     }
+
+    calculatePointsToPass();
   }
 
   /// Updates [maxPoints] and [pointsToPass] when a task is added to the schedule
@@ -96,5 +98,3 @@ class PointsManager {
   /// Returns true if the user has passed, false otherwise
   bool determinePass() => currentPoints >= pointsToPass;
 }
-
-  
