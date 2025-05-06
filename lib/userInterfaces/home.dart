@@ -33,7 +33,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   // Streak popup trigger and count
   bool hasTriggeredStreakPopup = false;
-  int streakCount = 74; //!replace with streak from backend
+  late int streakCount;
 
   // For dragging time blocks
   DateTime? _tentativeStart;
@@ -61,7 +61,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       accountManager: widget.accountManager,
     );
 
-    // _addTestTasks();
+    streakCount = widget.accountManager.getStreak(); // Get streak from AccountManager
+
     _fetchTodaysTasks();
     _fetchDisplaySchedule();
 
