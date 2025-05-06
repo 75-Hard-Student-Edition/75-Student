@@ -66,7 +66,7 @@ class DatabaseService implements IDatabaseService {
         }
       }
     } else {
-      print("✅ 'task' and 'user' tables exist.");
+      print("'task' and 'user' tables exist.");
     }
   }
 

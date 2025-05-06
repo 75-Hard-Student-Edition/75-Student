@@ -809,6 +809,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   children: [
                     _buildRepeatButton("Once", Duration.zero),
                     const SizedBox(width: 5),
+                    _buildRepeatButton("Daily", const Duration(days: 1)),
+                    const SizedBox(width: 5),
                     _buildRepeatButton("Weekly", const Duration(days: 7)),
                     const SizedBox(width: 5),
                     _buildRepeatButton("Fortnightly", const Duration(days: 14)),
