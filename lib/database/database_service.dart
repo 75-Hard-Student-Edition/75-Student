@@ -79,12 +79,10 @@ class DatabaseService implements IDatabaseService {
   }
 
   /// Updates a task record in the database.
-  /// If a task with the same ID does not exist, it will be added as a new record.
-  /// Functionally the same as [addTaskRecord], but for clarity and future-proofing it is separate.
   @override
   Future<void> updateTaskRecord(TaskModel task, int userId) async {
     final db = await database;
-    await db.insert("task", task.toMap(userId), conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.update("task", task.toMap(userId), where: "task_id = ?", whereArgs: [task.id]);
   }
 
   /// Removes a task record from the database.
