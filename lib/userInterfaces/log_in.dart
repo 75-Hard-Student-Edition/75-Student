@@ -10,9 +10,86 @@ import 'package:student_75/app_settings.dart';
 //import 'package:student_75/models/difficulty_enum.dart';
 //import 'package:student_75/models/task_model.dart';
 
-class LogInScreen extends StatelessWidget {
+class LogInScreen extends StatefulWidget {
   final AccountManager accountManager;
-  const LogInScreen({super.key, required this.accountManager});
+  LogInScreen({super.key, required this.accountManager});
+
+  @override
+  State<LogInScreen> createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
+  late final Widget _usernameField = Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: Container(
+      decoration: BoxDecoration(
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: TextField(
+        controller: _usernameController,
+        obscureText: false,
+        decoration: InputDecoration(
+          hintText: 'Mobile/Email/Username',
+          hintStyle: const TextStyle(color: Color(0xFFAFA9A9)),
+          filled: true,
+          fillColor: const Color(0xFFEBEFF0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    ),
+  );
+
+  late final Widget _passwordField = Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: Container(
+      decoration: BoxDecoration(
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: TextField(
+        controller: _passwordController,
+        obscureText: true,
+        decoration: InputDecoration(
+          hintText: 'Password',
+          hintStyle: const TextStyle(color: Color(0xFFAFA9A9)),
+          filled: true,
+          fillColor: const Color(0xFFEBEFF0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    ),
+  );
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +141,9 @@ class LogInScreen extends StatelessWidget {
 
                 const SizedBox(height: 40),
                 // Inputs
-                _buildInputField('Mobile/Email/Username'),
+                _usernameField,
                 const SizedBox(height: 20),
-                _buildInputField('Password', isPassword: true),
+                _passwordField,
 
                 const SizedBox(height: 20),
                 // Sign Up Link
@@ -79,7 +156,7 @@ class LogInScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => SignUpScreen(
-                                  accountManager: accountManager,
+                                  accountManager: widget.accountManager,
                                 )),
                       ),
                       child: const Text(
@@ -100,8 +177,10 @@ class LogInScreen extends StatelessWidget {
                     onPressed: () async {
                       // Log in to the account using the AccountManager
                       try {
-                        await accountManager.login("username",
-                            "password"); //todo @widad: replace with actual values from the text fields
+                        await widget.accountManager.login(
+                          _usernameController.text,
+                          _passwordController.text,
+                        );
                       } on AccountNotFoundException catch (e) {
                         // Handle login error (e.g., show a dialog or snackbar)
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -110,6 +189,7 @@ class LogInScreen extends StatelessWidget {
                             backgroundColor: Colors.red,
                           ),
                         );
+                        return;
                       }
 
                       // Navigate to the ScheduleScreen after logging in
@@ -117,7 +197,7 @@ class LogInScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => ScheduleScreen(
-                                  accountManager: accountManager,
+                                  accountManager: widget.accountManager,
                                 )),
                       );
                     },
@@ -148,7 +228,7 @@ class LogInScreen extends StatelessWidget {
                   child: TextButton(
                     onPressed: () async {
                       try {
-                        await accountManager.login("demo", "demo");
+                        await widget.accountManager.login(_usernameController.text, _passwordController.text);
                       } on AccountNotFoundException catch (e) {
                         // Create demo account if it doesn't exist
                         UserAccountModel demoAccount = UserAccountModel(
@@ -178,8 +258,8 @@ class LogInScreen extends StatelessWidget {
                           mindfulnessDuration:
                               Duration(minutes: AppSettings.defaultMindfulnessDuration),
                         );
-                        await accountManager.createAccount(demoAccount, "demo");
-                        await accountManager.login("demo", "demo");
+                        await widget.accountManager.createAccount(demoAccount, "demo");
+                        await widget.accountManager.login("demo", "demo");
                       }
 
                       // Navigate to the ScheduleScreen after logging in
@@ -187,7 +267,7 @@ class LogInScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => ScheduleScreen(
-                                  accountManager: accountManager,
+                                  accountManager: widget.accountManager,
                                 )),
                       );
                     },
@@ -203,38 +283,6 @@ class LogInScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInputField(String hintText, {bool isPassword = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(0, 3),
-            ),
-          ],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: TextField(
-          obscureText: isPassword,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: const TextStyle(color: Color(0xFFAFA9A9)),
-            filled: true,
-            fillColor: const Color(0xFFEBEFF0),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
             ),
           ),
         ),
