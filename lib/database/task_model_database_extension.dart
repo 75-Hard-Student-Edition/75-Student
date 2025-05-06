@@ -19,6 +19,7 @@ extension TaskModelDB on TaskModel {
   }
 
   static TaskModel fromMap(Map<String, dynamic> map) {
+    print("TaskModelDB.fromMap: ${map.toString()}");
     final ret = TaskModel(
         id: map["task_id"],
         name: map["title"],
