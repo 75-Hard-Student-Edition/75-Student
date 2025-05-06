@@ -74,6 +74,7 @@ class DatabaseService implements IDatabaseService {
   /// If a task with the same ID already exists, it will be replaced.
   @override
   Future<void> addTaskRecord(TaskModel task, int userId) async {
+    print("Adding task record to database: ${task.toMap(userId).toString()}");
     final db = await database;
     await db.insert("task", task.toMap(userId), conflictAlgorithm: ConflictAlgorithm.replace);
   }
@@ -81,6 +82,7 @@ class DatabaseService implements IDatabaseService {
   /// Updates a task record in the database.
   @override
   Future<void> updateTaskRecord(TaskModel task, int userId) async {
+    print("Updating task record in database: ${task.toMap(userId).toString()}");
     final db = await database;
     await db.update("task", task.toMap(userId), where: "task_id = ?", whereArgs: [task.id]);
   }
@@ -88,6 +90,7 @@ class DatabaseService implements IDatabaseService {
   /// Removes a task record from the database.
   @override
   Future<void> removeTaskRecord(int taskId) async {
+    print("Removing task record from database with ID: $taskId");
     final db = await database;
     db.delete("task", where: 'task_id = ?', whereArgs: [taskId]);
   }

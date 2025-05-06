@@ -33,8 +33,7 @@ class ScheduleManager implements IScheduleManager {
   late PointsManager pointsManager;
   late AccountManager accountManager;
   late NotificationManager notificationManager;
-  late Future<TaskModel?> Function(TaskModel, TaskModel, String)
-      userBinarySelectCallback;
+  late Future<TaskModel?> Function(TaskModel, TaskModel, String) userBinarySelectCallback;
   late void Function(String) displayErrorCallback;
 
   // Private constructor
@@ -44,8 +43,7 @@ class ScheduleManager implements IScheduleManager {
   static Future<ScheduleManager> create({
     required void Function(String) displayErrorCallback,
     required AccountManager accountManager,
-    required Future<TaskModel?> Function(TaskModel, TaskModel, String)
-        userBinarySelectCallback,
+    required Future<TaskModel?> Function(TaskModel, TaskModel, String) userBinarySelectCallback,
   }) async {
     final instance = ScheduleManager._();
     instance.displayErrorCallback = displayErrorCallback;
@@ -58,11 +56,9 @@ class ScheduleManager implements IScheduleManager {
 
   Future<void> _initialize() async {
     todaysSchedule = Schedule(
-        tasks: await DatabaseService()
-            .fetchTodaysScheduledTasks(accountManager.userAccount!.id));
+        tasks: await DatabaseService().fetchTodaysScheduledTasks(accountManager.userAccount!.id));
     backlog = Backlog(initialTasks: []);
-    pointsManager = PointsManager(
-        initialSchedule: todaysSchedule, accountManager: accountManager);
+    pointsManager = PointsManager(initialSchedule: todaysSchedule, accountManager: accountManager);
     notificationManager = NotificationManager(notifications: []);
 
     print("ScheduleManager initialised with the following account data:");
@@ -74,12 +70,10 @@ class ScheduleManager implements IScheduleManager {
   Schedule get schedule => todaysSchedule;
 
   @override
-  List<TaskModel> getBacklogSuggestions() =>
-      backlog.peak(AppSettings.backlogPeakDepth);
+  List<TaskModel> getBacklogSuggestions() => backlog.peak(AppSettings.backlogPeakDepth);
 
   @override
-  Future<TaskModel?> userBinarySelect(
-          TaskModel task1, TaskModel task2, String message) async =>
+  Future<TaskModel?> userBinarySelect(TaskModel task1, TaskModel task2, String message) async =>
       await userBinarySelectCallback(task1, task2, message);
   @override
   void displayError(String message) {
@@ -92,6 +86,7 @@ class ScheduleManager implements IScheduleManager {
   //* == GUI -> ScheduleManager methods ==
   @override
   void addTask(TaskModel task) {
+    print("Adding task: ${task.toString()}");
     // Add task to schedule
     try {
       todaysSchedule.add(task);
@@ -111,6 +106,7 @@ class ScheduleManager implements IScheduleManager {
 
   @override
   void deleteTask(int taskId) {
+    print("Deleting task with id: $taskId");
     // Remove task from schedule
     try {
       pointsManager.removeTask(todaysSchedule.getTaskModelFromId(taskId)!);
@@ -131,6 +127,7 @@ class ScheduleManager implements IScheduleManager {
 
   @override
   void editTask(TaskModel updatedTask) {
+    print("Editing task: ${updatedTask.toString()}");
     try {
       // Check for overlap *excluding* itself
       for (var otherTask in todaysSchedule.tasks) {
@@ -148,8 +145,7 @@ class ScheduleManager implements IScheduleManager {
       displayError("Uncaught Exception on editTask: ${e.toString()}");
     }
     // Update Database
-    DatabaseService()
-        .updateTaskRecord(updatedTask, accountManager.userAccount!.id);
+    DatabaseService().updateTaskRecord(updatedTask, accountManager.userAccount!.id);
   }
 
   @override
@@ -172,8 +168,8 @@ class ScheduleManager implements IScheduleManager {
     final TaskModel task = todaysSchedule.tasks[taskIndex];
     editTask(task.copyWith(isComplete: true));
     pointsManager.completeTask(task);
-    DatabaseService().updateTaskRecord(
-        task.copyWith(isComplete: true), accountManager.userAccount!.id);
+    DatabaseService()
+        .updateTaskRecord(task.copyWith(isComplete: true), accountManager.userAccount!.id);
   }
 
   @override
@@ -182,8 +178,8 @@ class ScheduleManager implements IScheduleManager {
     final TaskModel task = todaysSchedule.tasks[taskIndex];
     editTask(task.copyWith(isComplete: false));
     pointsManager.uncompleteTask(task);
-    DatabaseService().updateTaskRecord(
-        task.copyWith(isComplete: false), accountManager.userAccount!.id);
+    DatabaseService()
+        .updateTaskRecord(task.copyWith(isComplete: false), accountManager.userAccount!.id);
   }
 
   @override
@@ -226,8 +222,7 @@ class ScheduleManager implements IScheduleManager {
 
     //* 2. Generate new schedule
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule =
-        await scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
 
     //* 4. Add new schedule to todays schedule
     todaysSchedule = sanitisedSchedule;
@@ -235,8 +230,7 @@ class ScheduleManager implements IScheduleManager {
 
   Future<void> generateSanitisedSchedule() async {
     ScheduleGenerator scheduleGenerator = ScheduleGenerator(this);
-    final Schedule sanitisedSchedule =
-        await scheduleGenerator.generateSanitisedSchedule();
+    final Schedule sanitisedSchedule = await scheduleGenerator.generateSanitisedSchedule();
     todaysSchedule = sanitisedSchedule;
   }
 }

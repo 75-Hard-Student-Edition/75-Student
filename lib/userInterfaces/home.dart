@@ -63,7 +63,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     // _addTestTasks();
     _fetchTodaysTasks();
-    _fetchSchedule();
+    _fetchDisplaySchedule();
 
     print("✅ Initialization complete");
 
@@ -103,7 +103,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   /// Tasks from backend
-  void _fetchSchedule() {
+  void _fetchDisplaySchedule() {
     setState(() {
       displaySchedule = scheduleManager.schedule;
     });
@@ -276,7 +276,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
         scheduleManager: scheduleManager,
-        refreshSchedule: _fetchSchedule,
+        refreshSchedule: _fetchDisplaySchedule,
         accountManager: widget.accountManager,
         pointsManager: pointsManager, // ← add this line
       ),
@@ -533,7 +533,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     scheduleManager.deleteTask(task.id);
                     scheduleManager.editTask(overlappingTask.copyWith(endTime: _tentativeStart!));
                   }
-                  _fetchSchedule();
+                  _fetchDisplaySchedule();
                 }
 
                 setState(() {
@@ -602,7 +602,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
                       if (editedTask != null) {
                         scheduleManager.editTask(editedTask);
-                        _fetchSchedule();
+                        _fetchDisplaySchedule();
                       }
                     },
                     onComplete: (bool nowComplete) {
@@ -612,12 +612,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         nowComplete
                             ? pointsManager.completeTask(updatedTask)
                             : pointsManager.uncompleteTask(updatedTask);
-                        _fetchSchedule();
+                        _fetchDisplaySchedule();
                       });
                     },
                     onDelete: () {
                       scheduleManager.deleteTask(task.id);
-                      _fetchSchedule();
+                      _fetchDisplaySchedule();
                     },
                     onCopy: () async {
                       Navigator.pop(context);
@@ -647,7 +647,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       );
                       if (copiedTask != null) {
                         scheduleManager.addTask(copiedTask);
-                        _fetchSchedule();
+                        _fetchDisplaySchedule();
                       }
                     },
                   ),
@@ -696,7 +696,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             scheduleManager.completeTask(task.id);
                             pointsManager.completeTask(task);
                           }
-                          _fetchSchedule();
+                          _fetchDisplaySchedule();
                         });
                       },
                       child: Container(
