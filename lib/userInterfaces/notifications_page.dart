@@ -476,7 +476,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return CupertinoAlertDialog(
-                                            title: const Text('Mindulness'),
+                                            title: const Text('Mindfulness'),
                                             content: const Text(
                                                 'Take some time away from your screens.'),
                                             actions: <Widget>[

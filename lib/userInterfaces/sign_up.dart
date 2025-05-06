@@ -121,30 +121,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     ),
   );
-  // Mobile/Email Input field as a late final Widget
-  late final Widget _mobileEmailInputField = Row(
-    children: [
-      GestureDetector(
-        onTap: _showInputTypePicker,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          decoration: BoxDecoration(
-            color: const Color(0xFFEBEFF0),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Text(_selectedInputType),
-              const SizedBox(width: 6),
-              const Icon(CupertinoIcons.chevron_down, size: 16),
-            ],
-          ),
-        ),
-      ),
-      const SizedBox(width: 10),
-      if (_selectedInputType == 'Mobile') ...[
+  // Mobile/Email Input field as a method to reflect state changes
+  Widget _buildMobileEmailInputField() {
+    return Row(
+      children: [
         GestureDetector(
-          onTap: _showCountryPicker,
+          onTap: _showInputTypePicker,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             decoration: BoxDecoration(
@@ -153,61 +135,81 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             child: Row(
               children: [
-                Text(
-                  '${_countryData.firstWhere((c) => c['code'] == _selectedCountryCode)['flag']} $_selectedCountryCode',
-                  style: const TextStyle(fontSize: 16),
-                ),
+                Text(_selectedInputType),
                 const SizedBox(width: 6),
                 const Icon(CupertinoIcons.chevron_down, size: 16),
               ],
             ),
           ),
         ),
-      ],
-      const SizedBox(width: 10),
-      Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: TextFormField(
-            controller: _mobileEmailController,
-            decoration: InputDecoration(
-              hintText: _selectedInputType == 'Email' ? 'Email' : 'Mobile',
-              filled: true,
-              fillColor: const Color(0xFFEBEFF0),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-              border: OutlineInputBorder(
+        const SizedBox(width: 10),
+        if (_selectedInputType == 'Mobile') ...[
+          GestureDetector(
+            onTap: _showCountryPicker,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEBEFF0),
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    '${_countryData.firstWhere((c) => c['code'] == _selectedCountryCode)['flag']} $_selectedCountryCode',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(width: 6),
+                  const Icon(CupertinoIcons.chevron_down, size: 16),
+                ],
               ),
             ),
-            validator: (value) {
-              if (_selectedInputType == 'Email') {
-                if (value == null ||
-                    value.isEmpty ||
-                    !(value.contains('@') && value.contains('.'))) {
-                  return 'Enter a valid email';
+          ),
+          const SizedBox(width: 10),
+        ],
+        Expanded(
+          child: Container(
+            decoration: const BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: TextFormField(
+              controller: _mobileEmailController,
+              decoration: InputDecoration(
+                hintText: _selectedInputType == 'Email' ? 'Email' : 'Mobile',
+                filled: true,
+                fillColor: const Color(0xFFEBEFF0),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              validator: (value) {
+                if (_selectedInputType == 'Email') {
+                  if (value == null ||
+                      value.isEmpty ||
+                      !(value.contains('@') && value.contains('.'))) {
+                    return 'Enter a valid email';
+                  }
+                } else {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter a valid mobile number';
+                  }
                 }
-              } else {
-                if (value == null || value.isEmpty) {
-                  return 'Enter a valid mobile number';
-                }
-              }
-              return null;
-            },
+                return null;
+              },
+            ),
           ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -262,7 +264,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 32),
 
                 // Mobile/Email Input
-                _mobileEmailInputField,
+                _buildMobileEmailInputField(),
                 const SizedBox(height: 25),
 
                 // Full Name Input
