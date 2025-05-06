@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/models/task_model.dart';
+import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/userInterfaces/start_up.dart';
 import 'package:student_75/userInterfaces/sign_up.dart';
 import 'package:student_75/userInterfaces/home.dart';
+import 'package:student_75/app_settings.dart';
 //import 'package:student_75/models/difficulty_enum.dart';
 //import 'package:student_75/models/task_model.dart';
 
@@ -143,7 +147,40 @@ class LogInScreen extends StatelessWidget {
                 Center(
                   child: TextButton(
                     onPressed: () async {
-                      await accountManager.login("demo", "demo"); 
+                      try {
+                        await accountManager.login("demo", "demo");
+                      } on AccountNotFoundException catch (e) {
+                        // Create demo account if it doesn't exist
+                        UserAccountModel demoAccount = UserAccountModel(
+                          id: 0,
+                          username: "demo",
+                          email: "demo@demo.demo",
+                          phoneNumber: "0000000000",
+                          streak: 25,
+                          difficulty: Difficulty.easy,
+                          categoryOrder: [
+                            TaskCategory.academic,
+                            TaskCategory.chore,
+                            TaskCategory.employment,
+                            TaskCategory.health,
+                            TaskCategory.hobby,
+                            TaskCategory.social,
+                          ],
+                          sleepDuration: Duration(hours: AppSettings.defaultSleepDuration),
+                          bedtime: DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            AppSettings.defaultBedtimeHour,
+                            AppSettings.defaultBedtimeMinute,
+                          ),
+                          bedtimeNotifyBefore: Duration(hours: 1),
+                          mindfulnessDuration:
+                              Duration(minutes: AppSettings.defaultMindfulnessDuration),
+                        );
+                        await accountManager.createAccount(demoAccount, "demo");
+                        await accountManager.login("demo", "demo");
+                      }
 
                       // Navigate to the ScheduleScreen after logging in
                       Navigator.push(
