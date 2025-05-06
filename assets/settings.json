@@ -2,7 +2,7 @@
     "difficultyValues": {
         "easy": 0.5,
         "medium": 0.75,
-        "hard": 1
+        "hard": 0.9
     },
 
     "locationRadius": 100,

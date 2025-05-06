@@ -111,113 +111,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     print("Fetched schedule from backend: ${displaySchedule.length} tasks loaded.");
   }
 
-  void _addTestTasks() {
-    final task1 = TaskModel(
-      id: 11,
-      name: "Morning Prayer",
-      description: "Go back to sleep after",
-      isMovable: true,
-      isComplete: false,
-      category: TaskCategory.chore,
-      priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 3, 30),
-      duration: const Duration(minutes: 30),
-      notifyBefore: const Duration(minutes: 10),
-    );
-    scheduleManager.addTask(task1);
-    pointsManager.addTask(task1);
-
-    final task2 = TaskModel(
-      id: 12,
-      name: "Morning Run",
-      description: "Down the Lido",
-      isMovable: true,
-      isComplete: false,
-      category: TaskCategory.health,
-      priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 30),
-      duration: const Duration(hours: 1),
-      notifyBefore: const Duration(minutes: 10),
-    );
-    scheduleManager.addTask(task2);
-    pointsManager.addTask(task2);
-
-    final task3 = TaskModel(
-      id: 13,
-      name: "Shower",
-      description: "",
-      isMovable: true,
-      isComplete: false,
-      category: TaskCategory.chore,
-      priority: TaskPriority.medium,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0),
-      duration: const Duration(hours: 1),
-      notifyBefore: const Duration(minutes: 0),
-    );
-    scheduleManager.addTask(task3);
-    pointsManager.addTask(task3);
-
-    final task4 = TaskModel(
-      id: 14,
-      name: "SETaP Demo",
-      description: "Video recording on iPhone",
-      isMovable: true,
-      isComplete: false,
-      category: TaskCategory.academic,
-      priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
-      duration: const Duration(hours: 1),
-      notifyBefore: const Duration(minutes: 5),
-    );
-    scheduleManager.addTask(task4);
-    pointsManager.addTask(task4);
-
-    final task5 = TaskModel(
-      id: 15,
-      name: "Study Session",
-      description: "Catch up on missed lectures with Harry",
-      isMovable: true,
-      isComplete: false,
-      category: TaskCategory.social,
-      priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 1, 0),
-      duration: const Duration(hours: 2),
-      notifyBefore: const Duration(minutes: 15),
-    );
-    scheduleManager.addTask(task5);
-    pointsManager.addTask(task5);
-
-    final task6 = TaskModel(
-      id: 16,
-      name: "Operating Systems",
-      description: "",
-      isMovable: true,
-      isComplete: false,
-      category: TaskCategory.academic,
-      priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
-      duration: const Duration(hours: 1),
-      notifyBefore: const Duration(minutes: 15),
-    );
-    scheduleManager.addTask(task6);
-    pointsManager.addTask(task6);
-
-    final task7 = TaskModel(
-      id: 17,
-      name: "Shift @ Gym",
-      description: "",
-      isMovable: true,
-      isComplete: false,
-      category: TaskCategory.employment,
-      priority: TaskPriority.high,
-      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 18, 0),
-      duration: const Duration(hours: 4),
-      notifyBefore: const Duration(minutes: 15),
-    );
-    scheduleManager.addTask(task7);
-    pointsManager.addTask(task7);
-  }
-
   Future<TaskModel?> _userBinarySelect(TaskModel task1, TaskModel task2, String message) async {
     print("Showing conflict dialog: ${task1.name} vs ${task2.name}");
     return await showCupertinoDialog<TaskModel>(
@@ -420,8 +313,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       });
     }
 
-    print(
-        "ProgressBar Debug -> currentPoints: ${pointsManager.currentPoints}, maxPoints: ${pointsManager.maxPoints}, progress: $progress");
+    // print(
+    //     "ProgressBar Debug -> currentPoints: ${pointsManager.currentPoints}, maxPoints: ${pointsManager.maxPoints}, progress: $progress");
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
