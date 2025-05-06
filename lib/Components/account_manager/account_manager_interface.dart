@@ -15,16 +15,9 @@ abstract class IAccountManager {
   Future<void> login(String username, String password);
   void logout();
 
-  // AccountManager -> Database methods
-  void saveUserDetails(UserAccountModel userAccount);
-
   // AccountManager -> PointsManager methods
   Difficulty getDifficulty();
   List<TaskCategory> getCategoryOrder();
-
-  // PointsManager -> AccountManager methods
-  void resetStreak();
-  void incrementStreak();
 
   // AccountManager -> ScheduleManager methods
   int getUserId();

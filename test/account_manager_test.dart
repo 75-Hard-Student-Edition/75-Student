@@ -1,85 +1,251 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/database/database_service.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
-import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:student_75/Components/account_manager/account_manager_interface.dart';
 
 void main() {
-  late AccountManager accountManager;
-
-  setUp(() {
-    // Initialize AccountManager before each test
-    accountManager = AccountManager();
-  });
-
   group('AccountManager Tests', () {
-    test('Login and Get Username', () {
-      accountManager.login('testuser', 'password');
-      expect(accountManager.getUsername(), 'testuser');
+    late AccountManager accountManager;
+    TestWidgetsFlutterBinding.ensureInitialized();
+    databaseFactory = databaseFactoryFfi;
+
+    setUp(() {
+      accountManager = AccountManager();
     });
 
-    test('Get Streak', () {
-      accountManager.login('testuser', 'password');
-      expect(accountManager.getStreak(), 0);
-    });
-
-    test('Get Difficulty', () {
-      accountManager.login('testuser', 'password');
-      expect(accountManager.getDifficulty(), Difficulty.easy);
-    });
-
-    test('Get Category Order', () {
-      accountManager.login('testuser', 'password');
-      expect(accountManager.getCategoryOrder(), isNotEmpty);
-      expect(accountManager.getCategoryOrder().first, TaskCategory.academic);
-    });
-
-    test('Get Mindfulness Duration', () {
-      accountManager.login('testuser', 'password');
-      expect(
-          accountManager.getMindfulnessDuration(), const Duration(minutes: 30));
-    });
-
-    test('Reset Streak', () {
-      accountManager.login('testuser', 'password');
-      accountManager.incrementStreak();
-      accountManager.resetStreak();
-      expect(accountManager.getStreak(), 0);
-    });
-
-    test('Increment Streak', () {
-      accountManager.login('testuser', 'password');
-      print(accountManager.getStreak());
-      accountManager
-          .incrementStreak(); // need to check incrementStreak in the account manager. Test failed.
-      print(accountManager.getStreak());
-      expect(accountManager.getStreak(), 1);
-    });
-
-    test('Update Account', () {
-      accountManager.login('testuser', 'password');
-      final updatedAccount = UserAccountModel(
+    // Test for getStreak()
+    test('getStreak() should return the correct streak', () async {
+      accountManager.userAccount = UserAccountModel(
         id: 1,
-        username: 'updateduser',
-        streak: 0,
+        username: 'testuser',
+        streak: 5,
         difficulty: Difficulty.medium,
-        categoryOrder: [TaskCategory.social, TaskCategory.hobby],
-        sleepDuration: const Duration(hours: 7),
-        bedtime: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 22, 30),
-        bedtimeNotifyBefore: const Duration(minutes: 20),
-        mindfulnessDuration: const Duration(minutes: 15),
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
       );
-      accountManager.updateAccount(updatedAccount);
-      expect(accountManager.getUsername(), 'updateduser');
-      expect(accountManager.getDifficulty(), Difficulty.medium);
+
+      expect(accountManager.getStreak(), equals(5));
     });
 
-    test('Logout', () {
-      accountManager.login('testuser', 'password');
-      accountManager.logout();
+    test(
+        'getStreak() should throw NoUserSignedInException when no user is signed in',
+        () {
+      expect(() => accountManager.getStreak(),
+          throwsA(isA<NoUserSignedInException>()));
+    });
+
+    // Test for getUsername()
+    test('getUsername() should return the correct username', () async {
+      accountManager.userAccount = UserAccountModel(
+        id: 1,
+        username: 'testuser',
+        streak: 5,
+        difficulty: Difficulty.medium,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      expect(accountManager.getUsername(), equals('testuser'));
+    });
+
+    test(
+        'getUsername() should throw NoUserSignedInException when no user is signed in',
+        () {
       expect(() => accountManager.getUsername(),
           throwsA(isA<NoUserSignedInException>()));
+    });
+
+    // Test for createAccount()
+    test('createAccount() should create an account and sign in the user',
+        () async {
+      final userAccount = UserAccountModel(
+        id: 1,
+        username: 'newuser',
+        streak: 0,
+        difficulty: Difficulty.easy,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      await accountManager.createAccount(userAccount, 'password123');
+      expect(accountManager.userAccount, equals(userAccount));
+    });
+
+    test('createAccount() should throw an error if account creation fails',
+        () async {
+      final userAccount = UserAccountModel(
+        id: 1,
+        username: 'existinguser',
+        streak: 0,
+        difficulty: Difficulty.easy,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      await accountManager.createAccount(userAccount, 'password123');
+      expect(() => accountManager.createAccount(userAccount, 'newpassword123'),
+          throwsA(isA<Exception>()));
+    });
+
+    // Test for login()
+    test('login() should login the user successfully', () async {
+      final userAccount = UserAccountModel(
+        id: 1,
+        username: 'validuser',
+        streak: 3,
+        difficulty: Difficulty.medium,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      await accountManager.createAccount(userAccount, 'validpassword');
+      await accountManager.login('validuser', 'validpassword');
+
+      expect(accountManager.userAccount, equals(userAccount));
+    });
+
+    test(
+        'login() should throw AccountNotFoundException if invalid credentials are provided',
+        () async {
+      await accountManager.createAccount(
+          UserAccountModel(
+            id: 1,
+            username: 'validuser',
+            streak: 3,
+            difficulty: Difficulty.medium,
+            categoryOrder: [],
+            sleepDuration: Duration(hours: 8),
+            bedtime: DateTime.now(),
+            bedtimeNotifyBefore: Duration(minutes: 30),
+            mindfulnessDuration: Duration(minutes: 10),
+          ),
+          'validpassword');
+
+      expect(() => accountManager.login('validuser', 'invalidpassword'),
+          throwsA(isA<AccountNotFoundException>()));
+    });
+
+    // Test for logout()
+    test('logout() should log the user out', () async {
+      final userAccount = UserAccountModel(
+        id: 1,
+        username: 'testuser',
+        streak: 5,
+        difficulty: Difficulty.medium,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      await accountManager.createAccount(userAccount, 'password123');
+      accountManager.logout();
+
+      expect(accountManager.userAccount, isNull);
+    });
+
+    // Test for deleteAccount()
+    test('deleteAccount() should delete the user account and log the user out',
+        () async {
+      final userAccount = UserAccountModel(
+        id: 1,
+        username: 'testuser',
+        streak: 5,
+        difficulty: Difficulty.medium,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      await accountManager.createAccount(userAccount, 'password123');
+      await accountManager.deleteAccount(1);
+
+      expect(accountManager.userAccount, isNull);
+    });
+
+    // Test for resetStreak()
+    test('resetStreak() should reset the streak to 0', () async {
+      final userAccount = UserAccountModel(
+        id: 1,
+        username: 'testuser',
+        streak: 10,
+        difficulty: Difficulty.medium,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      await accountManager.createAccount(userAccount, 'password123');
+      accountManager.resetStreak();
+
+      expect(accountManager.getStreak(), equals(0));
+    });
+
+    // Test for incrementStreak()
+    test('incrementStreak() should increment the streak by 1', () async {
+      final userAccount = UserAccountModel(
+        id: 1,
+        username: 'testuser',
+        streak: 5,
+        difficulty: Difficulty.medium,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      await accountManager.createAccount(userAccount, 'password123');
+      accountManager.incrementStreak();
+
+      expect(accountManager.getStreak(), equals(6));
+    });
+
+    // Test for updateAccount()
+    test('updateAccount() should update the user account details', () async {
+      final userAccount = UserAccountModel(
+        id: 1,
+        username: 'testuser',
+        streak: 5,
+        difficulty: Difficulty.medium,
+        categoryOrder: [],
+        sleepDuration: Duration(hours: 8),
+        bedtime: DateTime.now(),
+        bedtimeNotifyBefore: Duration(minutes: 30),
+        mindfulnessDuration: Duration(minutes: 10),
+      );
+
+      await accountManager.createAccount(userAccount, 'password123');
+      final updatedAccount =
+          userAccount.copyWith(streak: 10, username: 'updateduser');
+      accountManager.updateAccount(updatedAccount);
+
+      expect(accountManager.getStreak(), equals(10));
+      expect(accountManager.getUsername(), equals('updateduser'));
     });
   });
 }
