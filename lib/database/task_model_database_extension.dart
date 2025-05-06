@@ -5,7 +5,7 @@ extension TaskModelDB on TaskModel {
     return {
       "task_id": id,
       "user_id": userId,
-      "title": description,
+      "title": name,
       "description": description,
       "is_moveable": isMovable ? 1 : 0,
       "is_complete": isComplete ? 1 : 0,
@@ -30,8 +30,7 @@ extension TaskModelDB on TaskModel {
         priority: TaskPriority.values[map["priority"]],
         startTime: DateTime.parse(map["start_time"]),
         duration: Duration(minutes: map["duration_minutes"]),
-        period: (map["repeat_period"] != null &&
-                map["repeat_period"].toString().isNotEmpty)
+        period: (map["repeat_period"] != null && map["repeat_period"].toString().isNotEmpty)
             ? Duration(days: int.parse(map["repeat_period"].toString()))
             : null,
         links: map["links"]);
