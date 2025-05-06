@@ -87,7 +87,6 @@ class SettingsPage extends StatelessWidget {
             _buildSettingItem(
                 context, Icons.mail_outline, "Invite Friends", difficulty, topCategory),
             _buildSettingItem(context, Icons.lightbulb_outline, "Help", difficulty, topCategory),
-            const SizedBox(height: 16),
             Center(
               child: TextButton.icon(
                 onPressed: () {
@@ -124,6 +123,51 @@ class SettingsPage extends StatelessWidget {
                 icon: const Icon(Icons.block, color: Colors.red),
                 label: const Text(
                   "Log Out",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'kdamThmorPro',
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: TextButton.icon(
+                onPressed: () {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CupertinoAlertDialog(
+                        title: const Text("Delete Account"),
+                        content: const Text("Are you sure you want to delete your account? This action cannot be undone."),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text("Cancel"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            child: const Text("Delete"),
+                            onPressed: () {
+                              accountManager.deleteAccount(accountManager.getUserId());
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(Icons.delete_forever, color: Colors.red),
+                label: const Text(
+                  "Delete Account",
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 16,
