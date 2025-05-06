@@ -142,13 +142,17 @@ class LogInScreen extends StatelessWidget {
                 // Log in with demo user button
                 Center(
                   child: TextButton(
-                    onPressed: () {
-                      /* Navigator.push(
+                    onPressed: () async {
+                      await accountManager.login("demo", "demo"); 
+
+                      // Navigate to the ScheduleScreen after logging in
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DemoScreen(accountManager: accountManager),
-                        ),
-                      ); */
+                            builder: (context) => ScheduleScreen(
+                                  accountManager: accountManager,
+                                )),
+                      );
                     },
                     child: const Text(
                       "Log in with demo user",
