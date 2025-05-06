@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:student_75/Components/points_manager.dart';
+import 'package:student_75/database/database_service.dart';
 import 'package:student_75/models/task_model.dart';
 import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
 import 'package:student_75/Components/schedule_manager/schedule.dart';
@@ -61,12 +62,26 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     );
 
     // _addTestTasks();
+    _fetchTodaysTasks();
     _fetchSchedule();
 
     print("✅ Initialization complete");
 
     setState(() {
       isInitialized = true;
+    });
+  }
+
+  void _fetchTodaysTasks() {
+    DatabaseService()
+        .fetchTodaysScheduledTasks(widget.accountManager.userAccount!.id)
+        .then((tasks) {
+      scheduleManager.todaysSchedule = Schedule(tasks: tasks);
+      setState(() {
+        displaySchedule = Schedule(tasks: tasks);
+      });
+    }).catchError((error) {
+      print("Error fetching today's tasks: $error");
     });
   }
 
