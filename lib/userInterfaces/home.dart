@@ -508,11 +508,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             ? pointsManager.completeTask(updatedTask)
                             : pointsManager.uncompleteTask(updatedTask);
                         _fetchDisplaySchedule();
+                        _buildProgressBar(
+                            context, pointsManager); // Update progress bar on completion
                       });
                     },
                     onDelete: () {
                       scheduleManager.deleteTask(task.id);
                       _fetchDisplaySchedule();
+                      _buildProgressBar(context, pointsManager); // Update progress bar on deletion
                     },
                     onCopy: () async {
                       Navigator.pop(context);
