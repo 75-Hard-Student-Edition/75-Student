@@ -1,17 +1,12 @@
-import 'package:flutter_test/flutter_test.dart'; // for Flutter test bindings
-import 'package:test/test.dart'
-    as coreTest; // aliasing 'test' from package:test
-
-// Import your project's files for classes used in the test
-import 'package:student_75/Components/schedule_manager/schedule_manager.dart'; // For ScheduleManager class
-import 'package:student_75/Components/schedule_manager/schedule_generator.dart'; // For ScheduleGenerator class
-import 'package:student_75/models/task_model.dart'; // For TaskModel class
-import 'package:student_75/models/difficulty_enum.dart'; // For Difficulty enum
-import 'package:student_75/models/user_account_model.dart'; // For UserAccountModel class
-import 'package:student_75/Components/account_manager/account_manager.dart'; // For AccountManager class
-
-// Import sqflite_common_ffi for the database
-import 'package:sqflite_common_ffi/sqflite_ffi.dart'; // To handle database in test environment
+import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart' as coreTest;
+import 'package:student_75/Components/schedule_manager/schedule_manager.dart';
+import 'package:student_75/Components/schedule_manager/schedule_generator.dart';
+import 'package:student_75/models/task_model.dart';
+import 'package:student_75/models/difficulty_enum.dart';
+import 'package:student_75/models/user_account_model.dart';
+import 'package:student_75/Components/account_manager/account_manager.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 // Define MockAccountManager to simulate the behavior of AccountManager for testing
 class MockAccountManager extends AccountManager {
@@ -28,7 +23,6 @@ class MockAccountManager extends AccountManager {
         mindfulnessDuration: Duration(minutes: 15),
       );
 
-  // Override methods if needed for your test
   @override
   int getUserId() {
     return 1; // Mock user ID
@@ -51,7 +45,6 @@ class MockAccountManager extends AccountManager {
 }
 
 void main() {
-  // Ensure that the Flutter bindings are initialized before running the tests
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late ScheduleManager scheduleManager;
@@ -59,7 +52,6 @@ void main() {
   late TaskModel task2;
 
   setUp(() async {
-    // Initialize sqflite for testing (using ffi for testing environment)
     databaseFactory = databaseFactoryFfi;
 
     // Create ScheduleManager using the named constructor
