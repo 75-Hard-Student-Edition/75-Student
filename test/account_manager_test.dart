@@ -164,6 +164,23 @@ void main() {
       expect(accountManager.userAccount, isNull);
     });
 
+    // Test for difficulty
+    test('getDifficulty() should throw if difficulty is not set', () {
+  accountManager.userAccount = UserAccountModel(
+    id: 1,
+    username: 'testuser',
+    streak: 0,
+    difficulty: null,
+    categoryOrder: [],
+    sleepDuration: Duration(hours: 8),
+    bedtime: DateTime.now(),
+    bedtimeNotifyBefore: Duration(minutes: 30),
+    mindfulnessDuration: Duration(minutes: 10),
+  );
+
+  expect(() => accountManager.getDifficulty(), throwsA(isA<NoUserSignedInException>()));
+});
+
     // Test for deleteAccount()
     test('deleteAccount() should delete the user account and log the user out',
         () async {
