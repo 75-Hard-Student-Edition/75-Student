@@ -177,9 +177,26 @@ void main() {
     bedtimeNotifyBefore: Duration(minutes: 30),
     mindfulnessDuration: Duration(minutes: 10),
   );
-
   expect(() => accountManager.getDifficulty(), throwsA(isA<NoUserSignedInException>()));
 });
+
+  // Test Category Order
+  test('getCategoryOrder() should throw if categoryOrder is not set', () {
+    accountManager.userAccount = UserAccountModel(
+      id: 1,
+      username: 'testuser',
+      streak: 0,
+      difficulty: Difficulty.medium,
+      categoryOrder: null,
+      sleepDuration: Duration(hours: 8),
+      bedtime: DateTime.now(),
+      bedtimeNotifyBefore: Duration(minutes: 30),
+      mindfulnessDuration: Duration(minutes: 10),
+    );
+
+    expect(() => accountManager.getCategoryOrder(),
+        throwsA(isA<NoUserSignedInException>()));
+  });
 
     // Test for deleteAccount()
     test('deleteAccount() should delete the user account and log the user out',
