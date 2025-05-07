@@ -428,6 +428,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     scheduleManager.editTask(overlappingTask.copyWith(endTime: _tentativeStart!));
                   }
                   _fetchDisplaySchedule();
+                  _buildProgressBar(context, pointsManager);
                 }
 
                 setState(() {
