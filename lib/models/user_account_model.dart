@@ -1,5 +1,6 @@
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
+import 'package:collection/collection.dart';
 
 class UserAccountModel {
   final int id;
@@ -55,6 +56,40 @@ class UserAccountModel {
       mindfulnessDuration: mindfulnessDuration ?? this.mindfulnessDuration,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserAccountModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          username == other.username &&
+          email == other.email &&
+          phoneNumber == other.phoneNumber &&
+          streak == other.streak &&
+          difficulty == other.difficulty &&
+          const ListEquality().equals(categoryOrder, other.categoryOrder) &&
+          sleepDuration == other.sleepDuration &&
+          ((bedtime == null && other.bedtime == null) ||
+              (bedtime != null &&
+                  other.bedtime != null &&
+                  bedtime!.isAtSameMomentAs(other.bedtime!))) &&
+          bedtimeNotifyBefore == other.bedtimeNotifyBefore &&
+          mindfulnessDuration == other.mindfulnessDuration;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      username.hashCode ^
+      email.hashCode ^
+      phoneNumber.hashCode ^
+      streak.hashCode ^
+      difficulty.hashCode ^
+      const ListEquality().hash(categoryOrder) ^
+      sleepDuration.hashCode ^
+      (bedtime?.millisecondsSinceEpoch.hashCode ?? 0) ^
+      bedtimeNotifyBefore.hashCode ^
+      mindfulnessDuration.hashCode;
 
   @override
   String toString() {

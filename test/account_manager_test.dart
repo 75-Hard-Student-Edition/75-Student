@@ -24,7 +24,15 @@ void main() {
         username: 'testuser',
         streak: 5,
         difficulty: Difficulty.medium,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -34,11 +42,8 @@ void main() {
       expect(accountManager.getStreak(), equals(5));
     });
 
-    test(
-        'getStreak() should throw NoUserSignedInException when no user is signed in',
-        () {
-      expect(() => accountManager.getStreak(),
-          throwsA(isA<NoUserSignedInException>()));
+    test('getStreak() should throw NoUserSignedInException when no user is signed in', () {
+      expect(() => accountManager.getStreak(), throwsA(isA<NoUserSignedInException>()));
     });
 
     // Test for getUsername()
@@ -48,7 +53,15 @@ void main() {
         username: 'testuser',
         streak: 5,
         difficulty: Difficulty.medium,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -58,22 +71,26 @@ void main() {
       expect(accountManager.getUsername(), equals('testuser'));
     });
 
-    test(
-        'getUsername() should throw NoUserSignedInException when no user is signed in',
-        () {
-      expect(() => accountManager.getUsername(),
-          throwsA(isA<NoUserSignedInException>()));
+    test('getUsername() should throw NoUserSignedInException when no user is signed in', () {
+      expect(() => accountManager.getUsername(), throwsA(isA<NoUserSignedInException>()));
     });
 
     // Test for createAccount()
-    test('createAccount() should create an account and sign in the user',
-        () async {
+    test('createAccount() should create an account and sign in the user', () async {
       final userAccount = UserAccountModel(
         id: 1,
         username: 'newuser',
         streak: 0,
         difficulty: Difficulty.easy,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -84,14 +101,21 @@ void main() {
       expect(accountManager.userAccount, equals(userAccount));
     });
 
-    test('createAccount() should throw an error if account creation fails',
-        () async {
+    test('createAccount() should throw an error if account creation fails', () async {
       final userAccount = UserAccountModel(
         id: 1,
         username: 'existinguser',
         streak: 0,
         difficulty: Difficulty.easy,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -110,7 +134,15 @@ void main() {
         username: 'validuser',
         streak: 3,
         difficulty: Difficulty.medium,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -123,8 +155,7 @@ void main() {
       expect(accountManager.userAccount, equals(userAccount));
     });
 
-    test(
-        'login() should throw AccountNotFoundException if invalid credentials are provided',
+    test('login() should throw AccountNotFoundException if invalid credentials are provided',
         () async {
       await accountManager.createAccount(
           UserAccountModel(
@@ -132,7 +163,15 @@ void main() {
             username: 'validuser',
             streak: 3,
             difficulty: Difficulty.medium,
-            categoryOrder: [],
+            categoryOrder: [
+              TaskCategory.academic,
+              TaskCategory.social,
+              TaskCategory.health,
+              TaskCategory.hobby,
+              TaskCategory.chore,
+              TaskCategory.hobby,
+              TaskCategory.employment
+            ],
             sleepDuration: Duration(hours: 8),
             bedtime: DateTime.now(),
             bedtimeNotifyBefore: Duration(minutes: 30),
@@ -151,7 +190,15 @@ void main() {
         username: 'testuser',
         streak: 5,
         difficulty: Difficulty.medium,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -165,14 +212,21 @@ void main() {
     });
 
     // Test for deleteAccount()
-    test('deleteAccount() should delete the user account and log the user out',
-        () async {
+    test('deleteAccount() should delete the user account and log the user out', () async {
       final userAccount = UserAccountModel(
         id: 1,
         username: 'testuser',
         streak: 5,
         difficulty: Difficulty.medium,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -192,7 +246,15 @@ void main() {
         username: 'testuser',
         streak: 10,
         difficulty: Difficulty.medium,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -212,7 +274,15 @@ void main() {
         username: 'testuser',
         streak: 5,
         difficulty: Difficulty.medium,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -232,7 +302,15 @@ void main() {
         username: 'testuser',
         streak: 5,
         difficulty: Difficulty.medium,
-        categoryOrder: [],
+        categoryOrder: [
+          TaskCategory.academic,
+          TaskCategory.social,
+          TaskCategory.health,
+          TaskCategory.hobby,
+          TaskCategory.chore,
+          TaskCategory.hobby,
+          TaskCategory.employment
+        ],
         sleepDuration: Duration(hours: 8),
         bedtime: DateTime.now(),
         bedtimeNotifyBefore: Duration(minutes: 30),
@@ -240,8 +318,7 @@ void main() {
       );
 
       await accountManager.createAccount(userAccount, 'password123');
-      final updatedAccount =
-          userAccount.copyWith(streak: 10, username: 'updateduser');
+      final updatedAccount = userAccount.copyWith(streak: 10, username: 'updateduser');
       accountManager.updateAccount(updatedAccount);
 
       expect(accountManager.getStreak(), equals(10));
