@@ -103,14 +103,12 @@ class AccountManager implements IAccountManager {
   }
 
   //* PointsManager -> AccountManager methods
-  @override
   void resetStreak() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
     userAccount = userAccount!.copyWith(streak: 0);
     saveUserDetails(userAccount!);
   }
 
-  @override
   void incrementStreak() {
     if (userAccount == null) throw NoUserSignedInException('No user signed in');
     int newStreak = getStreak() + 1;
