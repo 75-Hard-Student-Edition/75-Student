@@ -105,7 +105,7 @@ class ScheduleManager implements IScheduleManager {
   }
 
   @override
-  void deleteTask(int taskId) {
+  void deleteTask(int taskId) async {
     print("Deleting task with id: $taskId");
     // Remove task from schedule
     try {
@@ -120,7 +120,7 @@ class ScheduleManager implements IScheduleManager {
     // Remove notification for task
     notificationManager.removeNotification(taskId);
     // Update database
-    DatabaseService().removeTaskRecord(taskId);
+    await DatabaseService().removeTaskRecord(taskId);
   }
 
   @override

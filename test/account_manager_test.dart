@@ -1,11 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:student_75/Components/account_manager/account_manager.dart';
-import 'package:student_75/database/database_service.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:student_75/models/user_account_model.dart';
 import 'package:student_75/models/difficulty_enum.dart';
 import 'package:student_75/models/task_model.dart';
-import 'package:student_75/Components/account_manager/account_manager_interface.dart';
 
 void main() {
   group('AccountManager Tests', () {
