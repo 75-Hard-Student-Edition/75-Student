@@ -13,19 +13,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  late ScheduleManager scheduleManager;
-  late TaskModel task1;
-  late TaskModel task2;
-
-  setUp(() async {
-    databaseFactory = databaseFactoryFfi;
-  });
-
-  tearDown(() async {
-    await scheduleManager.close();
-  });
-
-  group('TaskModel Tests' () {
-    coreTest.test('')
-  });
+  // group('TaskModel Tests' () {
+  //   coreTest.test('')
+  // });
 }

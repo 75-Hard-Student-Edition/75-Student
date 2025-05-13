@@ -147,7 +147,7 @@ class DatabaseService implements IDatabaseService {
   @override
   Future<void> updateAccountRecord(UserAccountModel account) async {
     final db = await database;
-    await db.update("user", account.toMap(), where: "id = ?", whereArgs: [account.id]);
+    await db.update("user", account.toMap(), where: "user_id = ?", whereArgs: [account.id]);
   }
 
   /// Removes a user account record from the database.
