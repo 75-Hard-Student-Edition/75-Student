@@ -101,7 +101,7 @@ void main() {
       expect(accountManager.userAccount, equals(userAccount));
     });
 
-    test('createAccount() should throw an error if account creation fails', () async {
+    test('createAccount() should throw an error if account already exists', () async {
       final userAccount = UserAccountModel(
         id: 1,
         username: 'existinguser',
