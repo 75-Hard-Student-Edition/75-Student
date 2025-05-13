@@ -1,0 +1,103 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter assemble --no-version-check --output=/Users/admin/Library/Developer/Xcode/DerivedData/Runner-bpqkzsosexuhamfvnwkcoisxdfeh/Build/Products/Debug-iphoneos/ -dTargetPlatform=ios -dTargetFile=lib/main.dart -dBuildMode=debug -dIosArchs=arm64 -dSdkRoot=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.2.sdk -dSplitDebugInfo= -dTreeShakeIcons=false -dTrackWidgetCreation=true -dDartObfuscation=false -dAction=build -dFrontendServerStarterPath= --ExtraGenSnapshotOptions= --DartDefines= --ExtraFrontEndOptions= -dCodesignIdentity=19BAB8AD22DE7187487687DA14AC82DE1D859343 debug_ios_bundle_flutter_assets
+
+## exception
+
+FileSystemException: FileSystemException: Cannot open file, path = '/Users/admin/Desktop/75-Student/.dart_tool/flutter_build/b48d424b4a07f86d581e91efb7dad245/outputs.json' (OS Error: Operation timed out, errno = 60)
+
+```
+#0      _File.throwIfError (dart:io/file_impl.dart:782:7)
+#1      _File.openSync (dart:io/file_impl.dart:575:5)
+#2      _File.writeAsBytesSync (dart:io/file_impl.dart:747:31)
+#3      _File.writeAsStringSync (dart:io/file_impl.dart:775:5)
+#4      ForwardingFile.writeAsStringSync (package:file/src/forwarding/forwarding_file.dart:150:16)
+#5      ErrorHandlingFile.writeAsStringSync.<anonymous closure> (package:flutter_tools/src/base/error_handling_io.dart:254:22)
+#6      _runSync (package:flutter_tools/src/base/error_handling_io.dart:550:14)
+#7      ErrorHandlingFile.writeAsStringSync (package:flutter_tools/src/base/error_handling_io.dart:253:5)
+#8      FlutterBuildSystem.build (package:flutter_tools/src/build_system/build_system.dart:664:10)
+<asynchronous suspension>
+#9      AssembleCommand.runCommand (package:flutter_tools/src/commands/assemble.dart:354:32)
+<asynchronous suspension>
+#10     FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1558:27)
+<asynchronous suspension>
+#11     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#12     CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#13     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:496:9)
+<asynchronous suspension>
+#14     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#15     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:431:5)
+<asynchronous suspension>
+#16     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:98:11)
+<asynchronous suspension>
+#17     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#18     main (package:flutter_tools/executable.dart:99:3)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel stable, 3.29.3, on macOS 15.3.2 24D81 darwin-x64, locale en-GB) [11.7s]
+    • Flutter version 3.29.3 on channel stable at /usr/local/Caskroom/flutter/3.24.3/flutter
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision ea121f8859 (4 weeks ago), 2025-04-11 19:10:07 +0000
+    • Engine revision cf56914b32
+    • Dart version 3.7.2
+    • DevTools version 2.42.3
+
+[✓] Android toolchain - develop for Android devices (Android SDK version 34.0.0) [21.2s]
+    • Android SDK at /Users/admin/Library/Android/sdk
+    • Platform android-34, build-tools 34.0.0
+    • Java binary at: /Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/java
+      This is the JDK bundled with the latest Android Studio installation on this machine.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version OpenJDK Runtime Environment (build 21.0.3+-79915915-b509.11)
+    • All Android licenses accepted.
+
+[!] Xcode - develop for iOS and macOS (Xcode 16.2) [12.6s]
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Build 16C5032a
+    ✗ CocoaPods not installed.
+        CocoaPods is a package manager for iOS or macOS platform code.
+        Without CocoaPods, plugins will not work on iOS or macOS.
+        For more info, see https://flutter.dev/to/platform-plugins
+      For installation instructions, see https://guides.cocoapods.org/using/getting-started.html#installation
+
+[✓] Chrome - develop for the web [539ms]
+    • Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+[✓] Android Studio (version 2024.2) [536ms]
+    • Android Studio at /Applications/Android Studio.app/Contents
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 21.0.3+-79915915-b509.11)
+
+[✓] IntelliJ IDEA Community Edition (version 2024.2.3) [528ms]
+    • IntelliJ at /Applications/IntelliJ IDEA CE.app
+    • Flutter plugin version 82.0.3
+    • Dart plugin version 242.22855.32
+
+[✓] VS Code (version 1.99.3) [42ms]
+    • VS Code at /Applications/Visual Studio Code.app/Contents
+    • Flutter extension version 3.108.0
+
+[✓] Connected device (3 available) [18.2s]
+    • iPhone 13 (mobile) • 00008110-001C2CAA0186201E • ios            • iOS 18.4.1 22E252
+    • macOS (desktop)    • macos                     • darwin-x64     • macOS 15.3.2 24D81 darwin-x64
+    • Chrome (web)       • chrome                    • web-javascript • Google Chrome 135.0.7049.115
+
+[✓] Network resources [6.0s]
+    • All expected network resources are available.
+
+! Doctor found issues in 1 category.
+```
